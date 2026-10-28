@@ -22,15 +22,15 @@ const OhioMobile=(()=>{
   drawer(true);
   if(!$("mobile-tab-list")){
    const section=document.createElement("section");section.id="mobile-tab-list";
-   section.innerHTML='<h3>SECCIONES</h3>';
+   section.innerHTML='<h3>EXPLORAR OHIO</h3><div class="ohio-mobile-links"></div>';
    document.querySelectorAll(".tabs [data-tab]").forEach(button=>{
     const b=document.createElement("button");b.type="button";b.className="full";
     b.textContent=button.textContent;b.dataset.targetTab=button.dataset.tab;
     // The drawer is built lazily: inherit the progression state already
     // applied to the canonical tab before adding this new button.
     b.classList.toggle("ohio-discovery-hidden",button.classList.contains("ohio-discovery-hidden"));
-    b.addEventListener("click",()=>{button.click();drawer(false)});
-    section.append(b);
+    b.addEventListener("click",()=>{if(!button.classList.contains("ohio-discovery-hidden"))button.click();drawer(false)});
+    section.querySelector(".ohio-mobile-links").append(b);
    });
    $("mobile-drawer").append(section);
   }
@@ -38,6 +38,7 @@ const OhioMobile=(()=>{
   document.querySelectorAll("#mobile-tab-list [data-target-tab]").forEach(b=>{
    const source=document.querySelector('.tabs [data-tab="'+b.dataset.targetTab+'"]');
    b.classList.toggle("ohio-discovery-hidden",!source||source.classList.contains("ohio-discovery-hidden"));
+   b.classList.toggle("active",!!source&&source.classList.contains("active"));
   });
  });
  function update(game){
