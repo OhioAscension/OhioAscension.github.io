@@ -1,0 +1,23 @@
+/* Accessible locale selector shared by Windows, Linux, Android and web.
+   External sheet is compatible with Flask's strict style-src 'self' CSP. */
+.ohio-language-settings{
+ display:flex;flex-direction:column;gap:6px;min-width:0;margin:10px 0;
+ padding:12px;border:1px solid #3b7759;border-radius:11px;
+ background:#0c2b20;color:#bbefd0;
+ font:600 12px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif
+}
+.ohio-language-settings select{
+ width:100%;min-height:44px;margin:2px 0;
+ color:#e3ffe9;background:#133b2b;border:1px solid #4d966f;
+ border-radius:9px;padding:8px;font:600 14px system-ui,sans-serif
+}
+.ohio-language-settings small{color:#9cc7ae;overflow-wrap:anywhere}
+#auth>.ohio-language-settings{grid-column:1/-1}
+.ohio-language-settings label{font-weight:800;letter-spacing:.015em}
+.ohio-language-settings select:focus-visible{
+ outline:2px solid #a6ffc6;outline-offset:3px
+}
+@media(max-width:700px){
+ .ohio-language-settings{margin:8px 0;padding:10px 12px}
+ .ohio-language-settings select{font-size:15px}
+}

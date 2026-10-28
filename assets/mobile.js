@@ -194,7 +194,7 @@ const OhioMobile=(()=>{
   if(!game)return;
   $("mobile-clock").textContent=String(game.clock.hour).padStart(2,"0")+":"+String(game.clock.minute).padStart(2,"0");
   for(const [id,k] of [["m-credits","credits"],["m-wood","wood"],["m-ore","ore"]]){
-   $(id).textContent=Number(game.stats[k]||0).toLocaleString("es-AR");
+   $(id).textContent=Number(game.stats[k]||0).toLocaleString(window.OhioI18n?.effective()==="en"?"en-US":"es-AR");
   }
   const sector=game.sectors?.find(s=>s.id===game.location);
   context.textContent="DÍA "+game.stats.day+" · "+(sector?.name||"OHIO")+" · "+(game.clock.daylight?"TURNO ACTIVO":"TURNO NOCTURNO");

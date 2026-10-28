@@ -129,3 +129,14 @@ button:active:not(:disabled){transform:scale(.97)}
 .ohio-incident p{font-size:13px;color:#eee0cb;margin:7px 0}
 .ohio-incident .meta{font-size:11px;color:#d8ae78}
 @media(max-width:700px){.ohio-incident-inbox{padding:12px;margin:10px 0 17px}.ohio-incident-inbox h2{font-size:15px}}
+
+/* Native Ohio workforce forms: reliable in Chromium, Electron and Android. */
+.ohio-workforce-form{display:grid;gap:10px;margin-top:15px;padding:13px;border:1px solid #366e54;border-radius:12px;background:rgba(5,28,20,.55)}
+.ohio-workforce-label{display:block;color:#b6eecb;font-weight:650;font-size:.91rem}
+.ohio-workforce-quantity{width:100%;box-sizing:border-box;min-height:46px;padding:10px 12px;border-radius:9px;border:1px solid #4d9972;background:#0b261c;color:#e4ffed;font:600 1.05rem system-ui,sans-serif}
+.ohio-workforce-quantity:focus-visible{outline:2px solid #a5f5c8;outline-offset:2px}
+.ohio-workforce-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.ohio-workforce-actions button{min-width:0;white-space:normal}
+.ohio-workforce-feedback{margin:0;font-size:.9rem;color:#ffc98e}
+.ohio-workforce-feedback:empty{display:none}
+@media(max-width:430px){.ohio-workforce-actions{grid-template-columns:1fr}}

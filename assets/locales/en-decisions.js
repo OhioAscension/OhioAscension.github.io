@@ -1,0 +1,25 @@
+"use strict";
+window.OhioLocaleEnglish=(window.OhioLocaleEnglish||[]).concat([
+["Oferta de Capital Atlas","Atlas Capital Offer"],
+["Atlas ofrece financiación, pero exige exclusividad. Rechazarla entrega una ventaja a la competidora Boreal.","Atlas offers funding but demands exclusivity. Turning it down gives competitor Boreal an advantage."],
+["Aceptar Atlas: liquidez hoy, dividendos durante 20 días","Accept Atlas: liquidity now, dividends for 20 days"],
+["Rechazar y apostar por independencia","Decline and pursue independence"],
+["Convenio de trabajo","Labor agreement"],
+["La plantilla reclama garantías. Los contratos precarios provocarán conflictos futuros.","Staff demand safeguards. Insecure contracts will lead to future disputes."],
+["Firmar convenio: pagar un bono y reducir futuros conflictos","Sign the agreement: pay a bonus and reduce future disputes"],
+["Rechazar convenio: ahorrar ahora, asumir riesgos laborales","Reject the agreement: save now and accept future labor risks"],
+["Auditoría de la red","Grid audit"],
+["La autoridad exige una estrategia ante los apagones.","Regulators demand a strategy to address power outages."],
+["Crear mantenimiento preventivo permanente","Establish permanent preventive maintenance"],
+["Posponer obras y reservar fondos","Delay upgrades and reserve funds"],
+["Comité de seguridad aeroespacial","Aerospace Safety Committee"],
+["El directorio propone inspecciones independientes antes de pruebas tripuladas.","The board proposes independent inspections before crewed tests."],
+["Aceptar supervisión externa y pagar auditorías","Accept outside oversight and pay for audits"],
+["Acelerar el programa sin auditorías externas","Accelerate the program without external audits"],
+["Acuerdo internacional de abastecimiento","International supply agreement"],
+["Organismos civiles piden priorizar agua potable, aunque implique inversiones sostenidas.","Civil organizations request priority for drinking water even if it requires ongoing investment."],
+["Firmar convenio de abastecimiento público","Sign the public supply agreement"],
+["Priorizar contratos industriales de mayor margen","Prioritize higher-margin industrial contracts"],
+["Contrato de los tres voluntarios","The Three Volunteers' Contract"],
+["El pueblo pide una instalación digna. Una cooperativa o una fábrica: tu reputación empezará a formarse.","The village needs a proper facility. A cooperative or a factory: your reputation starts here."]
+]);

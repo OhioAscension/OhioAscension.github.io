@@ -1,4 +1,12 @@
 "use strict";
+(function(){
+ if(typeof document.createElement!=="function"||!document.head)return;
+ const s=document.createElement("script");
+ const parent=new URL(document.currentScript?.src||location.origin+"/assets/demo-player.js",location.href);
+ const loader=new URL("i18n-loader.js",parent);loader.search=parent.search;
+ s.src=loader.href;
+ document.head.append(s);
+})();
 /* Read-only cinematic camera over real engine snapshots. No gameplay writes. */
 const el=id=>document.getElementById(id),msg=()=>{},busy=true;
 function act(){return;}
@@ -103,3 +111,5 @@ el("game").hidden=false;
 el("sidebar").hidden=false;
 el("auth").hidden=true;
 window.OhioMobile?.authenticated(true);
+
+/* Ohio locale bundle: effb10d2e08f */

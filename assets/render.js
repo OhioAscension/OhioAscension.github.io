@@ -33,7 +33,39 @@ else if(g.decision_event){let d=g.decision_event;let n=node("div","event");n.app
 else if(g.pending){let n=node("div","event");let prompts={4:["Explorar el mapa y conservar los planos","Vender los planos al comerciante"],8:["Investigar el consumo subterráneo","Ocultar los registros"],13:["Desviar energía al B-12","Apagar la planta de manera controlada","Sobrecargar el reactor"],20:["Entregar la empresa a la comunidad","Expandir el imperio industrial","Desvelar el secreto de Lázaro"]},codes={4:["explore","ignore"],8:["investigate","conceal"],13:["redirect","shutdown","overdrive"],20:["community","industry","science"]};n.append(node("h2","",({4:"EL MAPA SECRETO",8:"PROYECTO LÁZARO",13:"INCIDENTE DEL REACTOR",20:"LA ASAMBLEA FINAL"})[g.pending]));n.append(node("p","","Decisión estratégica. Tus estadísticas y actos anteriores determinarán el resultado."));if(Array.isArray(prompts[g.pending]))prompts[g.pending].forEach((p,i)=>n.append(btn(p,()=>act("decision",codes[g.pending][i]))));else n.append(node("p","","Acontecimiento pendiente: "+String(g.pending)+". Revisá el registro y el estado del servidor."));ev.append(n)}
 let map=el("map");map.replaceChildren(node("h2","","SECTORES / DESPLAZAMIENTO"));let mg=node("div","grid");g.sectors.forEach(s=>{let c=card(s.name,s.desc,s.open?"ACCESIBLE":"DESBLOQUEO: DÍA "+s.unlock);c.dataset.sectorId=s.id;if(s.id===g.location)c.append(node("div","select","● UBICACIÓN ACTUAL"));else c.append(btn(s.open?"Viajar (−1 energía)":"Bloqueado",()=>act("travel",s.id),!s.open||!!g.pending));mg.append(c)});map.append(mg);
 let op=el("operations");op.replaceChildren(node("h2","","OPERACIONES DEL SECTOR"));let og=node("div","grid");let descriptions={village:"Atender a los aldeanos (+1 confianza, +80 créditos)",mine:"Extracción (+3 mineral)",forest:"Recolectar madera (+4 madera)",factory:"Turno de fábrica (+380 créditos, +1 contaminación)",lab:"Analizar archivos (+2 inteligencia)",b12:"Investigar subsuelo (+3 inteligencia, +2 contaminación)"};let cc=card(g.sectors.find(s=>s.id===g.location).name,descriptions[g.location],"Consumo: 2 energía");cc.append(btn("Ejecutar turno de trabajo",()=>act("work",g.location),g.stats.energy<2||!!g.pending));og.append(cc);if(["lab","b12"].includes(g.location)){let r=card("Investigación avanzada","Obtiene 3 de inteligencia.","450 créditos · 3 energía");r.append(btn("Investigar",()=>act("research"),g.stats.energy<3||g.stats.credits<450||!!g.pending));og.append(r)}op.append(og);
-let p=el("projects");p.replaceChildren(node("h2","","CATÁLOGO DE INSTALACIONES"));let pg=node("div","grid");g.projects.forEach(x=>{let c=card(x.name,x.desc,"Costo "+x.cost+" créditos · "+x.wood+" madera · "+x.ore+" mineral · "+x.power+" energía | Construidas: "+x.owned);c.dataset.projectId=x.id;c.append(btn("Construir",()=>act("build",x.id),!x.affordable||g.location!=="factory"||!!g.pending),btn("Construir lote (1–1000)",()=>{let v=prompt("¿Cuántas instalaciones querés construir? (1–1000)","100");if(v===null)return;let n=Number(v);if(!Number.isInteger(n)||n<1||n>1000){msg("Cantidad inválida: ingresá un número de 1 a 1000.");return;}act("build_batch",x.id,n)},!x.affordable||g.location!=="factory"||!!g.pending));pg.append(c)});p.append(pg);
+let p=el("projects");p.replaceChildren(node("h2","","CATÁLOGO DE INSTALACIONES"));let pg=node("div","grid");g.projects.forEach(x=>{
+ const c=card(x.name,x.desc,"Costo "+x.cost+" créditos · "+x.wood+" madera · "+x.ore+" mineral · "+x.power+" energía | Construidas: "+x.owned);
+ c.dataset.projectId=x.id;
+ const disabled=!x.affordable||g.location!=="factory"||!!g.pending;
+ c.append(btn("Construir",()=>act("build",x.id),disabled));
+ const form=document.createElement("form");
+ form.className="ohio-workforce-form ohio-batch-form";
+ const label=node("label","ohio-workforce-label","Cantidad de instalaciones (1–1000)");
+ const quantity=document.createElement("input");
+ quantity.type="number";quantity.min="1";quantity.max="1000";quantity.step="1";
+ quantity.required=true;quantity.inputMode="numeric";quantity.value="100";
+ quantity.id="batch-"+x.id;quantity.className="ohio-workforce-quantity";
+ label.htmlFor=quantity.id;
+ const feedback=node("p","ohio-workforce-feedback","");
+ feedback.setAttribute("role","status");
+ const build=btn("Construir lote (1–1000)",()=>{
+  const raw=quantity.value.trim(),n=Number(raw);
+  if(!raw||!Number.isSafeInteger(n)||n<1||n>1000){
+   feedback.textContent="Ingresá una cantidad entera de 1 a 1000.";
+   quantity.setCustomValidity("Cantidad inválida");
+   quantity.reportValidity();
+   return;
+  }
+  quantity.setCustomValidity("");
+  feedback.textContent="";
+  act("build_batch",x.id,n);
+ },disabled);
+ build.type="button";
+ quantity.addEventListener("input",()=>{quantity.setCustomValidity("");feedback.textContent=""});
+ form.addEventListener("submit",event=>{event.preventDefault();if(!build.disabled)build.click()});
+ form.append(label,quantity,build,feedback);
+ c.append(form);pg.append(c);
+});p.append(pg);
 let research=node("h2","","REVOLUCIÓN TECNOLÓGICA");p.append(research);
 let techGrid=node("div","grid");g.tech.forEach(x=>{let c=card(x.name,x.desc,"Créditos "+x.cost+" · Inteligencia "+x.intel+" · Chips "+x.chips+" · Cómputo "+x.compute+(x.requires?" · Requiere "+x.requires:""));c.append(btn(x.unlocked?"Investigada":"Investigar tecnología",()=>act("technology",x.id),x.unlocked||!x.affordable||!!g.pending));techGrid.append(c)});p.append(techGrid);
 p.append(node("h2","","MEGAPROYECTOS · NUEVA ERA"));

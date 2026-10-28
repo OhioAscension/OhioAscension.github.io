@@ -1,0 +1,26 @@
+"use strict";
+window.OhioLocaleEnglish=(window.OhioLocaleEnglish||[]).concat([
+["OHIO · CONTROL DE MISIÓN","OHIO · MISSION CONTROL"],
+["LANZAMIENTO FALLIDO","LAUNCH FAILED"],
+["Anomalía crítica · Iniciando investigación","Critical anomaly · Investigation started"],
+["RED ELÉCTRICA EN CRISIS","POWER GRID CRISIS"],
+["Suministro interrumpido · Ejecutar protocolo","Supply interrupted · Initiate protocol"],
+["INCIDENTE DETECTADO","INCIDENT DETECTED"],
+["El centro de mando requiere atención","Command center needs attention"],
+["DESPEGUE CONFIRMADO","LIFTOFF CONFIRMED"],
+["La siguiente frontera empieza acá","The next frontier begins here"],
+["PRIMERA BASE EXTRATERRESTRE","FIRST OFF-WORLD BASE"],
+["Ohio ya no pertenece solamente a la Tierra","Ohio is no longer bound to Earth"],
+["OPERACIONES RESTABLECIDAS","OPERATIONS RESTORED"],
+["La colonia sigue adelante","The colony moves forward"],
+["REPARACIÓN COMPLETADA","REPAIR COMPLETE"],
+["Ingeniería devuelve el control","Engineering restores control"],
+["INSTALACIÓN CONSTRUIDA","FACILITY BUILT"],
+["La industria sigue creciendo","Industry keeps growing"],
+["ENERGÍA EN LÍNEA","POWER ONLINE"],
+["La red recupera capacidad","Grid capacity restored"],
+["AUTORIZACIÓN CONCEDIDA","PERMIT GRANTED"],
+["Control legal confirmado","Legal clearance confirmed"],
+["RECURSOS OBTENIDOS","RESOURCES ACQUIRED"],
+["El siguiente paso ya está en marcha","The next step is underway"]
+]);

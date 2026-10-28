@@ -3,7 +3,7 @@
 const OhioDesktop=(()=>{
  const game=document.getElementById("game");
  const tabs=[...document.querySelectorAll(".tabs [data-tab]")];
- const fmt=n=>Number(n||0).toLocaleString("es-AR");
+ const fmt=n=>Number(n||0).toLocaleString(window.OhioI18n?.effective()==="en"?"en-US":"es-AR");
  if(!game)return {update(){}};
 
  const overview=document.createElement("section");

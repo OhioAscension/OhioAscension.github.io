@@ -1,0 +1,26 @@
+"use strict";
+window.OhioLocaleEnglish=(window.OhioLocaleEnglish||[]).concat([
+["La partida tiene un formato inválido.","The save has an invalid format."],
+["Partida incompatible: Ohio v6 requiere una campaña nueva.","Incompatible save: Ohio v6 requires a new campaign."],
+["MODO AUSENCIA · Se simularon 60 días de Ohio (24 horas reales); el exceso quedó pausado.","OFFLINE MODE · 60 Ohio days (24 real hours) were simulated; additional time remained paused."],
+["Necesitás descansar antes de continuar.","You need to rest before continuing."],
+["El tiempo avanza automáticamente. Ya no se puede adelantar el día.","Time advances automatically. You can no longer skip a day."],
+["El préstamo de emergencia ya fue utilizado.","The emergency loan has already been used."],
+["La campaña terminó: reiniciá para jugar de nuevo.","The campaign has ended. Restart to play again."],
+["Acción desconocida.","Unknown action."],
+["Fuera del horario de operación (08:00 a 20:00). Las oficinas y fábricas están cerradas.","Outside operating hours (08:00–20:00). Offices and factories are closed."],
+["Sector aún bloqueado.","Sector still locked."],
+["Trabajo inválido.","Invalid work assignment."],
+["Primero investigá la tecnología requerida.","Research the required technology first."],
+["Construí desde el parque industrial.","Build from the Industrial Park."],
+["Tecnología desconocida.","Unknown technology."],
+["Tecnología ya investigada.","Technology already researched."],
+["Falta tecnología previa.","Prerequisite technology missing."],
+["No alcanzan los recursos de investigación.","Not enough research resources."],
+["Falta investigación tecnológica.","Technology research required."],
+["Megaproyecto sin recursos suficientes.","Not enough resources for the megaproject."],
+["Región desconocida.","Unknown region."],
+["Región ya conectada.","Region already connected."],
+["Elegí región y servicio.","Choose a region and service."],
+["Región sin conectar o servicio inválido.","Region not connected or service invalid."]
+]);

@@ -27,6 +27,7 @@ async function safe(f){
 }
 async function refresh(){
  let a=await api("auth/status");
+ if(a.authenticated&&a.lang&&window.OhioI18n)window.OhioI18n.setProfile(a.lang);
  el("authInfo").textContent=a.initialized?"Elegí tu cuenta o registrá un usuario nuevo.":"Registro del primer agente";
  // A credential registered on github.io cannot sign for the localhost RP ID.
  // PC users should open the canonical site to reuse their existing passkey.
@@ -56,7 +57,7 @@ async function refresh(){
  window.OhioMobile?.authenticated(a.authenticated);
  if(a.authenticated){const g=await api("game");render(g);pollSignature=signature(g);await updateSecurity();}
 }
-el("register").onclick=()=>safe(async()=>{let o=decode(await api("auth/register/options",{username:el("username").value}));let c=await navigator.credentials.create({publicKey:o});await api("auth/register/verify",serial(c));await refresh()});
+el("register").onclick=()=>safe(async()=>{let o=decode(await api("auth/register/options",{username:el("username").value,lang:el("login-language")?.value||"default"}));let c=await navigator.credentials.create({publicKey:o});await api("auth/register/verify",serial(c));await refresh()});
 el("login").onclick=()=>safe(async()=>{let o=decode(await api("auth/login/options",{username:el("username").value.trim()}));let c=await navigator.credentials.get({publicKey:o});await api("auth/login/verify",serial(c));await refresh()});
 el("logout").onclick=()=>safe(async()=>{await api("auth/logout",{});await refresh()});
 let busy=false;
@@ -144,7 +145,7 @@ async function totpStart(kind){
  await safe(async()=>{
   totpFlow=kind;totpPanel.hidden=false;totpSecret.textContent="";document.getElementById("ohio-totp-qr").replaceChildren();
   if(kind==="register"||kind==="enroll"){
-   const payload=kind==="register"?{username:el("username").value.trim()}:{};
+   const payload=kind==="register"?{username:el("username").value.trim(),lang:el("login-language")?.value||"default"}:{};
    const data=await api(kind==="register"?"auth/totp/register/start":"auth/totp/enroll/start",payload);
    presentTotpQr(document.getElementById("ohio-totp-qr"),data);
    totpSecret.textContent="O copiá esta clave en Authenticator: "+data.secret;

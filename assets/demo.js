@@ -1,4 +1,12 @@
 "use strict";
+(function(){
+ if(typeof document.createElement!=="function"||!document.head)return;
+ const s=document.createElement("script");
+ const parent=new URL(document.currentScript?.src||location.origin+"/assets/demo.js",location.href);
+ const loader=new URL("i18n-loader.js",parent);loader.search=parent.search;
+ s.src=loader.href;
+ document.head.append(s);
+})();
 /* OHIO: ASCENSION — an uninterrupted five-act film, not a media player.
  * All gameplay frames originate in game/demo.py; no user saves are modified.
  * One tap/click pauses or resumes; Salir stays on desktop; Android uses Back.
@@ -209,3 +217,5 @@ document.addEventListener("visibilitychange",()=>{
 });
 window.addEventListener("pagehide",()=>{audio?.stop();sound=false;setStatus()});
 requestAnimationFrame(tick);
+
+/* Ohio locale bundle: effb10d2e08f */
