@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ohio · Diagnóstico de conexión</title><link rel="icon" href="/assets/favicon.svg">
+<style>body{font:16px system-ui;background:#071c17;color:#ddffeb;padding:24px;max-width:760px;margin:auto}h1{color:#6cf2af}section{background:#102d24;border:1px solid #477b5f;border-radius:12px;padding:16px;margin:14px 0}code,pre{overflow-wrap:anywhere;white-space:pre-wrap}button{padding:12px;background:#286e4b;color:white;border:0;border-radius:8px}a{color:#8affbd}</style>
+</head><body><h1>OHIO · Diagnóstico de conexión</h1><p>Esta página comprueba la configuración de API desde el mismo navegador. No solicita credenciales ni modifica partidas.</p>
+<section><strong>Configuración cargada</strong><p id="config">Cargando...</p></section>
+<section><strong>Resultado</strong><pre id="result">Esperando...</pre><button id="retry">Repetir prueba</button></section>
+<p><a href="/">Volver a Ohio</a></p>
+<script src="/assets/ohio-config.js"></script>
+<script>
+"use strict";
+const output=document.getElementById("result");
+const api=String(window.OHIO_API_ORIGIN||"").replace(/\/$/,"");
+document.getElementById("config").textContent=api||"(vacía: se usaría el dominio de la web)";
+async function test(){
+ const url=(api||location.origin)+"/api/auth/status";
+ output.textContent="Probando "+url+" ...";
+ try{
+  const r=await fetch(url,{credentials:"include",cache:"no-store"});
+  const body=await r.text();
+  output.textContent="HTTP "+r.status+"\nRespuesta: "+body.slice(0,1200)+"\n"+(r.ok?"La API respondió. Falta comprobar cookies y passkeys.":"La API devolvió un error.");
+ }catch(e){
+  output.textContent="La solicitud fue bloqueada o falló: "+e.message+"\nPosibles causas: CORS, servidor/túnel caído, bloqueo de red o caché.\nProbá abrir la API directamente en otra pestaña para comparar: "+url;
+ }
+}
+document.getElementById("retry").addEventListener("click",test);test();
+</script></body></html>
