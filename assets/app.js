@@ -2,7 +2,7 @@
 const el=x=>document.getElementById(x),msg=t=>el("message").textContent=t;
 const bytes=s=>{let z=atob(s.replace(/-/g,"+").replace(/_/g,"/")+"===".slice((s.length+3)%4));return Uint8Array.from(z,c=>c.charCodeAt(0))};
 const b64=v=>{let z="";for(const x of new Uint8Array(v))z+=String.fromCharCode(x);return btoa(z).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")};
-async function api(p,data){const base=String(window.OHIO_API_ORIGIN||"").replace(/\/$/,"");let r;try{r=await fetch(base+"/api/"+p,data===undefined?{credentials:"include"}:{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});}catch(err){throw Error("Servidor de Ohio desconectado o inaccesible. Verificá la conexión HTTPS y la configuración del servidor.");}let raw=await r.text(),o;try{o=JSON.parse(raw)}catch(_){throw Error("La API devolvió una respuesta no JSON (HTTP "+r.status+"). Revisá la consola del servidor. Ruta: /api/"+p)}if(!r.ok)throw Error(o.error||"Error HTTP "+r.status+" en /api/"+p);return o}
+async function api(p,data){const base=String(window.OHIO_API_ORIGIN||"").replace(/\/$/,"");let r;try{r=await fetch(base+"/api/"+p,data===undefined?{credentials:"include",cache:"no-store"}:{method:"POST",credentials:"include",cache:"no-store",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});}catch(err){throw Error("Servidor de Ohio desconectado o inaccesible. Verificá la conexión HTTPS y la configuración del servidor.");}let raw=await r.text(),o;try{o=JSON.parse(raw)}catch(_){throw Error("La API devolvió una respuesta no JSON (HTTP "+r.status+"). Revisá la consola del servidor. Ruta: /api/"+p)}if(!r.ok)throw Error(o.error||"Error HTTP "+r.status+" en /api/"+p);return o}
 function decode(o){o.challenge=bytes(o.challenge);if(o.user)o.user.id=bytes(o.user.id);for(const key of ["excludeCredentials","allowCredentials"])if(o[key])o[key].forEach(x=>x.id=bytes(x.id));return o}
 function serial(c){let r=c.response,v={clientDataJSON:b64(r.clientDataJSON)};for(const k of ["attestationObject","authenticatorData","signature","userHandle"])if(r[k])v[k]=b64(r[k]);if(r.getTransports)v.transports=r.getTransports();return {id:c.id,rawId:b64(c.rawId),type:c.type,response:v,clientExtensionResults:c.getClientExtensionResults()}}
 async function safe(f){
@@ -225,4 +225,6 @@ async function reconnectWhenNeeded(){
  await safe(refresh);
 }
 window.addEventListener("online",reconnectWhenNeeded);
+window.addEventListener("pageshow",reconnectWhenNeeded);
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")reconnectWhenNeeded()});
 setInterval(reconnectWhenNeeded,16000);
