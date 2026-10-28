@@ -1,155 +1,191 @@
 "use strict";
 /*
- * OHIO Trailer Score — five original procedural movements.
- * Synthesized in-browser; no samples, external music, or copyrighted material.
- * Browser policy: sound begins only after the viewer explicitly activates it.
+ * Ohio: Ascension — original adaptive cinematic score.
+ * Five composed movements, scored action cues and a unique orchestral
+ * launch victory. No recorded music, samples, external network or licensing
+ * required. Audio is activated by an explicit user gesture.
  */
 const OhioTrailerAudio=(()=>{
- const Audio=()=>window.AudioContext||window.webkitAudioContext;
+ const AudioContextClass=()=>window.AudioContext||window.webkitAudioContext;
  const CHAPTERS=[
-  {bpm:96, root:45, chord:[0,3,7,10], melody:[0,7,3,10,7,3,0,7], bass:"triangle",lead:"sine"},
-  {bpm:128,root:45, chord:[0,4,7,12], melody:[0,7,12,7,4,12,7,16],bass:"sawtooth",lead:"triangle"},
-  {bpm:142,root:43, chord:[0,3,6,10], melody:[0,6,3,10,6,3,0,-2],bass:"sawtooth",lead:"sawtooth"},
-  {bpm:154,root:47, chord:[0,5,7,12],melody:[0,7,12,17,12,7,19,17],bass:"triangle",lead:"sawtooth"},
-  {bpm:114,root:48, chord:[0,4,7,12],melody:[0,7,12,16,19,16,12,24],bass:"triangle",lead:"triangle"}
+  {bpm:96,root:45,mode:"minor",chords:[[0,3,7,10],[-2,2,5,9],[3,7,10,14],[-4,0,3,7]],melody:[0,7,10,7,3,7,0,-2],texture:"ambient"},
+  {bpm:128,root:45,mode:"major",chords:[[0,4,7,12],[-2,2,5,9],[5,9,12,16],[7,11,14,19]],melody:[0,7,12,16,12,7,4,12],texture:"industrial"},
+  {bpm:140,root:43,mode:"minor",chords:[[0,3,6,10],[-2,1,5,8],[-5,-2,3,7],[2,5,9,12]],melody:[0,6,3,10,6,3,-2,0],texture:"crisis"},
+  {bpm:148,root:47,mode:"minor",chords:[[0,5,7,12],[-2,3,7,10],[3,7,10,15],[5,9,12,17]],melody:[0,7,12,17,12,7,19,17],texture:"ascent"},
+  {bpm:110,root:48,mode:"major",chords:[[0,4,7,12],[5,9,12,16],[-2,2,5,9],[7,11,14,19]],melody:[0,7,12,16,19,16,12,24],texture:"wonder"}
  ];
- let context=null,master=null,track=null;
- let volume=.55,playing=false,paused=false,chapter=0,step=0,nextTime=0,timer=null,noise=null;
- const hz=midi=>440*Math.pow(2,(midi-69)/12);
+ let context=null,master=null,mix=null,scoreGain=null,fxGain=null,compressor=null,echo=null,echoGain=null;
+ let noiseBuffer=null,volume=.55,playing=false,paused=false,chapter=0,step=0,nextTime=0,timer=null;
+ const hz=n=>440*Math.pow(2,(n-69)/12);
  function create(){
   if(context)return true;
-  const C=Audio();if(!C)return false;
+  const C=AudioContextClass();if(!C)return false;
   context=new C();
-  master=context.createGain();
-  master.gain.value=volume*.72;
-  master.connect(context.destination);
-  track=context.createGain();
-  track.gain.value=.9;
-  track.connect(master);
-  noise=context.createBuffer(1,context.sampleRate*.35,context.sampleRate);
-  const data=noise.getChannelData(0);
-  for(let i=0;i<data.length;i++)data[i]=Math.random()*2-1;
+  master=context.createGain();master.gain.value=0;
+  compressor=context.createDynamicsCompressor();
+  compressor.threshold.value=-18;compressor.knee.value=18;compressor.ratio.value=3;
+  compressor.attack.value=.006;compressor.release.value=.22;
+  mix=context.createGain();mix.gain.value=.88;
+  scoreGain=context.createGain();scoreGain.gain.value=.72;
+  fxGain=context.createGain();fxGain.gain.value=.8;
+  echo=context.createDelay(.9);echo.delayTime.value=.32;
+  echoGain=context.createGain();echoGain.gain.value=.13;
+  scoreGain.connect(mix);fxGain.connect(mix);
+  mix.connect(compressor);compressor.connect(master);master.connect(context.destination);
+  scoreGain.connect(echo);echo.connect(echoGain);echoGain.connect(mix);
+  noiseBuffer=context.createBuffer(1,Math.floor(context.sampleRate*.6),context.sampleRate);
+  const data=noiseBuffer.getChannelData(0);
+  for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1);
   return true;
  }
- function tone(note,at,duration=.22,type="triangle",gain=.09,glide=0){
+ function output(destination){return destination==="fx"?fxGain:scoreGain}
+ function tone(note,at,duration=.25,type="triangle",gain=.1,{to=0,channel="score",lowpass=4500,attack=.02}={}){
   if(!context)return;
-  const oscillator=context.createOscillator();
-  const envelope=context.createGain();
-  const filter=context.createBiquadFilter();
-  oscillator.type=type;
-  oscillator.frequency.setValueAtTime(hz(note),at);
-  if(glide)oscillator.frequency.exponentialRampToValueAtTime(Math.max(25,hz(note+glide)),at+duration);
-  filter.type="lowpass";filter.frequency.value=type==="sawtooth"?2000:5000;
-  envelope.gain.setValueAtTime(.0001,at);
-  envelope.gain.exponentialRampToValueAtTime(Math.max(.0002,gain),at+.014);
-  envelope.gain.exponentialRampToValueAtTime(.0001,at+duration);
-  oscillator.connect(filter);filter.connect(envelope);envelope.connect(track);
-  oscillator.start(at);oscillator.stop(at+duration+.03);
+  at=Math.max(context.currentTime+.005,at);
+  const osc=context.createOscillator(),env=context.createGain(),filter=context.createBiquadFilter();
+  osc.type=type;osc.frequency.setValueAtTime(hz(note),at);
+  if(to)osc.frequency.exponentialRampToValueAtTime(Math.max(30,hz(note+to)),at+Math.max(.04,duration));
+  filter.type="lowpass";filter.frequency.value=lowpass;
+  env.gain.setValueAtTime(.0001,at);
+  env.gain.exponentialRampToValueAtTime(Math.max(.0003,gain),at+Math.min(attack,duration*.35));
+  env.gain.setTargetAtTime(.0001,at+duration*.75,Math.max(.03,duration*.13));
+  osc.connect(filter);filter.connect(env);env.connect(output(channel));
+  osc.start(at);osc.stop(at+duration+.16);
  }
- function percussion(at,kind){
+ function noise(at,kind="hat",gain=.07){
   if(!context)return;
-  if(kind==="kick"){
-   const o=context.createOscillator(),e=context.createGain();
-   o.type="sine";o.frequency.setValueAtTime(125,at);
-   o.frequency.exponentialRampToValueAtTime(43,at+.16);
-   e.gain.setValueAtTime(.13,at);e.gain.exponentialRampToValueAtTime(.0001,at+.18);
-   o.connect(e);e.connect(track);o.start(at);o.stop(at+.2);
-  }else{
-   const src=context.createBufferSource(),f=context.createBiquadFilter(),e=context.createGain();
-   src.buffer=noise;f.type="highpass";f.frequency.value=kind==="crash"?850:5000;
-   e.gain.setValueAtTime(kind==="crash"?.12:.035,at);
-   e.gain.exponentialRampToValueAtTime(.0001,at+(kind==="crash"?.28:.07));
-   src.connect(f);f.connect(e);e.connect(track);src.start(at);src.stop(at+(kind==="crash"?.3:.09));
-  }
+  at=Math.max(at,context.currentTime+.005);
+  const src=context.createBufferSource(),filter=context.createBiquadFilter(),env=context.createGain();
+  src.buffer=noiseBuffer;
+  filter.type=kind==="impact"?"lowpass":"highpass";
+  filter.frequency.value=kind==="impact"?1250:kind==="snare"?1800:6600;
+  const length=kind==="impact"?.5:kind==="snare"?.14:.075;
+  env.gain.setValueAtTime(Math.max(.001,gain),at);
+  env.gain.exponentialRampToValueAtTime(.0001,at+length);
+  src.connect(filter);filter.connect(env);env.connect(kind==="impact"?fxGain:scoreGain);
+  src.start(at);src.stop(at+length+.02);
  }
- function beat(at){
-  const score=CHAPTERS[chapter],i=step++,eighth=60/score.bpm/2;
-  const bar=Math.floor(i/8),root=score.root+[0,-2,3,-4][bar%4];
-  const note=root+score.melody[i%8];
-  if(i%4===0)tone(root-12,at,eighth*3.1,score.bass,chapter===2?.12:.09);
-  if(i%2===0)tone(root+score.chord[(i/2)%4],at,eighth*1.65,"sine",.035);
-  if(chapter===0){
-   if(i%2===0)tone(note+12,at,eighth*1.65,score.lead,.055);
-  }else if(chapter===2){
-   if(i%2===0)tone(note+12,at,eighth*.78,score.lead,.075);
-   percussion(at,i%4===0?"kick":"hat");
-  }else{
-   tone(note+12,at,eighth*.8,score.lead,chapter===3?.065:.055);
-   if(i%4===0)percussion(at,"kick");
-   if(i%2===1)percussion(at,"hat");
+ function drum(at,kind="kick"){
+  if(kind!=="kick"){noise(at,kind,kind==="snare"?.075:.043);return}
+  const osc=context.createOscillator(),env=context.createGain();
+  at=Math.max(context.currentTime+.005,at);
+  osc.type="sine";osc.frequency.setValueAtTime(148,at);
+  osc.frequency.exponentialRampToValueAtTime(43,at+.18);
+  env.gain.setValueAtTime(.25,at);
+  env.gain.exponentialRampToValueAtTime(.0001,at+.2);
+  osc.connect(env);env.connect(scoreGain);osc.start(at);osc.stop(at+.22);
+ }
+ function score(at){
+  const s=CHAPTERS[chapter],i=step++,eighth=30/s.bpm;
+  const chordIndex=Math.floor(i/8)%4,notes=s.chords[chordIndex],root=s.root;
+  const note=root+s.melody[i%8];
+  if(i%8===0){
+   for(let n=0;n<3;n++)tone(root+notes[n]+12,at,eighth*7.2,"sine",.022,{lowpass:1200,attack:.38});
+   tone(root+notes[0]-12,at,eighth*5,"triangle",.12,{lowpass:620,attack:.06});
   }
-  if(i%16===0&&chapter===4)tone(root+24,at,eighth*6,"sine",.04);
+  if(s.texture==="ambient"){
+   if(i%2===0)tone(note+12,at,eighth*1.65,"sine",.092,{lowpass:2700});
+   if(i%4===2)noise(at,"hat",.015);
+  }else if(s.texture==="crisis"){
+   if(i%2===0)tone(note+12,at,eighth*.65,"sawtooth",.085,{lowpass:1400});
+   if(i%2===0)drum(at,i%4===0?"kick":"snare");
+   else drum(at,"hat");
+  }else{
+   tone(note+12,at,eighth*.9,s.texture==="industrial"?"triangle":"sawtooth",
+        s.texture==="ascent"?.09:.073,{lowpass:s.texture==="ascent"?3200:2200});
+   if(i%4===0)drum(at);
+   if(i%4===2)drum(at,"snare");
+   if(i%2===1)drum(at,"hat");
+   if(s.texture==="wonder"&&i%4===0)tone(root+notes[2]+24,at,eighth*3.2,"sine",.045);
+  }
   return eighth;
  }
  function schedule(){
   if(!playing||paused||!context||context.state!=="running")return;
-  const until=context.currentTime+.16;
-  let attempts=0;
-  while(nextTime<until&&attempts++<12){
-   nextTime+=beat(nextTime);
-  }
+  const horizon=context.currentTime+.18;
+  for(let n=0;nextTime<horizon&&n<16;n++)nextTime+=score(nextTime);
  }
- function fade(target){
+ function fade(target,time=.075){
   if(!context)return;
-  master.gain.cancelScheduledValues(context.currentTime);
-  master.gain.setTargetAtTime(target,context.currentTime,.065);
+  const at=context.currentTime;
+  master.gain.cancelScheduledValues(at);
+  master.gain.setTargetAtTime(Math.max(.00001,target),at,time);
  }
  async function start(){
   if(!create())return false;
   await context.resume();
-  playing=true;paused=false;
-  nextTime=context.currentTime+.03;
-  step=0;
-  fade(volume*.72);
-  clearInterval(timer);timer=setInterval(schedule,60);
+  if(context.state!=="running")return false;
+  playing=true;paused=false;step=0;nextTime=context.currentTime+.045;
+  fade(volume*.88,.035);
+  clearInterval(timer);timer=setInterval(schedule,55);
   schedule();
   return true;
  }
- function pause(){
-  paused=true;fade(0);
- }
+ function pause(){paused=true;fade(0,.04)}
  function resume(){
-  if(!playing)return;
-  paused=false;
-  nextTime=context.currentTime+.06;
-  fade(volume*.72);
-  schedule();
+  if(!playing||!context)return;
+  context.resume().catch(()=>{});
+  paused=false;nextTime=context.currentTime+.06;
+  fade(volume*.88);schedule();
  }
  function stop(){
   playing=false;paused=false;
   clearInterval(timer);timer=null;
-  fade(0);
+  fade(0,.04);
  }
  function setChapter(n){
   chapter=Math.max(0,Math.min(CHAPTERS.length-1,Number(n)||0));
   step=0;
-  if(context)nextTime=context.currentTime+.08;
+  if(context)nextTime=context.currentTime+.09;
   if(playing&&!paused)schedule();
  }
- function setVolume(n){volume=Math.min(1,Math.max(0,Number(n)||0));if(playing&&!paused)fade(volume*.72)}
+ function setVolume(n){
+  volume=Math.max(0,Math.min(1,Number(n)||0));
+  if(playing&&!paused)fade(volume*.88,.04);
+ }
+ function fanfare(at,root){
+  // New original Ohio melody. Intentionally not an interpolation of "Day One".
+  const sequence=[
+   [0,0,.52],[.16,7,.65],[.40,12,.55],[.67,16,.7],
+   [.96,19,.8],[1.32,24,1.35],[1.42,16,1.0],[1.42,19,1.0]
+  ];
+  for(const [offset,pitch,duration] of sequence)
+   tone(root+pitch+12,at+offset,duration,"triangle",.125,{channel:"fx",attack:.05});
+  tone(root+12,at+.95,2.0,"sine",.095,{channel:"fx",lowpass:1300,attack:.3});
+  noise(at+.5,"impact",.11);
+ }
  function cue(type){
-  if(!playing||paused||!context)return;
-  const at=context.currentTime+.015,root=CHAPTERS[chapter].root;
+  if(!playing||paused||!context||context.state!=="running")return;
+  const at=context.currentTime+.035,root=CHAPTERS[chapter].root;
   if(type==="blackout"||type==="failure"){
-   percussion(at,"crash");
-   tone(root+5,at,.65,"sawtooth",.18,-14);
-   tone(root-7,at,.8,"sawtooth",.10,-9);
+   noise(at,"impact",.2);
+   tone(root+12,at,.8,"sawtooth",.13,{to:-16,channel:"fx",lowpass:1900});
+   tone(root-10,at+.12,.7,"triangle",.18,{to:-9,channel:"fx",lowpass:850});
+   if(type==="failure")noise(at+.28,"impact",.23);
   }else if(type==="launch"){
-   tone(root+12,at,.85,"sawtooth",.12,12);
-   tone(root+19,at+.17,.6,"triangle",.11,7);
-   percussion(at+.3,"crash");
+   noise(at,"impact",.16);
+   tone(root-12,at,1.25,"sawtooth",.15,{to:14,channel:"fx",lowpass:1700,attack:.12});
+   tone(root+7,at+.22,.9,"triangle",.09,{to:12,channel:"fx"});
+   // This is the hero moment, not a tiny two-note UI beep.
+   fanfare(at+.48,root);
   }else if(type==="resolve"||type==="finale"){
-   [0,4,7,12].forEach((v,i)=>tone(root+v+12,at+i*.11,.76,"triangle",.07));
-   percussion(at+.2,"crash");
+   fanfare(at,root);
   }else if(type==="build"||type==="repair"||type==="power"){
-   tone(root+12,at,.16,"triangle",.065);
-   tone(root+19,at+.11,.28,"triangle",.07);
+   noise(at,"hat",.07);
+   [0,7,12].forEach((v,i)=>tone(root+v+12,at+i*.11,.31,"triangle",.09,{channel:"fx"}));
   }else if(type==="approve"){
-   tone(root+7,at,.14,"sine",.06);
-   tone(root+12,at+.10,.25,"sine",.07);
+   [0,4,7].forEach((v,i)=>tone(root+v+12,at+i*.1,.34,"sine",.09,{channel:"fx"}));
   }else if(type==="warning"){
-   tone(root+9,at,.3,"sawtooth",.055,-2);
+   tone(root+9,at,.48,"sawtooth",.1,{to:-3,channel:"fx",lowpass:950});
+  }else if(type==="work"||type==="move"){
+   tone(root+12,at,.14,"sine",.05,{channel:"fx"});
   }
  }
- return {start,pause,resume,stop,setChapter,setVolume,cue,get playing(){return playing},get paused(){return paused}};
+ return {
+  start,pause,resume,stop,setChapter,setVolume,cue,
+  get playing(){return playing},
+  get paused(){return paused},
+  get supported(){return !!AudioContextClass()}
+ };
 })();
+window.OhioTrailerAudio=OhioTrailerAudio;

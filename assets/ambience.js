@@ -5,7 +5,7 @@ const OhioAmbience=(()=>{
  const $=id=>document.getElementById(id);
  const root=document.documentElement;
  const scene=$("live-console");
- if(scene)scene.innerHTML='<div class="live-heading"><span class="signal"></span><b id="live-condition">CENTRO DE CONTROL</b><span id="live-clock">08:00</span></div><div class="industrial-sky" aria-hidden="true"><div class="sun"></div><div class="moon"></div><div class="cloud cloud-a"></div><div class="cloud cloud-b"></div><div class="plant p1"><i></i><i></i></div><div class="plant p2"><i></i><i></i></div><div class="plant p3"><i></i><i></i></div><div class="stack"></div><div class="smoke"></div><div class="crane"><i></i></div><div class="terrain"></div></div><div class="live-readouts"><span id="live-machines">0 instalaciones</span><span id="live-grid">RED ESTABLE</span><span id="live-shift">JORNADA</span></div>';
+ if(scene)scene.innerHTML='<div class="live-heading"><span class="signal"></span><b id="live-condition">CENTRO DE CONTROL</b><span id="live-clock">08:00</span></div><div class="industrial-sky" aria-hidden="true"><div class="sun"></div><div class="moon"></div><div class="factory-stars"></div><div class="industrial-haze"></div><div class="cloud cloud-a"></div><div class="cloud cloud-b"></div><div class="plant p1"><i></i><i></i></div><div class="plant p2"><i></i><i></i></div><div class="plant p3"><i></i><i></i></div><div class="stack"></div><div class="smoke"></div><div class="crane"><i></i></div><div class="terrain"></div></div><div class="live-readouts"><span id="live-machines">0 instalaciones</span><span id="live-grid">RED ESTABLE</span><span id="live-shift">JORNADA</span></div><div class="ohio-signal-feed" aria-live="off"><span class="ohio-signal-id">◈ OHIO NETWORK</span><strong id="live-radio">SEÑAL INDUSTRIAL ESTABLECIDA</strong><span class="ohio-radio-led" aria-hidden="true"></span></div>';
  const toast=document.createElement("div");toast.className="ohio-toast";toast.setAttribute("role","status");toast.setAttribute("aria-live","polite");document.body.append(toast);
  function notify(message,emergency=false){
   if(!message)return;
@@ -22,7 +22,25 @@ const OhioAmbience=(()=>{
   const severity=!outage?"normal":deficit>=100?"critical":"warning";
   root.dataset.severity=severity;
   window.OhioAudio?.setMode?.(severity);
+  window.OhioAudio?.setEra?.(window.OhioProgression?.state?.(g)?.stage||0);
   const count=Object.values(g.projects).reduce((sum,p)=>sum+p.owned,0);
+  const stage=window.OhioProgression?.state?.(g)?.stage||0;
+  const signal=outage
+   ?"PRIORIDAD ROJA · MANTENIMIENTO DE LA RED"
+   :g.decision_event||g.pending
+    ?"CONSEJO DE ADMINISTRACIÓN · DECISIÓN PENDIENTE"
+    :stage>=5
+     ?"RED ORBITAL · LA COLONIA MIRA HACIA LAS ESTRELLAS"
+     :stage>=4
+      ?"INGENIERÍA AEROESPACIAL · VENTANA DE LANZAMIENTO"
+      :count===0
+       ?"MISIÓN INICIAL · LEVANTAR LA PRIMERA INDUSTRIA"
+       :g.clock.daylight
+        ?"PLANTAS EN OPERACIÓN · PRODUCCIÓN MONITOREADA"
+        :"CONTROL NOCTURNO · SISTEMAS EN VIGILANCIA";
+  if($("live-radio").textContent!==signal)$("live-radio").textContent=signal;
+  scene.classList.toggle("industrial-haze-active",g.stats.pollution>=40);
+  scene.classList.toggle("orbital-ready",stage>=4);
   root.style.setProperty("--factory-intensity",Math.min(1,count/25).toFixed(2));
   $("live-clock").textContent=String(hour).padStart(2,"0")+":"+String(g.clock.minute).padStart(2,"0");
   $("live-condition").textContent=outage?"EMERGENCIA ELÉCTRICA":g.clock.daylight?"OHIO · INDUSTRIA EN MARCHA":"OHIO · TURNO NOCTURNO";
@@ -34,6 +52,7 @@ const OhioAmbience=(()=>{
   if(previous&&!initial){
    if(outage&&!previous.outage){
     notify("ALERTA ELÉCTRICA · Déficit de "+deficit+" unidades",true);
+    window.OhioCinematics?.play("blackout");
     if(Date.now()-lastAlarm>30000){window.OhioAudio?.alarm?.();lastAlarm=Date.now()}
    }else if(!outage&&previous.outage){
     notify("SUMINISTRO RESTABLECIDO · Red eléctrica estable");

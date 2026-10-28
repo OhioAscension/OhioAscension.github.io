@@ -20,7 +20,7 @@ const cueIcons={
 };
 const musicSlider=$("music-volume"),musicReadout=$("music-volume-value");
 let scenes=[],ready=false,frameReady=false,chapter=0,beat=-1,elapsed=0;
-let paused=false,finished=false,failed=false,last=performance.now(),lastPaint=0,flashTimer=0,actionTimer=0;
+let paused=false,finished=false,failed=false,started=false,last=performance.now(),lastPaint=0,flashTimer=0,actionTimer=0;
 let sound=false;
 const stored=Number(localStorage.getItem("ohio-trailer-volume"));
 const initial=localStorage.getItem("ohio-trailer-volume")===null?55:(Number.isFinite(stored)?stored:55);
@@ -38,7 +38,7 @@ const formatTime=t=>{
  return String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0");
 };
 function setStatus(){
- const value=failed?"SIN CONEXIÓN":!ready||!frameReady?"CARGANDO":finished?"FINALIZADO":paused?"PAUSADO":"EN VIVO";
+ const value=failed?"SIN CONEXIÓN":!ready||!frameReady?"CARGANDO":!started?"LISTO":finished?"FINALIZADO":paused?"PAUSADO":"EN VIVO";
  $("live-status").textContent=value;
  $("pause-button").textContent=paused?"▶":"Ⅱ";
  $("pause-button").setAttribute("aria-label",paused?"Reproducir":"Pausar");
@@ -115,6 +115,7 @@ function showBeat(index,chapterStart=false){
  const cue=scene.cues?.[part]||"reveal";
  if(part>0||chapterStart)actionFlash(cue);
  if(sound)audio?.cue(cue);
+ if(started&&part>0)window.OhioCinematics?.play(cue);
  frame.contentWindow?.postMessage({
   type:"OHIO_DEMO_SCENE",
   state:scene.frames[part],
@@ -126,7 +127,7 @@ function showBeat(index,chapterStart=false){
  syncChapterButtons();
 }
 function jump(i){
- if(!ready||i<0||i>=scenes.length)return;
+ if(!ready||!started||i<0||i>=scenes.length)return;
  $("trailer-end").hidden=true;
  finished=false;paused=false;
  chapter=i;elapsed=0;beat=-1;
@@ -145,20 +146,55 @@ function end(){
  setStatus();
 }
 function skip(delta){
- if(!ready)return;
+ if(!ready||!started)return;
  if(finished){jump(delta<0?4:0);return}
  const next=chapter+delta;
  if(next>=scenes.length){end();return}
  jump(Math.max(0,next));
 }
 function togglePause(){
- if(!ready)return;
+ if(!ready||!started)return;
  if(finished){jump(0);return}
  paused=!paused;
  if(sound){if(paused)audio?.pause();else audio?.resume()}
  setStatus();
 }
+// Browsers will not play sound until a user gesture. Start the trailer and
+// its sound in the SAME click; never promise audible autoplay.
+function syncGate(){
+ const available=ready&&frameReady&&!failed;
+ for(const id of ["trailer-start-audio","trailer-start-muted"])
+  $(id).disabled=!available;
+ if(available)$("trailer-gate-status").textContent="SECUENCIAS LISTAS · ELEGÍ CÓMO COMENZAR";
+}
+async function begin(withSound){
+ if(started||!ready||!frameReady)return;
+ const playButton=$("trailer-start-audio");
+ const quietButton=$("trailer-start-muted");
+ playButton.disabled=true;quietButton.disabled=true;
+ if(withSound){
+  try{
+   const active=await audio?.start();
+   sound=!!active;
+   if(sound){audio.setChapter(chapter);audio.cue("reveal")}
+   else $("trailer-gate-status").textContent="Audio no disponible; reproduciendo sin sonido.";
+  }catch(err){
+   sound=false;
+   $("trailer-gate-status").textContent="El navegador no habilitó sonido: "+String(err?.message||err);
+  }
+ }
+ started=true;paused=false;
+ $("trailer-gate").hidden=true;
+ $("trailer-end").hidden=true;
+ elapsed=0;beat=-1;last=performance.now();
+ showBeat(0,true);
+ setStatus();
+}
+$("trailer-start-audio").addEventListener("click",()=>begin(true));
+$("trailer-start-muted").addEventListener("click",()=>begin(false));
+$("trailer-retry").addEventListener("click",()=>location.reload());
 async function toggleMusic(){
+ if(!started){await begin(true);return}
  if(sound){
   sound=false;audio?.stop();
  }else{
@@ -197,10 +233,11 @@ document.addEventListener("keydown",event=>{
 frame.addEventListener("load",()=>{
  frameReady=true;
  if(ready&&!finished)showBeat(Math.max(beat,0),true);
+ syncGate();
 });
 function tick(now){
  const dt=Math.min(150,Math.max(0,now-last));last=now;
- if(ready&&frameReady&&!paused&&!finished&&!document.hidden){
+ if(started&&ready&&frameReady&&!paused&&!finished&&!document.hidden){
   elapsed+=dt;
   if(elapsed>=ACT_MS){
    if(chapter===scenes.length-1)end();
@@ -219,7 +256,10 @@ function tick(now){
 function showError(err){
  $("trailer-error").hidden=false;
  $("trailer-error").textContent="No se pudo cargar el gameplay del tráiler: "+String(err?.message||err)+". Verificá la conexión con el servidor e intentá recargar.";
- failed=true;paused=true;setStatus();
+ failed=true;paused=true;syncGate();
+ $("trailer-gate-status").textContent="No se pudo preparar el tráiler: "+String(err?.message||err);
+ $("trailer-retry").hidden=false;
+ setStatus();
 }
 fetch((window.OHIO_API_ORIGIN||"")+"/api/demo/scenes",{credentials:"include"})
  .then(response=>{
@@ -236,6 +276,7 @@ fetch((window.OHIO_API_ORIGIN||"")+"/api/demo/scenes",{credentials:"include"})
   chapterButtons();
   audio?.setChapter(0);
   if(frameReady)showBeat(0,true);
+  syncGate();
   setStatus();
  })
  .catch(showError);

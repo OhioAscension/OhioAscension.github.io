@@ -132,3 +132,84 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #a6ff
  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
  .trailer-cut{display:none}
 }
+
+/* Premiere: an explicit sound gesture makes the music dependable on TWA and PC. */
+.trailer-gate{
+ position:absolute;z-index:20;inset:0;display:flex;flex-direction:column;
+ justify-content:center;align-items:center;text-align:center;gap:14px;
+ padding:clamp(24px,5vw,70px);
+ background:radial-gradient(ellipse at 50% 28%,#174730fa,#06180efc 66%,#010a05 100%);
+ overflow-y:auto;overscroll-behavior:contain
+}
+.trailer-gate-beacon{
+ width:84px;height:84px;display:grid;place-items:center;
+ border:1px solid #69e49e;border-radius:50%;box-shadow:0 0 70px #67e79b40,inset 0 0 30px #5acb9244;
+ color:#afffd0;font-size:50px;animation:gatePulse 4.2s ease-in-out infinite
+}
+@keyframes gatePulse{50%{box-shadow:0 0 100px #83ffaf7a,inset 0 0 43px #51ef9266;transform:scale(1.05)}}
+.trailer-gate-eyebrow{margin:0;font-size:11px;font-weight:900;letter-spacing:.23em;color:#9bdcb2}
+.trailer-gate h2{
+ font-size:clamp(40px,6.5vw,94px);line-height:.98;letter-spacing:-.06em;
+ max-width:900px;margin:0;font-weight:950;text-wrap:balance
+}
+.trailer-gate h2 em{font-style:normal;color:#a5ffbd}
+.trailer-gate-description{
+ font-size:clamp(14px,1.55vw,19px);line-height:1.55;color:#c1e7cc;
+ max-width:590px;margin:0
+}
+.trailer-gate-actions{display:flex;justify-content:center;flex-wrap:wrap;align-items:center;gap:12px;margin-top:10px}
+.trailer-gate-actions button{
+ min-width:190px;min-height:53px;padding:13px 20px;margin:0;border-radius:12px;
+ font-size:14px;font-weight:800;letter-spacing:.015em
+}
+#trailer-start-audio{background:#94f4b5;border:1px solid #c1ffd1;color:#062013;box-shadow:0 8px 40px #6de49b40}
+#trailer-start-muted{background:#18392a;border:1px solid #4f8962;color:#d9ffea}
+.trailer-gate-actions button:disabled{opacity:.5;cursor:progress}
+.trailer-gate-status{font-size:10px;font-weight:900;letter-spacing:.1em;color:#93d2ab;margin:4px 0 0}
+.trailer-gate small{max-width:460px;color:#87ae96;font-size:11px;line-height:1.45}
+@media(max-width:700px){
+ .trailer-gate{gap:11px;padding:20px 18px}
+ .trailer-gate-beacon{width:65px;height:65px;font-size:39px}
+ .trailer-gate-eyebrow{font-size:8px;letter-spacing:.14em}
+ .trailer-gate h2{font-size:clamp(36px,9vw,54px)}
+ .trailer-gate-description{font-size:13px}
+ .trailer-gate-actions{flex-direction:column;width:100%;max-width:330px;gap:9px}
+ .trailer-gate-actions button{width:100%;min-height:48px;font-size:13px}
+ .trailer-gate small{font-size:10px}
+}
+@media(max-height:600px){
+ .trailer-gate{gap:7px;padding:12px 15px}
+ .trailer-gate-beacon{width:47px;height:47px;font-size:31px}
+ .trailer-gate h2{font-size:clamp(26px,6vw,48px)}
+ .trailer-gate-description{font-size:12px}
+ .trailer-gate-actions button{min-height:40px}
+}
+@media(prefers-reduced-motion:reduce){.trailer-gate-beacon{animation:none}}
+
+.trailer-retry:not([hidden]){display:block;min-height:42px;margin:4px 0 0;padding:10px 18px;
+ border:1px solid #c88c68;border-radius:10px;background:#5a3024;color:#ffe2ce;
+ font-size:12px;font-weight:750}
+
+/* A controlled cinematic push-in gives each chapter camera momentum without
+   replacing the actual scroll/pointer footage in the embedded game. */
+.trailer[data-chapter] #game-frame{transform-origin:50% 45%;animation:trailerCameraPush 15s linear both}
+@keyframes trailerCameraPush{0%{transform:scale(1.004)}100%{transform:scale(1.06)}}
+.trailer[data-chapter="3"] .trailer-vignette{background:
+ linear-gradient(0deg,#0b0c0ce8,transparent 64%),
+ linear-gradient(90deg,#331b17a6,transparent 72%)}
+.trailer[data-chapter="4"] .trailer-vignette{background:
+ linear-gradient(0deg,#090c12e8,transparent 62%),
+ linear-gradient(90deg,#102f36a1,transparent 72%)}
+.trailer[data-chapter="5"] .trailer-vignette{background:
+ linear-gradient(0deg,#061321eb,transparent 60%),
+ linear-gradient(90deg,#0d2542aa,transparent 70%)}
+.trailer[data-mood="critical"] .trailer-scanlines{opacity:.18}
+.trailer[data-mood="warning"] #game-frame{filter:saturate(.78) brightness(.78) sepia(.10)}
+@media(max-width:700px){
+ .trailer[data-chapter="3"] .trailer-vignette,
+ .trailer[data-chapter="4"] .trailer-vignette,
+ .trailer[data-chapter="5"] .trailer-vignette{
+  background:linear-gradient(0deg,#061511f2,transparent 69%),linear-gradient(180deg,#05120d85,transparent 24%)
+ }
+}
+@media(prefers-reduced-motion:reduce){.trailer[data-chapter] #game-frame{animation:none!important;transform:none!important}}

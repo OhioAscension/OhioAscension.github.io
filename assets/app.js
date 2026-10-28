@@ -5,10 +5,46 @@ const b64=v=>{let z="";for(const x of new Uint8Array(v))z+=String.fromCharCode(x
 async function api(p,data){const base=String(window.OHIO_API_ORIGIN||"").replace(/\/$/,"");let r;try{r=await fetch(base+"/api/"+p,data===undefined?{credentials:"include"}:{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});}catch(err){throw Error("Servidor de Ohio desconectado o inaccesible. Verificá la conexión HTTPS y la configuración del servidor.");}let raw=await r.text(),o;try{o=JSON.parse(raw)}catch(_){throw Error("La API devolvió una respuesta no JSON (HTTP "+r.status+"). Revisá la consola del servidor. Ruta: /api/"+p)}if(!r.ok)throw Error(o.error||"Error HTTP "+r.status+" en /api/"+p);return o}
 function decode(o){o.challenge=bytes(o.challenge);if(o.user)o.user.id=bytes(o.user.id);for(const key of ["excludeCredentials","allowCredentials"])if(o[key])o[key].forEach(x=>x.id=bytes(x.id));return o}
 function serial(c){let r=c.response,v={clientDataJSON:b64(r.clientDataJSON)};for(const k of ["attestationObject","authenticatorData","signature","userHandle"])if(r[k])v[k]=b64(r[k]);if(r.getTransports)v.transports=r.getTransports();return {id:c.id,rawId:b64(c.rawId),type:c.type,response:v,clientExtensionResults:c.getClientExtensionResults()}}
-async function safe(f){try{msg("");await f();const banner=el("server-connection-banner");if(banner)banner.hidden=true;}catch(e){msg(e.message);if(/desconectado|inaccesible|Failed to fetch|NetworkError|no JSON|HTTP 502|HTTP 503|HTTP 504/i.test(e.message)){const banner=el("server-connection-banner");if(banner)banner.hidden=false;}}}
+async function safe(f){
+ try{
+  msg("");
+  await f();
+  const banner=el("server-connection-banner");
+  if(banner){banner.hidden=true;banner.textContent="Servidor de Ohio conectado."}
+ }catch(e){
+  const message=String(e?.message||e);
+  msg(message);
+  const originDenied=/Origen web no autorizado/i.test(message);
+  const disconnected=/desconectado|inaccesible|Failed to fetch|NetworkError|no JSON|HTTP 502|HTTP 503|HTTP 504|HTTP 403/i.test(message);
+  const banner=el("server-connection-banner");
+  if(banner&&(originDenied||disconnected)){
+   banner.hidden=false;
+   banner.textContent=originDenied
+    ?"El servidor rechazó esta dirección. Usá http://localhost:8765 en esta PC o https://ohioascension.github.io para la versión pública."
+    :"Servidor de Ohio desconectado. Reintentando conexión automáticamente…";
+  }
+ }
+}
 async function refresh(){
  let a=await api("auth/status");
  el("authInfo").textContent=a.initialized?"Elegí tu cuenta o registrá un usuario nuevo.":"Registro del primer agente";
+ // A credential registered on github.io cannot sign for the localhost RP ID.
+ // PC users should open the canonical site to reuse their existing passkey.
+ let hint=el("local-passkey-hint");
+ const local=location.hostname==="localhost"||location.hostname==="127.0.0.1";
+ if(local&&!a.authenticated&&a.public_frontend==="https://ohioascension.github.io"){
+  if(!hint){
+   hint=document.createElement("p");hint.id="local-passkey-hint";
+   hint.className="ohio-public-login-hint";
+   const label=document.createElement("span");
+   label.textContent="¿Tu passkey está vinculada a GitHub Pages? Para usarla en la PC, ingresá desde el dominio original: ";
+   const link=document.createElement("a");
+   link.href="https://ohioascension.github.io";link.textContent="Abrir Ohio público";
+   hint.append(label,link);
+   el("auth").append(hint);
+  }
+  hint.hidden=false;
+ }else if(hint){hint.hidden=true;}
  el("auth").hidden=!!a.authenticated;
  el("lab-name").textContent=a.authenticated?(a.username+" Labs"):"FPSENSOR LABS";
  el("username").hidden=a.authenticated;
@@ -30,8 +66,11 @@ async function act(kind,target,count){
  try{await safe(async()=>{
   const payload={kind,target};
   if(kind==="build_batch")payload.count=count;
+  const previous=window.currentGame;
   const result=await api("game/action",payload);render(result);pollSignature=signature(result);
-  if(window.OhioAudio)OhioAudio.effect(kind);
+  // Animate only after the server confirms the action; never predict success.
+  const cinematic=window.OhioCinematics?.observe(previous,result,kind);
+  if(window.OhioAudio)OhioAudio.effect(cinematic==="failure"?"launch_failure":cinematic==="launch"?"launch_success":kind);
   window.OhioAmbience?.action(kind);
  })}finally{busy=false}
 }
@@ -172,3 +211,18 @@ setInterval(()=>{if(!busy&&!el("game").hidden&&document.visibilityState==="visib
  if(next!==pollSignature){render(g);pollSignature=next}
  else paintClock(g);
 })},10000);
+
+
+// Restore sessions and the menu after a network interruption, even if the
+// player is still on the unauthenticated landing screen.
+let lastConnectRetry=0;
+async function reconnectWhenNeeded(){
+ const banner=el("server-connection-banner");
+ if(!banner||banner.hidden||document.visibilityState!=="visible")return;
+ const now=Date.now();
+ if(now-lastConnectRetry<14000)return;
+ lastConnectRetry=now;
+ await safe(refresh);
+}
+window.addEventListener("online",reconnectWhenNeeded);
+setInterval(reconnectWhenNeeded,16000);
