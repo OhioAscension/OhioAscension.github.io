@@ -1,165 +1,182 @@
-/* Mobile-only presentation layer. Desktop rules remain unchanged. */
+/* Ohio phone UI — all desktop styling remains in style.css.
+   No mobile rule may leak above 700px. */
 .mobile-only{display:none!important}
 @media(max-width:700px){
- body{padding-top:58px;padding-bottom:76px}
+ :root{--phone-bg:#071711;--phone-card:#102b20;--phone-raised:#173b2a;--phone-stroke:#37674d;--phone-fg:#e5f7ea;--phone-soft:#a7cbb5;--phone-mint:#9af2ba}
+ html{background:var(--phone-bg);scroll-padding-top:76px}
+ body{margin:0;padding:66px 0 calc(84px + env(safe-area-inset-bottom));background:var(--phone-bg);color:var(--phone-fg);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+ body.mobile-drawer-open{overflow:hidden}
  .mobile-only{display:flex!important}
- #mobile-topbar{position:fixed;top:0;left:0;right:0;height:58px;z-index:50;align-items:center;gap:12px;justify-content:space-between;padding:0 14px;background:#092018;border-bottom:1px solid #396e51;color:#b9ffda}
- #mobile-topbar strong{font-size:18px;letter-spacing:.08em}
- #mobile-clock{font-variant-numeric:tabular-nums;font-size:14px;color:#9ad3b0}
- #mobile-menu-toggle{padding:8px 10px;min-height:37px;font-size:12px}
- .shell{display:block!important}
- .shell>main{margin:0!important;max-width:100%!important;padding:12px 15px!important;width:100%}
- .shell>aside{position:fixed;top:58px;bottom:76px;left:0;width:min(87vw,340px);max-height:calc(100dvh - 134px);overflow-y:auto;z-index:48;display:block!important;transform:translateX(-105%);transition:transform .23s ease;background:#0b211a;border-right:1px solid #4b9870;box-shadow:15px 0 35px #0007}
- body.mobile-drawer-open .shell>aside{transform:translateX(0)}
- #mobile-drawer-backdrop:not([hidden]){display:block!important;position:fixed;inset:58px 0 76px;background:#0009;z-index:47}
- #mobile-resource-strip{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:12px}
- #mobile-resource-strip>div{background:#123b2b;border:1px solid #35684d;border-radius:10px;padding:9px 7px;min-width:0;display:flex;flex-direction:column;gap:3px}
- #mobile-resource-strip small{font-size:9px;letter-spacing:.055em;color:#83bda0}
- #mobile-resource-strip strong{font-size:clamp(12px,3.8vw,17px);color:#dbffe7;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
- #mobile-bottom-nav:not([hidden]){position:fixed;bottom:0;left:0;right:0;height:76px;z-index:45;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));padding:6px 4px max(6px,env(safe-area-inset-bottom));background:#0b211a;border-top:1px solid #407755}
- #mobile-bottom-nav button{margin:0 2px;padding:6px 1px;min-width:0;min-height:48px;display:flex;flex-direction:column;gap:3px;align-items:center;justify-content:center;background:transparent;border:0;font-size:22px;color:#a7d6b8;border-radius:9px}
- #mobile-bottom-nav button span{font-size:10px}
- #mobile-bottom-nav button.active{background:#22533b;color:#b7ffce}
- .hero{padding-top:1px}
- .hero .eyebrow{font-size:9px}
- .hero h1{font-size:clamp(25px,7vw,36px)}
- #sidebar{display:grid!important}
- #sidebar[hidden]{display:none!important}
- .tabs{display:none}
- .view:not([hidden]){margin-top:15px}
- .card{border-radius:13px}
-}
-@media(prefers-reduced-motion:reduce){.shell>aside{transition:none!important}}
-
-@media(max-width:700px){
- body:not(.mobile-logged-in){padding-bottom:0}
- body:not(.mobile-logged-in) .shell>aside{position:relative;top:auto;bottom:auto;left:auto;width:100%;max-height:none;overflow:visible;transform:none;border:0;box-shadow:none;padding:14px 18px}
- body:not(.mobile-logged-in) .shell>main{padding:12px 15px!important}
- body:not(.mobile-logged-in) #mobile-menu-toggle{display:none}
- body:not(.mobile-logged-in) #mobile-resource-strip{display:none!important}
- body:not(.mobile-logged-in) #mobile-bottom-nav{display:none!important}
- body.mobile-logged-in #auth,body.mobile-logged-in .welcome-actions{display:none!important}
-}
-
-/* Progressive mobile onboarding only; desktop content remains complete. */
-@media(max-width:700px){
- .mobile-progress-locked{display:none!important}
- #mobile-bottom-nav button[hidden],#mobile-tab-list button[hidden]{display:none!important}
- #mobile-bottom-nav{grid-template-columns:repeat(5,minmax(0,1fr));}
- #mobile-bottom-nav:has(button[hidden]){grid-template-columns:repeat(4,minmax(0,1fr));}
- .mobile-next-stage{background:#123529;border:1px dashed #508467;border-radius:12px;padding:12px 14px;margin:10px 0 17px;color:#9fe3bd;font-size:12px;line-height:1.5}
- .mobile-account-actions{display:grid;gap:8px;margin:8px 0 14px}
- .mobile-account-actions a,.mobile-account-actions button{display:block;width:100%;text-align:center;background:#1c4d37;border:1px solid #5c9d78;color:#d7ffea;padding:11px;border-radius:9px;font-size:13px;text-decoration:none}
- body:not(.mobile-logged-in) .mobile-account-actions{display:none}
-}
-@media(min-width:701px){.mobile-account-actions{display:none}}
-
-/* Evenly distribute only unlocked bottom actions, no empty columns. */
-@media(max-width:700px){#mobile-bottom-nav:not([hidden]){display:flex!important;justify-content:space-around}#mobile-bottom-nav button:not(.ohio-discovery-hidden){flex:1 1 0;max-width:28%}}
-
-@media(max-width:700px){
- .desktop-logout{display:none!important}
- body.mobile-logged-in #mobile-drawer{display:flex!important;flex-direction:column}
- #mobile-logout{display:block!important;width:100%;flex-shrink:0;margin-top:22px;margin-bottom:16px;padding:13px}
- body:not(.mobile-logged-in) #mobile-logout{display:none!important}
-}
-
-
-/* Mobile app-like chrome: keep scrolling, omit visible scrollbar gutters.
-   This does not hide the browser's Custom Tab toolbar. */
-@media(max-width:700px){
-  html,body,.shell>aside,main,.view,#mobile-drawer{
-    scrollbar-width:none;
-    -ms-overflow-style:none;
-  }
-  html::-webkit-scrollbar,body::-webkit-scrollbar,
-  .shell>aside::-webkit-scrollbar,main::-webkit-scrollbar,
-  .view::-webkit-scrollbar,#mobile-drawer::-webkit-scrollbar{
-    display:none;
-    width:0;
-    height:0;
-  }
-}
-
-/* Logout must not stretch to the height of the adjacent security panel. */
-@media(max-width:700px){
- #sidebar #mobile-logout{grid-column:1/-1;align-self:start;justify-self:stretch;min-height:44px;height:auto;flex:none;margin:10px 0 12px;padding:11px 13px;font-size:13px;line-height:1.3}
-}
-
-
-/* Ohio Mobile 2: independent phone experience; desktop CSS is untouched. */
-@media(max-width:700px){
- :root{--m-bg:#081813;--m-surface:#102920;--m-surface-raised:#16382b;--m-border:#315c48;--m-text:#e4f8e9;--m-muted:#9abdaa;--m-accent:#83e4ac}
- html{background:var(--m-bg);scroll-padding-top:78px}
- body{background:var(--m-bg);color:var(--m-text);padding-top:66px;padding-bottom:calc(78px + env(safe-area-inset-bottom))}
- #mobile-topbar{height:64px;padding:0 16px;gap:10px;background:#0b231a;border-bottom:1px solid #2c5942;box-shadow:0 5px 18px #0003}
- #mobile-topbar strong{font-family:system-ui,sans-serif;font-size:18px;letter-spacing:.16em;color:#baffd3}
- #mobile-clock{font-family:system-ui,sans-serif;font-size:14px;font-weight:700;color:#9de4b5;background:#153b2b;border:1px solid #315e47;border-radius:20px;padding:6px 11px}
- #mobile-menu-toggle{min-height:42px;margin:0;padding:8px 13px;border-radius:12px;background:#1a4735;border-color:#4b8564;color:#e4ffed;font-family:system-ui,sans-serif;font-size:13px;font-weight:650}
- .shell>main{padding:12px 13px 24px!important}
- #mobile-resource-strip{gap:8px;margin-bottom:14px}
- #mobile-resource-strip>div{background:linear-gradient(160deg,#173d2c,#0f2c21);border:1px solid #3b6b50;border-radius:14px;padding:12px 10px;box-shadow:0 4px 16px #0002}
- #mobile-resource-strip small{font-family:system-ui,sans-serif;font-size:10px;font-weight:700;letter-spacing:.09em}
- #mobile-resource-strip strong{font-family:system-ui,sans-serif;font-size:clamp(15px,4.2vw,21px);font-weight:750}
- .hero{padding:8px 3px 15px;border-bottom-color:#274c39}
- .hero .eyebrow{font-family:system-ui,sans-serif;font-size:9px;letter-spacing:.13em;color:#88c9a2}
- .hero h1{font-family:system-ui,sans-serif;font-size:clamp(25px,7.3vw,36px);line-height:1.08;letter-spacing:-.04em;margin:10px 0}
- .hero #summary{font-family:system-ui,sans-serif;font-size:12px;color:#a6c8b4;line-height:1.5}
- #game .view:not([hidden]){margin-top:15px}
- #game .view h2{font-family:system-ui,sans-serif;font-size:17px;line-height:1.3;letter-spacing:.01em}
- .grid{gap:10px}
- .card{background:linear-gradient(145deg,#10291f,#0c211a);border:1px solid #315b45;border-radius:15px;padding:15px;box-shadow:0 5px 20px #0002}
- .card h2{font-family:system-ui,sans-serif;font-size:16px;line-height:1.35}
- .card p{font-family:system-ui,sans-serif;font-size:13px;line-height:1.55;color:#bad4c3}
- .card .meta{font-family:system-ui,sans-serif;font-size:12px;line-height:1.5}
- .card button,.event button{min-height:46px;border-radius:11px;font-family:system-ui,sans-serif;font-size:13px;font-weight:650}
- button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #a5f7bd;outline-offset:3px}
- #mobile-bottom-nav:not([hidden]){height:calc(68px + env(safe-area-inset-bottom));padding:5px 7px max(7px,env(safe-area-inset-bottom));background:#0b211a;border-top:1px solid #3b7253;box-shadow:0 -6px 24px #0006;gap:4px}
- #mobile-bottom-nav button{max-width:none!important;margin:0;padding:7px 2px;min-height:52px;gap:2px;border-radius:12px;font-family:system-ui,sans-serif;font-size:21px;transition:background .15s}
- #mobile-bottom-nav button span{font-size:11px;font-weight:650}
- #mobile-bottom-nav button.active{background:#21563d;color:#c7ffda}
- #mobile-bottom-nav button.ohio-discovery-hidden{display:none!important}
- .ohio-next-stage{border:1px dashed #4b8764;background:#102c21;border-radius:13px;padding:14px;margin:15px 0;color:#b7e6c6;font-family:system-ui,sans-serif}
- .ohio-next-stage strong{display:block;margin-bottom:5px;color:#a4f3bc}
+ .shell{display:block!important;min-width:0}
+ .shell>main{min-width:0;width:100%;max-width:100%!important;margin:0!important;padding:12px 13px 22px!important}
+ #mobile-topbar{position:fixed;top:0;left:0;right:0;z-index:60;height:64px;padding:0 14px;display:flex!important;align-items:center;justify-content:space-between;gap:9px;background:#0b221a;border-bottom:1px solid #37664c;box-shadow:0 4px 25px #0006}
+ #mobile-topbar strong{font-size:18px;font-weight:800;letter-spacing:.14em;color:#c0ffd4}
+ #mobile-clock{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;color:#b0e9c5;background:#163829;border:1px solid #39674d;border-radius:40px;padding:6px 10px;white-space:nowrap}
+ #mobile-menu-toggle{font-family:inherit;font-size:13px;font-weight:700;background:#20533b;border:1px solid #4d8865;border-radius:12px;padding:9px 12px;margin:0;min-height:42px;white-space:nowrap}
+ #mobile-menu-toggle[aria-expanded="true"]{background:#367c55}
+ #mobile-resource-strip{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:1px 0 15px}
+ #mobile-resource-strip>div{display:flex;min-width:0;flex-direction:column;gap:5px;padding:11px 10px;border-radius:14px;background:linear-gradient(145deg,#163d2c,#112e23);border:1px solid #3c7354;box-shadow:0 5px 19px #0003}
+ #mobile-resource-strip small{font-size:9px;font-weight:750;color:#9fcbb0;letter-spacing:.085em}
+ #mobile-resource-strip strong{min-width:0;font-size:clamp(15px,4.1vw,21px);font-weight:800;color:#e4ffed;font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis}
+ .hero{padding:3px 0 12px;border-bottom:1px solid #31513f}
+ .hero .eyebrow{font-size:9px;line-height:1.4;letter-spacing:.09em;color:#87b99e}
+ .hero h1{font-family:inherit;font-size:clamp(24px,6.5vw,31px);line-height:1.1;letter-spacing:-.045em;margin:7px 0 8px;overflow-wrap:anywhere}
+ .hero h1 em{color:#93f0b4}
+ body.mobile-logged-in .hero #summary{display:none}
+ #mobile-colony-context{display:flex;flex-wrap:wrap;gap:6px 11px;align-items:center;font-size:11px;font-weight:600;color:#b4d6c1;line-height:1.5}
+ #mobile-colony-context span:first-child{color:#a2ecc0}
+ #live-console{margin-top:12px;border:1px solid #3c7655;border-radius:14px;box-shadow:0 7px 18px #0004}
+ #live-console .live-heading{padding:8px 12px;font-size:10px;letter-spacing:.05em;gap:8px}
+ #live-console .industrial-sky{height:86px}
+ #live-console .live-readouts{padding:9px 11px;font-size:9px;gap:7px;letter-spacing:.025em;justify-content:space-between}
+ #live-console .live-readouts span{white-space:nowrap}
+ #game{scroll-margin-top:77px}
+ #game .tabs{display:none!important}
+ #game .view:not([hidden]){margin-top:12px}
+ #game .view h2{font-family:inherit;font-size:16px;line-height:1.3}
+ .grid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+ .card{padding:14px;border-radius:14px;background:linear-gradient(150deg,#122d23,#0b211a);border:1px solid #355d48;box-shadow:0 4px 15px #0002;overflow-wrap:anywhere}
+ .card:hover{transform:none;box-shadow:0 4px 15px #0002}
+ .card h2{font-family:inherit;font-size:16px;margin:0 0 8px}
+ .card p{font-family:inherit;font-size:13px;line-height:1.55;margin:7px 0;color:#c0d9c8}
+ .card .meta{font-family:inherit;font-size:11px;line-height:1.55;color:#a4c6b1}
+ .card button{min-height:45px;padding:10px 12px;margin:10px 0 0;border-radius:11px;font-family:inherit;font-size:13px;font-weight:650;text-align:center;white-space:normal}
+ button:disabled{opacity:.42}
+ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #9cf9b9;outline-offset:3px}
+ .ohio-next-stage{display:flex;flex-direction:column;gap:4px;margin:12px 0 15px;padding:12px 13px;background:#123426;border:1px dashed #498666;border-radius:13px}
+ .ohio-next-stage strong{color:#a6f2be;font-size:12px;letter-spacing:.01em}
+ .ohio-next-stage span{color:#bad8c4;font-size:12px;line-height:1.5}
+ #event .event,#event .ohio-incident-inbox{margin:10px 0 16px;padding:15px 14px;border-radius:15px}
+ #event .event h2{font-family:inherit;font-size:19px;line-height:1.25;margin:0 0 9px}
+ #event .event p{font-size:13px;line-height:1.55;margin:7px 0 13px}
+ #event .event button{display:block;width:100%;max-width:100%;min-height:47px;margin:8px 0 0;padding:11px 12px;border-radius:11px;text-align:left;white-space:normal;font-family:inherit;font-size:13px;font-weight:700;line-height:1.4}
+ #event .ohio-incident-inbox{padding:14px}
+ main footer{font-size:10px;padding-bottom:12px}
+ #message{font-size:12px;line-height:1.5}
  .ohio-discovery-hidden{display:none!important}
- body.mobile-logged-in .shell>aside{top:64px;bottom:calc(68px + env(safe-area-inset-bottom));width:min(90vw,390px);max-height:none;padding:0 17px 22px;background:#0c241b;border-right:1px solid #3b7955;box-shadow:12px 0 35px #0009}
- #mobile-drawer-backdrop:not([hidden]){inset:64px 0 calc(68px + env(safe-area-inset-bottom));background:#000b}
+ .desktop-logout{display:none!important}
+
+ /* Bottom navigation lives above Android's gesture area. */
+ #mobile-bottom-nav:not([hidden]){position:fixed;bottom:0;left:0;right:0;z-index:55;display:flex!important;justify-content:space-around;gap:3px;height:calc(68px + env(safe-area-inset-bottom));padding:5px 7px max(6px,env(safe-area-inset-bottom));background:#092219;border-top:1px solid #3b7753;box-shadow:0 -5px 22px #0007}
+ #mobile-bottom-nav[hidden]{display:none!important}
+ #mobile-bottom-nav button{flex:1 1 0;min-width:0;max-width:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:51px;margin:0;padding:5px 2px;border:1px solid transparent;border-radius:12px;background:transparent;color:#a6cfb7;font-family:inherit;font-size:21px;line-height:1}
+ #mobile-bottom-nav button span{font-size:10px;line-height:1.3;font-weight:650}
+ #mobile-bottom-nav button.active{background:#24543d;border-color:#376b4c;color:#dcffe7}
+ #mobile-bottom-nav button.ohio-discovery-hidden{display:none!important}
+
+ /* A true drawer, not a giant column of unrelated widgets. */
+ body.mobile-logged-in .shell>aside{position:fixed;top:64px;bottom:calc(68px + env(safe-area-inset-bottom));left:0;z-index:58;display:flex!important;flex-direction:column;gap:0;width:min(91vw,390px);max-height:none;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;padding:0 15px 22px;background:#0c241b;border:0;border-right:1px solid #457f5b;box-shadow:14px 0 40px #0009;transform:translateX(-108%);visibility:hidden;transition:transform .22s ease,visibility .22s}
+ body.mobile-drawer-open .shell>aside{transform:translateX(0);visibility:visible}
+ #mobile-drawer-backdrop:not([hidden]){display:block!important;position:fixed;z-index:57;inset:64px 0 calc(68px + env(safe-area-inset-bottom));background:#000b}
  #mobile-drawer .logo{display:none}
  #mobile-drawer .welcome-actions{display:none}
- #mobile-drawer #sidebar{display:flex!important;flex-direction:column;gap:0}
- #mobile-drawer #sidebar[hidden]{display:none!important}
- #mobile-drawer #sidebar>h3{font-family:system-ui,sans-serif;font-size:11px;letter-spacing:.11em;color:#8ecda6;margin:17px 0 10px}
- #mobile-drawer #stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
- #mobile-drawer #stats .stat{display:flex;flex-direction:column;gap:3px;background:#143529;border:1px solid #305c47;border-radius:10px;padding:9px 10px;min-width:0}
- #mobile-drawer #stats .stat span{font-family:system-ui,sans-serif;font-size:10px;color:#a1c5b0;letter-spacing:.04em}
- #mobile-drawer #stats .stat strong{font-family:system-ui,sans-serif;font-size:17px;font-variant-numeric:tabular-nums}
- #mobile-drawer .meter{height:9px;margin:2px 0 6px;border-radius:20px}
- #mobile-drawer #power{margin:4px 0 8px;font-family:system-ui,sans-serif;font-size:12px;color:#aac9b5}
- #mobile-drawer #audio-toggle,#mobile-drawer #restart,#mobile-drawer [data-action="rest"]{width:100%;text-align:center;margin:5px 0;min-height:44px;border-radius:11px;font-family:system-ui,sans-serif;font-size:13px}
- #mobile-drawer .audio-label{display:flex;justify-content:space-between;align-items:center;gap:8px;font-family:system-ui,sans-serif;font-size:12px;color:#b6d7c1;margin-top:10px}
- #mobile-drawer #music-volume{margin:6px 0 10px}
- #mobile-drawer .micro{font-size:10px;line-height:1.5;color:#749c87}
- #sidebar #mobile-logout{order:10;display:block!important;width:100%;min-height:43px;height:auto;flex:none;margin:12px 0 0;padding:10px;font-size:12px}
- #mobile-drawer #sidebar>section:not(.mobile-account-actions){background:#102d22;border:1px solid #315d46;border-radius:13px;padding:13px;margin-top:15px}
- #mobile-drawer #sidebar>section:not(.mobile-account-actions) h3{margin:0 0 9px;font-family:system-ui,sans-serif;font-size:11px}
- #ohio-security-status{font-family:system-ui,sans-serif;font-size:13px;line-height:1.5;margin:5px 0 11px;overflow-wrap:anywhere}
- #mobile-drawer #sidebar>section button{min-height:42px;font-family:system-ui,sans-serif;font-size:13px;border-radius:10px}
- #mobile-tab-list{order:-1;padding:13px 0 6px;border-bottom:1px solid #315540}
- #mobile-tab-list h3{font-family:system-ui,sans-serif;font-size:11px;letter-spacing:.12em;color:#9ce1b4;margin:7px 0 10px}
- #mobile-tab-list .ohio-mobile-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
- #mobile-tab-list button{display:flex;align-items:center;text-align:left;justify-content:flex-start;min-height:46px;margin:0;padding:10px 12px;background:#173c2c;border:1px solid #396b4f;border-radius:11px;color:#d7f5e0;font-family:system-ui,sans-serif;font-size:12px;font-weight:600}
- #mobile-tab-list button.active{background:#276647;border-color:#6cbd8b}
- body:not(.mobile-logged-in) .shell>aside{width:100%;padding:14px 17px}
- body:not(.mobile-logged-in) #auth{gap:10px}
- body:not(.mobile-logged-in) #auth button{min-height:46px;border-radius:11px}
- #server-connection-banner{border-radius:11px;padding:12px;font-family:system-ui,sans-serif;font-size:12px}
+ .mobile-drawer-heading{order:0;position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:67px;padding:10px 0 8px;background:#0c241b}
+ .mobile-drawer-heading>div{display:flex;flex-direction:column;gap:5px;min-width:0}
+ .mobile-drawer-heading strong{font-size:14px;letter-spacing:.13em;color:#c0f7d0}
+ #mobile-drawer-player{font-size:10px;font-weight:650;letter-spacing:.02em;color:#8fbca2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .mobile-drawer-close{flex-shrink:0;width:38px;height:38px;min-height:38px;margin:0;padding:0;background:#173c2d;border:1px solid #46795a;border-radius:11px;font-family:inherit;font-size:16px}
+ .mobile-drawer-switcher{order:1;position:sticky;top:67px;z-index:5;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;padding:0 0 11px;background:#0c241b}
+ .mobile-drawer-switcher button{margin:0;min-width:0;min-height:41px;padding:8px 4px;background:#132f24;border:1px solid #315b44;border-radius:10px;color:#9fc9ad;font-family:inherit;font-size:12px;font-weight:700}
+ .mobile-drawer-switcher button[aria-pressed="true"]{background:#276044;color:#e3ffeb;border-color:#5aa779}
+ #mobile-tab-list{order:2;display:block;padding:4px 0 18px}
+ #mobile-tab-list h3{font-size:11px;color:#9bd4b0;letter-spacing:.13em;margin:7px 1px 12px}
+ #mobile-tab-list .ohio-mobile-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ #mobile-tab-list button{display:flex;align-items:center;justify-content:flex-start;min-height:53px;margin:0;padding:11px 12px;background:#153d2c;border:1px solid #3a7252;border-radius:12px;color:#d9f5e2;text-align:left;font-family:inherit;font-size:12px;font-weight:700;line-height:1.25}
+ #mobile-tab-list button.active{background:#286346;border-color:#78bc91;color:#effff3}
+ #mobile-tab-list button[hidden]{display:none!important}
+ #sidebar{order:3;display:flex!important;flex-direction:column;gap:0;width:100%}
+ #sidebar[hidden]{display:none!important}
+ #mobile-drawer[data-mobile-panel="sections"] #sidebar{display:none!important}
+ #mobile-drawer[data-mobile-panel="colony"] #mobile-tab-list,
+ #mobile-drawer[data-mobile-panel="account"] #mobile-tab-list{display:none!important}
+ #mobile-drawer[data-mobile-panel="colony"] #sidebar>section,
+ #mobile-drawer[data-mobile-panel="colony"] #mobile-logout{display:none!important}
+ #mobile-drawer[data-mobile-panel="account"] #sidebar>:not(section):not(#mobile-logout){display:none!important}
+ #mobile-drawer[data-mobile-panel="account"] #sidebar>section.mobile-account-actions{display:none!important}
+ #sidebar>h3{font-family:inherit;font-size:11px;letter-spacing:.12em;color:#8ecaa4;margin:17px 0 11px}
+ #sidebar #stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ #sidebar #stats .stat{display:flex;flex-direction:column;gap:3px;min-width:0;padding:10px 11px;background:#143529;border:1px solid #33664b;border-radius:11px}
+ #sidebar #stats .stat span{font-family:inherit;font-size:10px;letter-spacing:.04em;color:#a6cdb5}
+ #sidebar #stats .stat strong{font-family:inherit;font-size:18px;font-variant-numeric:tabular-nums;color:#d0ffe0}
+ #sidebar .meter{height:10px;margin:3px 0 7px;border-radius:20px}
+ #sidebar #power{font-family:inherit;font-size:12px;line-height:1.5;color:#accbb8;margin:4px 0 14px}
+ #sidebar #audio-toggle,#sidebar #restart,#sidebar [data-action="rest"]{display:block;width:100%;min-height:45px;margin:6px 0;padding:11px;border-radius:11px;text-align:center;font-family:inherit;font-size:13px;font-weight:650}
+ #sidebar .audio-label{display:flex;justify-content:space-between;gap:8px;font-family:inherit;font-size:12px;margin:12px 0 4px}
+ #sidebar #music-volume{margin:9px 0 15px}
+ #sidebar .micro{font-size:10px;line-height:1.45;color:#85a993;margin-top:12px}
+ #sidebar>section:not(.mobile-account-actions){display:block;background:#123227;border:1px solid #34644a;border-radius:13px;padding:14px;margin:13px 0 9px}
+ #sidebar>section:not(.mobile-account-actions) h3{font-size:12px;margin:0 0 10px;letter-spacing:.07em;color:#b1f1c6}
+ #sidebar>section:not(.mobile-account-actions) p{font-size:13px;line-height:1.6;color:#c2dcca}
+ #sidebar>section:not(.mobile-account-actions) button{min-height:44px;max-width:100%;margin:5px 0;padding:10px 13px;border-radius:10px;font-family:inherit;font-size:13px}
+ #sidebar #ohio-security-status{margin:7px 0 12px;overflow-wrap:anywhere}
+ #sidebar #ohio-add-passkey,#sidebar #ohio-add-totp{display:block;width:100%;text-align:center}
+ #sidebar #mobile-logout{display:block!important;width:100%;min-height:44px;height:auto;margin:17px 0 8px;padding:11px 12px;flex:none;background:#481e24!important;border:1px solid #d36a73!important;border-radius:11px;font-family:inherit;font-size:13px;font-weight:700;text-align:center}
+ #mobile-drawer[data-mobile-panel="colony"] #mobile-logout{display:none!important}
+
+ /* Login remains full page and does not inherit the authenticated drawer. */
+ body:not(.mobile-logged-in){padding-bottom:0}
+ body:not(.mobile-logged-in) .shell>aside{display:block!important;position:relative;top:auto;left:auto;bottom:auto;width:100%;max-height:none;overflow:visible;transform:none;visibility:visible;border:0;box-shadow:none;padding:18px 16px;background:transparent}
+ body:not(.mobile-logged-in) .mobile-drawer-heading,
+ body:not(.mobile-logged-in) .mobile-drawer-switcher,
+ body:not(.mobile-logged-in) #mobile-tab-list,
+ body:not(.mobile-logged-in) #mobile-menu-toggle,
+ body:not(.mobile-logged-in) #mobile-resource-strip,
+ body:not(.mobile-logged-in) #mobile-bottom-nav{display:none!important}
+ body:not(.mobile-logged-in) .welcome-actions{display:block}
+ body:not(.mobile-logged-in) .shell>main{padding:10px 15px!important}
+ body:not(.mobile-logged-in) #auth{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ body:not(.mobile-logged-in) #auth[hidden]{display:none!important}
+ body:not(.mobile-logged-in) #auth h2,
+ body:not(.mobile-logged-in) #auth p,
+ body:not(.mobile-logged-in) #auth input,
+ body:not(.mobile-logged-in) #auth .auth-methods{grid-column:1/-1}
+ body:not(.mobile-logged-in) #auth button{min-height:46px;margin:0;font-family:inherit;font-size:12px}
+ body:not(.mobile-logged-in) #auth input{font-family:inherit;font-size:15px}
+ body:not(.mobile-logged-in) #mobile-drawer .logo{display:block}
+ body:not(.mobile-logged-in) #mobile-drawer .welcome-actions{display:block}
+ body:not(.mobile-logged-in) #sidebar{display:none!important}
+
+ html,body,.shell>aside,main,.view,#mobile-drawer{scrollbar-width:none;-ms-overflow-style:none}
+ html::-webkit-scrollbar,body::-webkit-scrollbar,.shell>aside::-webkit-scrollbar,main::-webkit-scrollbar,.view::-webkit-scrollbar,#mobile-drawer::-webkit-scrollbar{display:none;width:0}
 }
 @media(max-width:370px){
  #mobile-topbar{padding:0 9px}
  #mobile-topbar strong{font-size:16px}
- #mobile-clock{padding:5px 7px}
+ #mobile-clock{padding:6px 7px}
  #mobile-tab-list .ohio-mobile-links{grid-template-columns:1fr}
+ #live-console .live-readouts{font-size:8px}
 }
 @media(prefers-reduced-motion:reduce){
- #mobile-bottom-nav button{transition:none}
+ .shell>aside,#mobile-bottom-nav button{transition:none!important}
+}
+@media(min-width:701px){
+ .mobile-drawer-heading,.mobile-drawer-switcher,#mobile-tab-list,#mobile-colony-context{display:none!important}
+}
+
+/* Contextual onboarding appears only when a phone player is blocked. */
+@media(max-width:700px){
+ .mobile-build-guide{display:flex;flex-direction:column;gap:6px;margin:5px 0 14px;padding:13px 14px;background:#173526;border:1px solid #64966c;border-radius:13px}
+ .mobile-build-guide strong{font-size:11px;letter-spacing:.07em;color:#c3ffd1}
+ .mobile-build-guide p{margin:0;font-size:12px;line-height:1.55;color:#c7e3ce}
+ .mobile-build-guide button{align-self:flex-start;min-height:39px;margin:5px 0 0;padding:9px 13px;border-radius:9px;background:#2d6548;font-size:12px;font-weight:700}
+}
+
+@media(max-width:700px){
+ #mobile-drawer .mobile-account-actions{display:none!important}
+ #mobile-tab-list .mobile-showcase-link{display:flex;align-items:center;justify-content:flex-start;min-height:51px;padding:11px 12px;margin:0;border:1px solid #3b7253;border-radius:12px;background:#122e24;color:#b7e9c8;text-decoration:none;font-size:12px;font-weight:700}
+ #mobile-tab-list .mobile-showcase-link:focus-visible{outline:2px solid #a6ffd1;outline-offset:3px}
+}
+
+/* Mobile feedback stays in view, above Android navigation. */
+@media(max-width:700px){
+ .mobile-progress-locked{display:none!important}
+ #message:empty{display:none!important}
+ #message:not(:empty){position:fixed;left:13px;right:13px;bottom:calc(81px + env(safe-area-inset-bottom));z-index:70;max-width:600px;margin:0 auto;padding:12px 14px;min-height:0;border:1px solid #b58a57;border-radius:12px;background:#35261c;color:#ffe0b7;font-size:12px;line-height:1.5;box-shadow:0 10px 30px #000a;overflow-wrap:anywhere}
+ .ohio-toast{bottom:calc(82px + env(safe-area-inset-bottom));left:13px;right:13px;max-width:600px;margin:0 auto;z-index:67}
+}
+
+/* Defense in depth: authenticated phones never display login controls,
+   including during delayed account-state repaint or DOM transitions. */
+@media(max-width:700px){
+ body.mobile-logged-in #auth{display:none!important}
 }

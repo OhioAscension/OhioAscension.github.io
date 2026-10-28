@@ -1,9 +1,65 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ohio · Demo en vivo</title><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/demo.css"></head>
-<body><div class="showcase" id="showcase">
-<iframe id="game-frame" title="Vista del juego Operation Ohio" src="/demo-game.html"></iframe>
-<div class="screen-shade"></div><div class="titlebar"><span>◈ OHIO SYSTEMS</span><span id="scene-number">01 / 09</span><a href="/" aria-label="Salir de la demostración">Salir ×</a></div>
-<div class="callout"><div class="kicker">VISITA GUIADA · SIMULACIÓN</div><h1 id="scene-title">Ohio</h1><p id="scene-description">Una nueva civilización.</p><p class="scene-note">Se muestran pantallas reales con escenarios preparados; tu partida permanece intacta.</p></div>
-<button class="hotspot left" id="previous" aria-label="Anterior escena"></button><button class="hotspot right" id="next" aria-label="Siguiente escena"></button>
-<div class="bottom-status"><span>← / → Cambiar escena · Espacio pausar · F pantalla completa</span><button id="sound-button">Activar sonido</button><label for="music-volume" class="demo-volume-label">Música <output id="music-volume-value">50%</output></label><input id="music-volume" type="range" min="0" max="100" value="50" step="1" aria-label="Volumen de música"><span id="live-status">REPRODUCIENDO</span></div>
-<div class="scene-progress" id="bar-progress"></div>
-</div><script src="/assets/audio.js" defer></script><script src="/assets/ohio-config.js?v=8d331b5d4d98" defer></script><script src="/assets/demo.js" defer></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06140f">
+<title>OHIO: ASCENSION · Tráiler oficial</title>
+<link rel="icon" href="/assets/favicon.svg?v=36151721e9ef" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/demo.css?v=406217d737fd">
+</head>
+<body>
+<main class="trailer" id="trailer">
+  <iframe id="game-frame" title="Gameplay real simulado de Ohio: Ascension"
+          src="/demo-game.html" tabindex="-1" aria-hidden="true"></iframe>
+  <div class="trailer-vignette" aria-hidden="true"></div>
+  <div class="trailer-scanlines" aria-hidden="true"></div>
+  <div class="trailer-cut" id="trailer-cut" aria-hidden="true"></div>
+  <header class="trailer-header">
+    <a href="/" class="trailer-logo" aria-label="Volver a Ohio">◈ <span>OHIO</span><small>ASCENSION</small></a>
+    <span class="trailer-label">GAMEPLAY REAL · 5 ACTOS · 75 SEGUNDOS</span>
+    <a class="trailer-exit" href="/">Salir <span aria-hidden="true">×</span></a>
+  </header>
+  <div class="trailer-action" id="trailer-action" aria-hidden="true">
+    <span id="action-icon">◆</span><span id="action-label">OPERACIÓN INICIADA</span>
+  </div>
+  <section class="trailer-copy" aria-label="Narración del tráiler">
+    <p class="trailer-kicker"><span id="act-number">ACTO 01 / 05</span> <span class="kicker-rule"></span> <span id="act-subtitle">Tu historia comienza</span></p>
+    <h1 id="scene-title">La revolución empieza en Ohio.</h1>
+    <p id="scene-description" aria-live="polite">Cinco decisiones. Una colonia. Un futuro por construir.</p>
+    <span id="scene-tagline" class="trailer-tagline">EL DESTINO DE OHIO ESTÁ EN TUS MANOS</span>
+  </section>
+  <section class="trailer-hud" aria-label="Controles del tráiler">
+    <div class="trailer-chapters" id="chapter-list" role="group" aria-label="Saltar a un acto"></div>
+    <div class="trailer-toolbar">
+      <div class="trailer-transport">
+        <button id="previous" type="button" aria-label="Acto anterior" title="Acto anterior (←)">‹</button>
+        <button id="pause-button" type="button" aria-label="Pausar" title="Pausar o reproducir (Espacio)">Ⅱ</button>
+        <button id="next" type="button" aria-label="Acto siguiente" title="Acto siguiente (→)">›</button>
+      </div>
+      <div class="trailer-audio-controls">
+        <button id="sound-button" type="button" aria-pressed="false">♫ Activar música</button>
+        <label for="music-volume" class="demo-volume-label">Volumen <output id="music-volume-value">55%</output></label>
+        <input id="music-volume" type="range" min="0" max="100" value="55" step="1" aria-label="Volumen de la banda sonora">
+      </div>
+      <span id="live-status" class="trailer-live" role="status">CARGANDO</span>
+      <span id="trailer-clock" class="trailer-clock" aria-label="Tiempo transcurrido">00:00 / 01:15</span>
+    </div>
+    <div class="trailer-timeline" aria-label="Progreso del tráiler"><div id="bar-progress"></div></div>
+  </section>
+  <section id="trailer-end" class="trailer-end" hidden aria-label="Fin del tráiler">
+    <p class="trailer-end-kicker">EXPLOTACIONES MINERAS DE OHIO</p>
+    <h2>LA HISTORIA<br><em>LA ESCRIBÍS VOS.</em></h2>
+    <p>Cinco actos. Miles de decisiones. Una civilización por construir.</p>
+    <div class="trailer-end-actions">
+      <a href="/" class="trailer-play">Entrar a Ohio <span aria-hidden="true">↗</span></a>
+      <button type="button" id="replay">↺ Volver a ver</button>
+    </div>
+    <small>Partidas de demostración aisladas. Tus datos permanecen intactos.</small>
+  </section>
+  <div id="trailer-error" class="trailer-error" role="alert" hidden></div>
+</main>
+<script src="/assets/trailer-audio.js?v=afd054c77a92" defer></script>
+<script src="/assets/ohio-config.js?v=c1c1c418cdfb" defer></script><script src="/assets/demo.js?v=197fa011b022" defer></script>
+</body>
+</html>

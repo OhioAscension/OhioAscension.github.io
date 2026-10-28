@@ -4,24 +4,32 @@ const OhioProgression=(()=>{
  const $=id=>document.getElementById(id);
  const count=(g,id)=>Number(g.projects?.find(p=>p.id===id)?.owned||0);
  function state(g){
-  const total=Number(g.progress?.projects??g.projects?.reduce((n,p)=>n+(p.owned||0),0)??0);
-  const hasTech=(id)=>g.tech?.some(t=>t.id===id&&t.unlocked)===true;
+  // Time is not an accomplishment. A day-eight colony with zero buildings
+  // must still discover its FIRST installation, not the space program.
+  const total=(g.projects||[]).reduce((n,p)=>n+Math.max(0,Number(p.owned)||0),0);
+  const hasTech=id=>g.tech?.some(t=>t.id===id&&t.unlocked)===true;
+  const researched=g.tech?.some(t=>t.unlocked)===true;
   const colony=g.space?.some(p=>p.active)===true;
   const orbital=Number(g.aerospace?.stage||0)>0;
   const helios=Number(g.helios?.collectors||0)>0||Number(g.helios?.relay||0)>0||g.helios?.active===true;
-  const infrastructure=total>=2||g.stats.day>=3||Number(g.stats.pollution)>0;
-  const advanced=total>=5||g.stats.day>=7||g.tech?.some(t=>t.unlocked)===true||count(g,"fab")>0;
-  const aerospace=(advanced&&(orbital||g.stats.day>=12||g.stats.credits>=150000))||colony||helios;
-  const interplanetary=colony||helios||g.energy_worlds?.some(w=>w.id!=="earth"&&w.established)===true;
+  const offworld=g.energy_worlds?.some(w=>w.id!=="earth"&&w.established)===true;
+  const interplanetary=colony||helios||offworld;
+  const advanced=total>=5||researched||count(g,"fab")>0||orbital||interplanetary;
+  // Backend requires 'silicon' research before aero_attempt. Show the
+  // control room when launch preparation becomes possible, not after launch.
+  const aerospace=hasTech("silicon")||orbital||interplanetary||Number(g.aerospace?.attempts||0)>0;
+  const infrastructure=total>=2||Number(g.stats?.pollution||0)>0||advanced;
+  const enterprise=infrastructure||Number(g.personnel?.required_industry||0)>0;
+  const world=(g.world||[]).some(r=>r.connected)||(advanced&&(total>=12||Number(g.stats?.credits||0)>=1000000));
   const stage=helios?6:interplanetary?5:aerospace?4:advanced?3:infrastructure?2:total>0?1:0;
-  return {stage,total,infrastructure,advanced,aerospace,interplanetary,hasTech};
+  return {stage,total,infrastructure,advanced,aerospace,interplanetary,enterprise,world,hasTech};
  }
- function update(g){
+  function update(g){
   if(!g||$("game")?.hidden)return;
   const s=state(g);
   const access={map:true,operations:true,projects:true,contracts:true,logs:true,
-   environment:s.infrastructure,energy:s.infrastructure,enterprise:s.advanced,
-   world:s.advanced,space:s.aerospace};
+   environment:s.infrastructure,energy:s.infrastructure,enterprise:s.enterprise,
+   world:s.world,space:s.aerospace};
   const hidden=(element,flag)=>{if(element)element.classList.toggle("ohio-discovery-hidden",flag)};
   document.querySelectorAll(".tabs [data-tab],[data-mobile-tab],[data-target-tab]").forEach(b=>{
    const tab=b.dataset.tab||b.dataset.mobileTab||b.dataset.targetTab;
@@ -64,11 +72,11 @@ const OhioProgression=(()=>{
   $("ohio-stage-hint")?.remove();
   if(s.stage<6){
    const next=[
-    ["Instalá tu primera fábrica","Construí un aserradero o una perforadora desde el parque industrial."],
-    ["Energía y ambiente","Construí 2 instalaciones o llegá al día 3."],
-    ["Investigación y empresa","Llegá a 5 instalaciones, al día 7 o investigá una tecnología."],
-    ["Programa espacial","Desarrollá el programa industrial hasta iniciar vuelos de prueba."],
-    ["Expansión interplanetaria","Fundá una colonia o establecé tu primer puesto fuera de la Tierra."],
+    ["Tu primera instalación","Visitá el sector industrial y construí un aserradero o una perforadora."],
+    ["Energía y ambiente","Construí una segunda instalación para ampliar la colonia."],
+    ["Investigación y empresa","Alcanzá 5 instalaciones o investigá una tecnología."],
+    ["Programa espacial","Investigá la Era del silicio y prepará chips, ingenieros y permisos de lanzamiento."],
+    ["Expansión interplanetaria","Prepará el primer lanzamiento y avanzá hacia la Luna y Marte."],
     ["Proyecto Helios","Desplegá colectores y repetidores orbitales para empezar tu red energética solar."]
    ][s.stage];
    const note=document.createElement("section");
@@ -79,6 +87,7 @@ const OhioProgression=(()=>{
   }
   const indicator=$("ohio-progress-status");
   if(indicator)indicator.textContent="ETAPA "+(s.stage+1)+" / 7";
+  window.OhioMobile?.syncActive();
  }
  return {update,state};
 })();

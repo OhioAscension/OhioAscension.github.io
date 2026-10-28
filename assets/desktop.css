@@ -1,0 +1,95 @@
+/* Ohio Desktop Refinement. All design changes are scoped above 800px. */
+.desktop-only{display:none!important}
+@media(min-width:801px){
+ .desktop-only:not([hidden]){display:block!important}
+ :root{--desk-ink:#e1f9e9;--desk-muted:#99c4a9;--desk-stroke:#35664a;--desk-accent:#a0f7bb}
+ body{background:radial-gradient(ellipse at 75% 0%,#122d2066,transparent 55%),#07120f}
+ .shell{grid-template-columns:clamp(252px,20vw,294px) minmax(0,1fr);align-items:start}
+ .shell>aside{position:sticky;top:0;height:100dvh;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#386c51 transparent;padding:25px 21px 28px;gap:14px;background:linear-gradient(165deg,#0e2a1f,#091812 70%);border-right:1px solid #38684e;box-shadow:12px 0 30px #0002}
+ .shell>aside .logo{font-size:18px;line-height:1.5;text-shadow:0 0 18px #68f6a621;padding-bottom:12px;border-bottom:1px solid #2d513c}
+ .shell>aside h3{font-size:11px;letter-spacing:.13em;color:#93c9a7;margin:15px 0 9px}
+ .shell>aside #stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ .shell>aside .stat{display:flex;flex-direction:column;gap:4px;min-width:0;border:1px solid #30533f;border-radius:9px;padding:9px 10px;background:#133427}
+ .shell>aside .stat span{font-size:9px;letter-spacing:.09em;color:#a7cfb8;overflow:hidden;text-overflow:ellipsis}
+ .shell>aside .stat strong{font-size:15px;font-weight:850;color:#dbffe8;font-variant-numeric:tabular-nums}
+ .shell>aside #power{margin:4px 0 10px;font-size:12px;line-height:1.45;color:#b4d3bf}
+ .shell>aside .meter{height:9px;border-radius:10px}
+ .shell>aside #audio-toggle,.shell>aside [data-action="rest"]{margin:5px 0;min-height:42px;text-align:center;border-radius:10px;font-size:12px}
+ .shell>aside #restart:not([hidden]){font-size:12px}
+ .shell>aside .micro{line-height:1.65;margin-top:13px;color:#80ab92}
+ .shell>main{width:100%;max-width:1640px;padding:28px clamp(24px,3.1vw,54px) 60px;margin:0 auto}
+ .hero{border-bottom:1px solid #315b43;padding:8px 0 25px}
+ .hero .eyebrow{letter-spacing:.15em;font-size:11px;color:#91c9a7;font-weight:700}
+ .hero h1{font-size:clamp(34px,4.6vw,65px);letter-spacing:-.055em;margin:15px 0 13px}
+ .hero #summary{color:#b6d8c3;font-size:13px;line-height:1.55}
+ #live-console{border:1px solid #477c59;box-shadow:0 15px 40px #0004}
+ #live-console .live-heading{font-size:11px;font-weight:650}
+ #live-console .live-readouts{font-size:10px}
+ #game .tabs{position:sticky;top:0;z-index:28;margin:19px 0 22px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:7px;border:1px solid #39634b;border-radius:14px;background:#081e16ef;backdrop-filter:blur(14px);box-shadow:0 7px 26px #0007}
+ #game .tabs button{margin:0;padding:10px 13px;min-height:42px;border-radius:9px;border:1px solid #2d6045;background:#12372a;color:#bde4c9;font-size:12px;font-weight:700;white-space:nowrap}
+ #game .tabs button:hover:not(:disabled){background:#235b3d;border-color:#5a9b70;transform:translateY(-1px)}
+ #game .tabs button.active{background:#7bdfa1;border-color:#b2ffca;color:#082317;box-shadow:0 0 20px #6df2a533}
+ #game .tabs button:focus-visible,.shell>aside button:focus-visible{outline:2px solid #a2ffca;outline-offset:3px}
+ #game .view:not([hidden]){scroll-margin-top:105px;animation:deskReveal .28s ease both}
+ @keyframes deskReveal{from{opacity:.65;transform:translateY(9px)}to{opacity:1;transform:none}}
+ .grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:15px}
+ .card{border:1px solid #345944;border-radius:14px;padding:19px 18px;background:linear-gradient(145deg,#102a20,#0c221b 73%);box-shadow:0 8px 25px #0002}
+ .card:hover{border-color:#5b9770;box-shadow:0 14px 34px #0004}
+ .card h2{color:#c4ffdb;font-size:17px;line-height:1.3}
+ .card p{color:#bbd9c6;font-size:13px;line-height:1.6}
+ .card .meta{color:#97c3a9;font-size:12px;line-height:1.55}
+ .card button{min-height:42px;border-radius:10px;font-size:12px;font-weight:700;transition:background .15s}
+ #event .event{padding:23px 25px;border-radius:15px;box-shadow:0 12px 27px #0004}
+ #event .event button{min-height:44px;border-radius:10px;margin:6px 6px 4px 0;font-size:12px}
+ .ohio-next-stage{border-radius:13px;margin:15px 0 19px;padding:14px 17px}
+ #message:not(:empty){font-size:12px;line-height:1.6}
+ main footer{border-top:1px solid #254a35;margin-top:29px;padding-top:14px;font-size:10px;letter-spacing:.06em}
+
+ /* First-fold cockpit: a real-time data ribbon, not a second navigation bar. */
+ #desktop-overview{margin:19px 0 14px;padding:15px 17px;border:1px solid #3d6f50;border-radius:16px;background:linear-gradient(130deg,#122f23,#0b2019);box-shadow:0 12px 27px #0002}
+ .desktop-overview-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:13px;margin-bottom:12px;border-bottom:1px solid #31583f}
+ .desktop-overview-heading>div{display:flex;flex-direction:column;gap:5px}
+ .desktop-eyebrow{color:#8ccba3;font-size:9px;letter-spacing:.17em;font-weight:850}
+ #desktop-colony-name{font-size:14px;font-weight:900;color:#d2ffe1;letter-spacing:.03em}
+ #desktop-search-launch{display:flex;align-items:center;gap:10px;margin:0;padding:8px 12px;border:1px solid #548966;border-radius:10px;background:#1b4e36;color:#e8fff1;font-size:12px;font-weight:700}
+ #desktop-search-launch kbd{display:inline-block;border:1px solid #4d8160;border-radius:5px;padding:4px 6px;background:#0f2b1f;color:#a8dbb8;font-size:10px}
+ .desktop-overview-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+ .desktop-kpi{min-width:0;display:flex;flex-direction:column;gap:6px;padding:12px 13px;border:1px solid #315942;border-radius:11px;background:#153828}
+ .desktop-kpi span{color:#9acaab;font-size:10px;font-weight:850;letter-spacing:.08em}
+ .desktop-kpi strong{color:#e6ffed;font-size:clamp(17px,2vw,26px);font-weight:900;font-variant-numeric:tabular-nums;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .desktop-kpi small{font-size:10px;color:#8cb29c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+ /* Keyboard-first search palette, explicitly hidden on phones. */
+ #desktop-command:not([hidden]){position:fixed;inset:0;z-index:120;display:grid!important;place-items:start center;padding:clamp(65px,13vh,160px) 20px 20px}
+ .desktop-command-backdrop{position:absolute;inset:0;background:#010b07d9;backdrop-filter:blur(6px)}
+ .desktop-command-window{position:relative;z-index:1;width:min(620px,100%);max-height:min(70dvh,650px);overflow:hidden;display:flex;flex-direction:column;padding:10px;border:1px solid #66a27b;border-radius:17px;background:#0d261b;box-shadow:0 24px 100px #000e}
+ .desktop-command-field{display:flex;align-items:center;gap:12px;border-bottom:1px solid #3b6b4e;padding:9px 12px 14px;color:#a6f0bb;font-size:23px}
+ #desktop-command-search{flex:1;min-width:0;margin:0;padding:8px 4px;background:transparent;border:0;outline:0;color:#e7ffed;font-size:16px}
+ #desktop-command-search::placeholder{color:#8ab79d}
+ .desktop-command-field kbd{font-size:10px;padding:5px 8px;border:1px solid #467358;border-radius:7px;background:#183e2c;color:#b4dec1}
+ #desktop-command-results{overflow-y:auto;scrollbar-color:#387457 transparent;padding:8px 0;display:flex;flex-direction:column;gap:5px}
+ #desktop-command-results button{display:flex;justify-content:space-between;align-items:center;width:100%;padding:13px 15px;margin:0;border:1px solid transparent;border-radius:9px;background:#122f23;color:#daffe6;font-size:14px;font-weight:750;text-align:left}
+ #desktop-command-results button[aria-selected="true"]{background:#245b3d;border-color:#86d9a2}
+ #desktop-command-results button small{color:#98dfb0;font-size:10px;font-weight:850}
+ .desktop-command-empty{margin:14px;color:#a9c9b3;font-size:13px}
+ .desktop-command-help{margin:8px 12px 5px;color:#90b59b;font-size:11px;line-height:1.5}
+}
+@media(min-width:1150px){
+ .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(330px,.85fr);grid-template-rows:auto auto 1fr;align-items:start;column-gap:clamp(25px,4vw,65px)}
+ .hero .eyebrow{grid-column:1;grid-row:1}
+ .hero h1{grid-column:1;grid-row:2;margin-top:18px}
+ .hero #summary{grid-column:1;grid-row:3}
+ .hero #live-console{grid-column:2;grid-row:1/span3;margin:0;align-self:stretch;min-height:210px}
+ .hero #live-console .industrial-sky{height:140px}
+ .hero #live-console .live-readouts{padding:12px 14px}
+}
+@media(min-width:801px) and (max-width:1090px){
+ .desktop-overview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .shell>aside{padding:20px 15px}
+ #desktop-overview{padding:12px}
+ #game .tabs{gap:5px}
+ #game .tabs button{padding:9px 10px;font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){
+ #game .view:not([hidden]){animation:none!important}
+}
