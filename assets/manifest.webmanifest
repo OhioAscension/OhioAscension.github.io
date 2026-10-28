@@ -1,0 +1,19 @@
+{
+  "name": "Explotaciones Mineras de Ohio",
+  "short_name": "Ohio",
+  "description": "Simulación industrial y expansión espacial",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#07120f",
+  "theme_color": "#0b1c18",
+  "icons": [
+    {
+      "src": "/assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

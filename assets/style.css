@@ -1,0 +1,131 @@
+:root{font-family:Consolas,"Cascadia Code",system-ui,sans-serif;color:#e6f5ec;background:#07120f}*{box-sizing:border-box}body{margin:0}.shell{min-height:100vh;display:grid;grid-template-columns:275px minmax(0,1fr)}aside{background:#0b1c18;border-right:1px solid #2c5042;padding:24px;display:flex;flex-direction:column;gap:16px}.logo{font-size:18px;color:#afffd2;font-weight:800;letter-spacing:.1em}.logo span{display:block;font-size:11px;color:#749b8d}.micro,footer{font-size:11px;color:#648a7b;margin-top:20px}main{padding:32px;max-width:1450px;width:100%;margin:auto}.hero{border-bottom:1px solid #315442;padding:16px 0 28px}.eyebrow{font-size:11px;letter-spacing:.16em;color:#7abc9b}h1{font-size:clamp(30px,5vw,58px);line-height:1.05;margin:14px 0}h1 em{font-style:normal;color:#94fec2}h2{color:#bbf8d1}h3{font-size:12px;letter-spacing:.12em;color:#7db89b;margin:18px 0 10px}p{line-height:1.65}button,input{font:inherit}button{background:#193d32;color:#d8ffe8;border:1px solid #407760;border-radius:8px;padding:11px 13px;cursor:pointer;margin:3px}button:hover{background:#2b5b47}button:disabled{opacity:.38;cursor:not-allowed}input{padding:12px;color:white;background:#102820;border:1px solid #4d9270;border-radius:8px;width:100%}.full{width:100%;text-align:left}.tabs{display:flex;gap:5px;flex-wrap:wrap;margin:20px 0}.tabs button.active{background:#429168;color:#08180f}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}.card{background:#0c221b;border:1px solid #2a5541;border-radius:12px;padding:18px}.card h2{font-size:17px;margin:0 0 9px}.card p{font-size:13px;color:#accbb8}.card .meta{font-size:12px;color:#89b5a0}.card button{display:block;width:100%;margin:12px 0 0}.locked{opacity:.5}.pill{display:inline-block;border:1px solid #477b5e;padding:4px 8px;margin:4px;border-radius:6px;font-size:12px}.meter{height:12px;background:#2f3033;border-radius:8px;overflow:hidden}.meter div{height:100%;background:#75d5a0;width:0}.stat{display:flex;justify-content:space-between;border-bottom:1px dotted #3b5b4b;padding:7px 0;font-size:13px}.stat strong{color:#baffd5}.event{background:linear-gradient(135deg,#352319,#131d1a);border:1px solid #a47341;border-radius:12px;padding:20px;margin:18px 0}.event h2{color:#ffd193}.event button{border-color:#b48c57;background:#443020}#message{color:#ffbc83;min-height:24px;margin:15px 0}.log{padding:8px 12px;border-left:2px solid #518a69;margin:7px 0;background:#10251d;font-size:13px}.select{font-weight:bold;color:#98ffc1}@media(max-width:800px){.shell{display:block}aside{border-right:none;border-bottom:1px solid #2c5042}main{padding:17px}}
+
+/* Ohio world atmosphere: fixed number of purely decorative elements. */
+body{transition:background-color 1.5s ease}
+#ohio-atmosphere{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 80% 10%,rgba(16,100,69,.24),transparent 57%);transition:background 2s}
+:root[data-phase="night"] #ohio-atmosphere{background:radial-gradient(ellipse at 78% 8%,rgba(35,57,107,.34),transparent 62%)}
+:root[data-phase="dusk"] #ohio-atmosphere{background:radial-gradient(ellipse at 80% 9%,rgba(193,95,34,.2),transparent 60%)}
+:root[data-phase="dawn"] #ohio-atmosphere{background:radial-gradient(ellipse at 80% 9%,rgba(130,116,65,.22),transparent 60%)}
+.hero{position:relative}
+#live-console{border:1px solid #39654b;border-radius:14px;margin-top:18px;overflow:hidden;background:#081a16;box-shadow:0 12px 36px #0005}
+.live-heading,.live-readouts{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 15px;font-size:11px;letter-spacing:.08em;background:#0a201a}
+.live-heading b{flex:1}.signal{width:8px;height:8px;background:#5df4a0;border-radius:50%;box-shadow:0 0 12px #5df4a0;animation:signalPulse 2.8s infinite}
+@keyframes signalPulse{50%{opacity:.45;box-shadow:0 0 2px #5df4a0}}
+.industrial-sky{position:relative;height:155px;overflow:hidden;background:linear-gradient(180deg,#247f84,#72a9a0 75%,#254b41);transition:background 1.6s}
+:root[data-phase="night"] .industrial-sky{background:linear-gradient(180deg,#061229,#12304c 75%,#152a33)}
+:root[data-phase="dusk"] .industrial-sky{background:linear-gradient(180deg,#42446f,#c17c53 75%,#394136)}
+:root[data-phase="dawn"] .industrial-sky{background:linear-gradient(180deg,#344d70,#ac9e78 75%,#364b41)}
+.sun,.moon{position:absolute;right:16%;top:13%;width:52px;height:52px;border-radius:50%;background:#fff7af;box-shadow:0 0 60px 22px #ffdf8a70;transition:opacity 1.5s,transform 1.5s}
+.moon{background:#dbe9ff;box-shadow:0 0 30px #b6ceef65;opacity:0;transform:translateY(45px)}
+:root[data-phase="night"] .sun{opacity:0;transform:translateY(50px)}
+:root[data-phase="night"] .moon{opacity:1;transform:translateY(0)}
+.cloud{position:absolute;width:150px;height:27px;border-radius:40px;background:#ffffff30;top:32px;animation:cloudDrift 32s linear infinite}
+.cloud-a{left:4%}.cloud-b{left:50%;top:72px;animation-duration:43s}
+@keyframes cloudDrift{50%{transform:translateX(85px)}}
+.terrain{position:absolute;bottom:0;width:100%;height:23px;background:#09291f}
+.plant{position:absolute;bottom:17px;width:85px;height:69px;background:#163a33;border:2px solid #367563;clip-path:polygon(0 27%,20% 13%,35% 27%,53% 13%,70% 27%,90% 13%,100% 23%,100% 100%,0 100%)}
+.plant i{position:absolute;bottom:13px;left:23px;width:10px;height:9px;background:#9af8a9;box-shadow:25px 0 #9af8a9}
+.p1{left:8%}.p2{left:30%;height:90px;width:120px}.p3{right:21%;height:78px}
+:root[data-phase="night"] .plant i{background:#ffe2a2;box-shadow:25px 0 #ffe2a2}
+.stack{position:absolute;bottom:18px;left:64%;height:124px;width:21px;background:#214039;border:3px solid #3e7465}
+.smoke{position:absolute;bottom:139px;left:64%;height:15px;width:21px;background:#d7e8e675;border-radius:50%;filter:blur(5px);opacity:var(--factory-intensity,0);animation:smokeRise 4s linear infinite}
+@keyframes smokeRise{to{transform:translate(45px,-80px) scale(3);opacity:0}}
+.crane{position:absolute;bottom:40px;right:7%;width:8px;height:104px;background:#a98c59;opacity:var(--factory-intensity,0)}
+.crane:before{content:"";position:absolute;top:4px;right:-8px;width:110px;height:5px;background:#c7a569;transform-origin:right;animation:craneMove 10s ease-in-out infinite alternate}
+@keyframes craneMove{to{transform:rotate(-7deg)}}
+.live-readouts{flex-wrap:wrap;color:#97ccb1}
+#live-console:not(.industrial-active) .smoke,#live-console:not(.industrial-active) .crane{animation-play-state:paused;opacity:0}
+#live-console.has-outage{border-color:#ed925d;box-shadow:0 0 0 1px #ed925d80,0 0 30px #ec703533}
+#live-console.has-outage .signal{background:#ff745a;box-shadow:0 0 14px #ff745a;animation:alertBlink .7s infinite}
+#live-console.has-outage .plant i{animation:alertBlink 1.3s steps(2,end) infinite}
+@keyframes alertBlink{50%{opacity:.08}}
+.ohio-toast{position:fixed;bottom:24px;right:24px;z-index:30;max-width:min(420px,calc(100vw - 48px));background:#12372b;border:1px solid #4f9d78;color:#d6ffe7;padding:15px 18px;border-radius:12px;box-shadow:0 18px 50px #0009;opacity:0;transform:translateY(18px);pointer-events:none;transition:opacity .25s,transform .25s;font-size:13px}
+.ohio-toast.visible{opacity:1;transform:translateY(0)}
+.ohio-toast.emergency{background:#3d211c;border-color:#ed925d;color:#ffe2d1}
+.tabs button{transition:transform .17s,background .22s,border-color .22s}.tabs button:hover:not(:disabled){transform:translateY(-2px)}
+.card{transition:border-color .2s,transform .2s,box-shadow .2s}
+.card:hover{border-color:#4d9270;transform:translateY(-2px);box-shadow:0 12px 27px #0004}
+button:active:not(:disabled){transform:scale(.97)}
+.view:not([hidden])>.grid,.view:not([hidden])>.card{animation:riseIn .35s ease both}
+@keyframes riseIn{from{opacity:.4;transform:translateY(9px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+@media(max-width:800px){.industrial-sky{height:115px}.live-readouts{font-size:10px}.ohio-toast{bottom:12px;right:12px}}
+
+/* Guided showcase shares normal game UI; emphasis never alters gameplay. */
+.demo-focus{outline:2px solid #a6ffca!important;outline-offset:2px;box-shadow:0 0 34px #58f2a653!important;animation:demoFocus .8s ease both}
+@keyframes demoFocus{0%{filter:brightness(1);transform:scale(.985)}50%{filter:brightness(1.28);transform:scale(1.018)}100%{filter:brightness(1.07);transform:scale(1)}}
+
+/* State-aware emergency palette: mild deficits amber, major deficits red. */
+:root[data-severity="warning"]{--alert-accent:#f3a849}
+:root[data-severity="critical"]{--alert-accent:#ed4858}
+:root[data-severity="warning"] aside,:root[data-severity="warning"] .hero,:root[data-severity="warning"] #live-console{border-color:#bc7f38}
+:root[data-severity="critical"] aside,:root[data-severity="critical"] .hero,:root[data-severity="critical"] #live-console{border-color:#b83342}
+:root[data-severity="warning"] .logo,:root[data-severity="warning"] h1 em,:root[data-severity="warning"] .tabs button.active,:root[data-severity="warning"] .signal{color:#ffc06f}
+:root[data-severity="critical"] .logo,:root[data-severity="critical"] h1 em,:root[data-severity="critical"] .tabs button.active,:root[data-severity="critical"] .signal{color:#ff8390}
+:root[data-severity="warning"] .tabs button.active{background:#955c21;color:#fff}
+:root[data-severity="critical"] .tabs button.active{background:#922a3d;color:#fff}
+:root[data-severity="warning"] #ohio-atmosphere{background:radial-gradient(ellipse at 80% 10%,#b4773038,transparent 65%)}
+:root[data-severity="critical"] #ohio-atmosphere{background:radial-gradient(ellipse at 80% 10%,#bd253d44,transparent 65%)}
+:root[data-severity="critical"] .live-heading{background:#401820}
+:root[data-severity="warning"] .live-heading{background:#402b17}
+:root[data-severity="critical"] #live-console .industrial-sky{filter:sepia(.45) hue-rotate(290deg)}
+:root[data-severity="warning"] #live-console .industrial-sky{filter:sepia(.4)}
+
+/* Independent music fader, keyboard-accessible and compact. */
+.audio-label{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#9fd9b7;margin:0 3px}
+#music-volume{width:100%;max-width:100%;height:6px;padding:0;margin:10px 0 15px;accent-color:#7df4ae;cursor:pointer;background:transparent}
+
+/* Mobile-first layout for installable Ohio PWA. */
+@media(max-width:700px){.shell{display:flex;flex-direction:column;min-width:0}aside{width:100%;padding:12px 15px;gap:8px}main{min-width:0;max-width:100%;padding:12px 14px}.hero{padding:5px 0 15px}.hero h1{font-size:clamp(27px,8vw,44px)}.tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:7px;overscroll-behavior-x:contain}.tabs::-webkit-scrollbar{display:none}.tabs button{flex:none;white-space:nowrap;font-size:12px;padding:10px 11px}.grid{grid-template-columns:minmax(0,1fr)}.card{padding:13px;overflow-wrap:anywhere}button{touch-action:manipulation;min-height:42px}.logo span{display:inline;margin-left:6px}#sidebar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 12px}#sidebar h3{grid-column:1/-1;margin:6px 0}#stats,#power,.meter,.audio-label,#music-volume,.micro{grid-column:1/-1}#sidebar .full{width:100%}}
+
+/* Never reveal signed-in control containers just because a mobile display rule wins specificity. */
+[hidden]{display:none!important}
+.welcome-actions{margin:4px 0 14px}
+.trailer-link{display:block;padding:12px 14px;border:1px solid #62bd92;border-radius:10px;background:linear-gradient(110deg,#18412e,#1f6042);color:#e4ffee;font-size:13px;font-weight:750;letter-spacing:.02em;text-decoration:none;text-align:center}
+.trailer-link:hover,.trailer-link:focus-visible{background:#2f7652;outline:2px solid #93f7c0;outline-offset:2px}
+@media(max-width:700px){
+ .shell{gap:0}
+ aside{padding:14px 18px}
+ .logo{font-size:17px}
+ .welcome-actions{margin:7px 0}
+ #auth{display:grid;gap:9px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+ #auth h2,#auth p,#auth input{grid-column:1/-1}
+ #auth h2{font-size:17px;margin:8px 0 0}
+ #auth p{font-size:13px;margin:0}
+ #auth button{margin:0;width:100%;font-size:12px;padding:8px}
+ #auth input{font-size:14px}
+ #sidebar{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 9px}
+ #sidebar .stat{font-size:11px;padding:5px 0}
+ #sidebar h3{font-size:10px;letter-spacing:.06em}
+ #sidebar .full{font-size:12px;padding:9px 8px}
+ .hero h1{font-size:clamp(27px,8vw,42px)}
+ .industrial-sky{height:110px}
+}
+
+
+/* Discovery is consistent across both interfaces; the server alone enforces requirements. */
+.ohio-discovery-hidden{display:none!important}
+.ohio-next-stage{display:flex;flex-direction:column;gap:5px;background:#103227;border:1px dashed #4e896b;color:#b9f2ce;padding:14px 17px;border-radius:12px;margin:18px 0 22px;line-height:1.5}
+.ohio-next-stage strong{font-size:13px;letter-spacing:.04em;color:#a4ffd0}
+.ohio-next-stage span{font-size:12px;color:#a7ceba}
+@media(max-width:700px){.ohio-next-stage{padding:11px 13px;margin:10px 0 17px}}
+
+/* Signed-in identity, visually clean account header and intentionally destructive logout. */
+.logo .lab-name{display:inline;font-size:inherit;font-weight:inherit;color:inherit;letter-spacing:inherit}
+.logo .lab-version{display:block;font-size:11px;color:#749b8d}
+#auth[hidden]{display:none!important}
+.danger-logout{background:#481e24!important;border:1px solid #d36a73!important;color:#ffe1e2!important;font-weight:700;cursor:pointer;transition:background .2s,border-color .2s}
+.danger-logout:hover,.danger-logout:focus-visible{background:#7a2933!important;border-color:#ff949e!important;outline-offset:2px}
+.desktop-logout:not([hidden]){display:block;width:100%;margin-top:auto;min-height:42px}
+@media(min-width:701px){#mobile-logout{display:none!important}}
+
+
+/* Shared incident inbox: visible and actionable on desktop and mobile. */
+.ohio-incident-inbox{border:1px solid #bd8240;background:#261d15;border-radius:13px;padding:16px 18px;margin:15px 0 24px}
+.ohio-incident-inbox h2{margin:0 0 8px;font-size:17px;color:#ffd39b}
+.ohio-incident-inbox>.meta,.ohio-incident-inbox>p{color:#e4c9a6;font-size:12px;line-height:1.6}
+.ohio-incident{margin-top:12px;padding:12px;border:1px solid #87623b;border-radius:10px;background:#241a16}
+.ohio-incident strong{font-size:13px;color:#ffddab}
+.ohio-incident p{font-size:13px;color:#eee0cb;margin:7px 0}
+.ohio-incident .meta{font-size:11px;color:#d8ae78}
+@media(max-width:700px){.ohio-incident-inbox{padding:12px;margin:10px 0 17px}.ohio-incident-inbox h2{font-size:15px}}

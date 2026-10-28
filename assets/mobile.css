@@ -1,0 +1,65 @@
+/* Mobile-only presentation layer. Desktop rules remain unchanged. */
+.mobile-only{display:none!important}
+@media(max-width:700px){
+ body{padding-top:58px;padding-bottom:76px}
+ .mobile-only{display:flex!important}
+ #mobile-topbar{position:fixed;top:0;left:0;right:0;height:58px;z-index:50;align-items:center;gap:12px;justify-content:space-between;padding:0 14px;background:#092018;border-bottom:1px solid #396e51;color:#b9ffda}
+ #mobile-topbar strong{font-size:18px;letter-spacing:.08em}
+ #mobile-clock{font-variant-numeric:tabular-nums;font-size:14px;color:#9ad3b0}
+ #mobile-menu-toggle{padding:8px 10px;min-height:37px;font-size:12px}
+ .shell{display:block!important}
+ .shell>main{margin:0!important;max-width:100%!important;padding:12px 15px!important;width:100%}
+ .shell>aside{position:fixed;top:58px;bottom:76px;left:0;width:min(87vw,340px);max-height:calc(100dvh - 134px);overflow-y:auto;z-index:48;display:block!important;transform:translateX(-105%);transition:transform .23s ease;background:#0b211a;border-right:1px solid #4b9870;box-shadow:15px 0 35px #0007}
+ body.mobile-drawer-open .shell>aside{transform:translateX(0)}
+ #mobile-drawer-backdrop:not([hidden]){display:block!important;position:fixed;inset:58px 0 76px;background:#0009;z-index:47}
+ #mobile-resource-strip{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:12px}
+ #mobile-resource-strip>div{background:#123b2b;border:1px solid #35684d;border-radius:10px;padding:9px 7px;min-width:0;display:flex;flex-direction:column;gap:3px}
+ #mobile-resource-strip small{font-size:9px;letter-spacing:.055em;color:#83bda0}
+ #mobile-resource-strip strong{font-size:clamp(12px,3.8vw,17px);color:#dbffe7;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+ #mobile-bottom-nav:not([hidden]){position:fixed;bottom:0;left:0;right:0;height:76px;z-index:45;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));padding:6px 4px max(6px,env(safe-area-inset-bottom));background:#0b211a;border-top:1px solid #407755}
+ #mobile-bottom-nav button{margin:0 2px;padding:6px 1px;min-width:0;min-height:48px;display:flex;flex-direction:column;gap:3px;align-items:center;justify-content:center;background:transparent;border:0;font-size:22px;color:#a7d6b8;border-radius:9px}
+ #mobile-bottom-nav button span{font-size:10px}
+ #mobile-bottom-nav button.active{background:#22533b;color:#b7ffce}
+ .hero{padding-top:1px}
+ .hero .eyebrow{font-size:9px}
+ .hero h1{font-size:clamp(25px,7vw,36px)}
+ #sidebar{display:grid!important}
+ #sidebar[hidden]{display:none!important}
+ .tabs{display:none}
+ .view:not([hidden]){margin-top:15px}
+ .card{border-radius:13px}
+}
+@media(prefers-reduced-motion:reduce){.shell>aside{transition:none!important}}
+
+@media(max-width:700px){
+ body:not(.mobile-logged-in){padding-bottom:0}
+ body:not(.mobile-logged-in) .shell>aside{position:relative;top:auto;bottom:auto;left:auto;width:100%;max-height:none;overflow:visible;transform:none;border:0;box-shadow:none;padding:14px 18px}
+ body:not(.mobile-logged-in) .shell>main{padding:12px 15px!important}
+ body:not(.mobile-logged-in) #mobile-menu-toggle{display:none}
+ body:not(.mobile-logged-in) #mobile-resource-strip{display:none!important}
+ body:not(.mobile-logged-in) #mobile-bottom-nav{display:none!important}
+ body.mobile-logged-in #auth,body.mobile-logged-in .welcome-actions{display:none!important}
+}
+
+/* Progressive mobile onboarding only; desktop content remains complete. */
+@media(max-width:700px){
+ .mobile-progress-locked{display:none!important}
+ #mobile-bottom-nav button[hidden],#mobile-tab-list button[hidden]{display:none!important}
+ #mobile-bottom-nav{grid-template-columns:repeat(5,minmax(0,1fr));}
+ #mobile-bottom-nav:has(button[hidden]){grid-template-columns:repeat(4,minmax(0,1fr));}
+ .mobile-next-stage{background:#123529;border:1px dashed #508467;border-radius:12px;padding:12px 14px;margin:10px 0 17px;color:#9fe3bd;font-size:12px;line-height:1.5}
+ .mobile-account-actions{display:grid;gap:8px;margin:8px 0 14px}
+ .mobile-account-actions a,.mobile-account-actions button{display:block;width:100%;text-align:center;background:#1c4d37;border:1px solid #5c9d78;color:#d7ffea;padding:11px;border-radius:9px;font-size:13px;text-decoration:none}
+ body:not(.mobile-logged-in) .mobile-account-actions{display:none}
+}
+@media(min-width:701px){.mobile-account-actions{display:none}}
+
+/* Evenly distribute only unlocked bottom actions, no empty columns. */
+@media(max-width:700px){#mobile-bottom-nav:not([hidden]){display:flex!important;justify-content:space-around}#mobile-bottom-nav button:not(.ohio-discovery-hidden){flex:1 1 0;max-width:28%}}
+
+@media(max-width:700px){
+ .desktop-logout{display:none!important}
+ body.mobile-logged-in #mobile-drawer{display:flex!important;flex-direction:column}
+ #mobile-logout{display:block!important;width:100%;flex-shrink:0;margin-top:22px;margin-bottom:16px;padding:13px}
+ body:not(.mobile-logged-in) #mobile-logout{display:none!important}
+}

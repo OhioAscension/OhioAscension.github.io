@@ -1,0 +1,35 @@
+:root{color-scheme:dark;font-family:system-ui,Segoe UI,sans-serif;color:#effff4;background:#06120e}*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden}.showcase{height:100dvh;width:100vw;position:relative;overflow:hidden;background:#061b13}#game-frame{height:100%;width:100%;border:0;display:block;filter:saturate(1.2);pointer-events:none;transform:scale(1.015);animation:zoom 14s ease-in-out infinite alternate}@keyframes zoom{to{transform:scale(1.045) translateY(-.8%)}}.screen-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(0,8,5,.25),transparent 22%)}
+.titlebar{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:20px 30px;letter-spacing:.13em;font-size:12px;color:#a9eccc;z-index:4}.titlebar a{color:#d5ffe7;text-decoration:none;border:1px solid #5e8f79;border-radius:7px;padding:9px 12px;background:#102a20}.callout{position:absolute;left:18px;bottom:60px;top:auto;max-width:min(430px,calc(100vw - 45px));padding:13px 17px;border:1px solid #416b56;border-radius:12px;background:rgba(5,22,15,.87);backdrop-filter:blur(7px);pointer-events:none;z-index:3;animation:appear .35s both}.kicker{font-size:10px;color:#79ffb5;letter-spacing:.13em;font-weight:700}.callout h1{font-size:clamp(18px,2vw,27px);line-height:1.1;margin:7px 0;text-transform:none;text-shadow:none}.callout p{font-size:13px;line-height:1.4;margin:5px 0;color:#e0f4e7}.callout .scene-note{font-size:10px;color:#91b5a1}
+.hotspot{position:absolute;top:13%;bottom:12%;width:16%;z-index:2;opacity:0;background:none;border:0;cursor:pointer}.hotspot.left{left:0}.hotspot.right{right:0}.bottom-status{position:absolute;bottom:25px;left:30px;right:30px;z-index:4;display:flex;align-items:center;gap:20px;color:#9bcbb0;font-size:12px}.bottom-status button{border:1px solid #5b9c7c;color:#eafff4;border-radius:7px;padding:9px 15px;background:#123b29;cursor:pointer}.bottom-status span:last-child{margin-left:auto;color:#60e69e;letter-spacing:.15em}.scene-progress{position:absolute;bottom:0;left:0;height:3px;width:0;background:#67e9a1;z-index:5;transition:width .08s linear}@keyframes appear{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}@media(max-width:720px){.titlebar{padding:13px;font-size:10px}.bottom-status{left:12px;right:12px;bottom:14px;font-size:9px;gap:7px}.bottom-status button{padding:7px}}@media(prefers-reduced-motion:reduce){#game-frame,.callout{animation:none}}
+.showcase.severity-warning .titlebar,.showcase.severity-warning .callout{border-color:#f3ab42;color:#ffcf85}.showcase.severity-warning .scene-progress{background:#ffa640}.showcase.severity-critical .titlebar,.showcase.severity-critical .callout{border-color:#e04e56;color:#ffc0c0}.showcase.severity-critical .scene-progress{background:#ff465b}.showcase.severity-critical:after{content:"";position:absolute;inset:0;border:4px solid #b0203555;pointer-events:none;animation:alarmGlow 1.2s infinite alternate}@keyframes alarmGlow{to{border-color:#ff354a99}}
+@media(max-width:720px){.callout{left:10px;right:10px;bottom:52px;max-width:none;padding:10px 12px}.callout h1{font-size:19px}.callout p{font-size:12px}.bottom-status span:first-child{display:none}}
+
+/* No cropping or fake camera zoom: showcase full UI at native size. */
+#game-frame{transform:none!important;animation:none!important;filter:none;}
+
+
+.demo-cursor{position:fixed;left:50%;top:50%;z-index:8;pointer-events:none;opacity:0;transition:left .7s ease,top .7s ease,opacity .2s}
+.demo-cursor.visible{opacity:1}.cursor-tip{font-size:29px;color:white;text-shadow:0 2px 5px black;display:block;transform:rotate(-30deg)}
+.cursor-ripple{position:absolute;left:7px;top:10px;width:10px;height:10px;border:2px solid #8fffd0;border-radius:50%;opacity:0}
+.demo-cursor.clicked .cursor-ripple{animation:clickRing .6s ease-out}
+@keyframes clickRing{0%{opacity:1;transform:scale(.6)}100%{opacity:0;transform:scale(5)}}
+@media(prefers-reduced-motion:reduce){.demo-cursor{transition:none!important}.demo-cursor.clicked .cursor-ripple{animation:none}}
+
+.demo-volume-label{font-size:12px;color:#a7d9bc;white-space:nowrap}
+#music-volume{width:115px;max-width:25vw;accent-color:#81eab0;cursor:pointer}
+@media(max-width:640px){#music-volume{width:70px}.demo-volume-label{font-size:10px}.bottom-status{gap:8px}}
+
+/* Phone trailer transport controls must remain reachable, including standalone PWA. */
+@media(max-width:720px){
+ .bottom-status{bottom:max(10px,env(safe-area-inset-bottom));left:10px;right:10px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:5px 8px;padding:8px;background:#071a14ed;border:1px solid #36694d;border-radius:12px;align-items:center}
+ .bottom-status>span:first-child{display:none}
+ #sound-button{grid-column:1;grid-row:1;white-space:nowrap;font-size:12px;padding:9px 10px}
+ .demo-volume-label{grid-column:2;grid-row:1;white-space:nowrap;font-size:10px}
+ #music-volume{grid-column:2;grid-row:2;width:100%;max-width:none;min-width:0;margin:0}
+ #live-status{grid-column:3;grid-row:1 / 3;margin:0!important;font-size:9px;letter-spacing:0!important}
+ .callout{bottom:100px;left:10px;right:10px;padding:9px 11px;max-width:none}
+ .callout .scene-note{display:none}
+ .titlebar{background:#061c16ed;padding:8px 12px;gap:8px}
+ .titlebar>span:first-child{display:none}
+ .titlebar a{padding:6px 9px}
+}

@@ -1,0 +1,18 @@
+/* Tour viewport: sidebar stays in frame while only the game content scrolls. */
+html,body{height:100%;overflow:hidden}
+.shell{height:100dvh;min-height:0;grid-template-columns:275px minmax(0,1fr)}
+.shell>aside{height:100dvh;overflow-y:auto;position:sticky;top:0;scrollbar-width:thin}
+.shell>main{height:100dvh;min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scroll-padding-top:20px}
+#live-console{margin-bottom:12px}
+@media(max-width:800px){.shell{display:grid;grid-template-columns:190px minmax(0,1fr)}.shell>aside{height:100dvh;padding:12px}.shell>main{height:100dvh;padding:12px}.logo{font-size:13px}}
+
+/* Navigation remains keyboard and wheel accessible without visual scrollbars. */
+html,body,.shell,.shell>aside,.shell>main{margin-right:0;max-width:100%;}
+.shell>aside,.shell>main{scrollbar-width:none;-ms-overflow-style:none;}
+.shell>aside::-webkit-scrollbar,.shell>main::-webkit-scrollbar{display:none;width:0;height:0;}
+
+/* Fill the entire remaining column; the regular app's centered 1450px cap created a blank right gutter. */
+.shell>main{max-width:none;width:100%;margin:0;min-width:0;}
+
+/* Visual feedback for guided mouse interaction; demo buttons remain inert. */
+.demo-pressed{outline:2px solid #9cfbc8!important;background:#3e8760!important;box-shadow:0 0 18px #8efbb866!important;transition:background .14s,box-shadow .14s}
