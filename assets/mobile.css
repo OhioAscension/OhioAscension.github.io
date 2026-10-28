@@ -63,3 +63,20 @@
  #mobile-logout{display:block!important;width:100%;flex-shrink:0;margin-top:22px;margin-bottom:16px;padding:13px}
  body:not(.mobile-logged-in) #mobile-logout{display:none!important}
 }
+
+
+/* Mobile app-like chrome: keep scrolling, omit visible scrollbar gutters.
+   This does not hide the browser's Custom Tab toolbar. */
+@media(max-width:700px){
+  html,body,.shell>aside,main,.view,#mobile-drawer{
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+  }
+  html::-webkit-scrollbar,body::-webkit-scrollbar,
+  .shell>aside::-webkit-scrollbar,main::-webkit-scrollbar,
+  .view::-webkit-scrollbar,#mobile-drawer::-webkit-scrollbar{
+    display:none;
+    width:0;
+    height:0;
+  }
+}
