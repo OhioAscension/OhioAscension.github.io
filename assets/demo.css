@@ -118,19 +118,11 @@ button:focus-visible,a:focus-visible,input:focus-visible{
  font-weight:600;color:#9bcbaa
 }
 
-/* The high-impact animated notifications still come from real engine cues,
-   but their explanatory sublines needn't obscure the action footage. */
-body.ohio-trailer-playback .ohio-cinematic-label{
- top:13%;max-width:min(80vw,510px);padding:10px 15px;gap:3px;
- background:#0b3024d9
-}
-body.ohio-trailer-playback .ohio-cinematic-label strong{
- font-size:clamp(16px,2.1vw,24px);color:#c0f4d5
-}
-body.ohio-trailer-playback .ohio-cinematic-label small{display:none}
-body.ohio-trailer-playback .ohio-cinematic-eyebrow{
- font-size:9px;letter-spacing:.11em
-}
+/* The game already has a contextual bottom-left act caption.
+   Duplicate cinematic headings from the shared effects system obscure
+   phone gameplay and add no information. Keep particles, hide only text. */
+body.ohio-trailer-playback .ohio-cinematic-label{display:none!important}
+body.ohio-trailer-playback .ohio-cinematic-canvas{opacity:.65}
 
 /* Final frame / replay, preserved as the sole end-of-film action. */
 .trailer-end{
@@ -254,19 +246,30 @@ body.ohio-trailer-playback .ohio-cinematic-eyebrow{
    linear-gradient(to top,rgba(2,16,10,.68),rgba(2,16,10,.25) 14%,transparent 31%),
    linear-gradient(to bottom,rgba(3,18,12,.44),transparent 12%)
  }
+ /* On Android a TWA/navigation-bar overlay may cover the last pixels
+    of 100dvh. Put the *whole* caption inside a visible lower-left safe band,
+    accounting for dynamic visualViewport occlusion when available. */
  .trailer-copy{
   left:15px;right:15px;width:auto;
-  bottom:calc(22px + env(safe-area-inset-bottom));
+  bottom:max(88px,calc(24px + env(safe-area-inset-bottom)),
+                   calc(24px + var(--ohio-vv-bottom,0px)));
+  max-height:35dvh;overflow:hidden;
  }
  .trailer-kicker{font-size:9px;margin-bottom:4px}
- .trailer-copy h1{font-size:clamp(21px,5.6vw,27px);margin-bottom:5px}
- .trailer-copy #scene-description{font-size:clamp(12px,3.2vw,14px);max-width:100%}
- body.ohio-trailer-playback .ohio-cinematic-label{
-  top:12%;max-width:82vw;padding:8px 12px
+ .trailer-copy h1{
+  font-size:clamp(20px,5.4vw,26px);line-height:1.14;
+  margin-bottom:5px;overflow-wrap:anywhere
  }
- body.ohio-trailer-playback .ohio-cinematic-label strong{
-  font-size:clamp(15px,4.2vw,19px)
+ .trailer-copy #scene-description{
+  font-size:clamp(11px,3vw,13px);line-height:1.4;
+  max-width:100%;display:-webkit-box;-webkit-box-orient:vertical;
+  -webkit-line-clamp:2;overflow:hidden
  }
+ /* The film's only top-level control is Salir. The underlying game
+    already displays its brand, so another mobile logo just overlaps it. */
+ .trailer-logo{display:none}
+ .trailer-header{justify-content:flex-end}
+ body.ohio-trailer-playback .ohio-cinematic-canvas{opacity:.38}
  .trailer-end{padding:23px 15px}
  .trailer-end h2{font-size:clamp(34px,9.8vw,53px)}
  .trailer-end-actions>*{font-size:13px;min-height:45px;padding:11px 15px}
@@ -281,8 +284,9 @@ body.ohio-trailer-playback .ohio-cinematic-eyebrow{
  .trailer-gate small{font-size:10px}
 }
 @media(max-height:610px){
- .trailer-copy{bottom:calc(12px + env(safe-area-inset-bottom))}
- .trailer-copy h1{font-size:clamp(19px,2.7vw,26px)}
+ .trailer-copy{bottom:max(48px,calc(16px + env(safe-area-inset-bottom)),
+                                    calc(16px + var(--ohio-vv-bottom,0px)))}
+ .trailer-copy h1{font-size:clamp(18px,2.7vw,25px)}
  .trailer-copy #scene-description{font-size:12px}
  .trailer-gate{gap:6px;padding:11px 16px}
  .trailer-gate-beacon{width:42px;height:42px;font-size:28px}

@@ -7,6 +7,23 @@ const $=id=>document.getElementById(id);
 const ACT_MS=15000,BEAT_COUNT=5;
 const frame=$("game-frame"),trailer=$("trailer"),audio=window.OhioTrailerAudio;
 document.body.classList.add("ohio-trailer-playback");
+
+// Android's system navigation and browser/TWA chrome can obscure the layout
+// viewport even with 100dvh. Give the caption the actual visual-viewport
+// bottom occlusion as a CSS variable, without changing playback dimensions.
+function updateVisibleBottom(){
+ const vv=window.visualViewport;
+ const height=Number(window.innerHeight);
+ if(!vv||!Number.isFinite(height)||height<=0)return;
+ const visibleBottom=Number(vv.height)+Number(vv.offsetTop);
+ if(!Number.isFinite(visibleBottom))return;
+ const occluded=Math.min(height,Math.max(0,height-visibleBottom));
+ trailer.style?.setProperty?.("--ohio-vv-bottom",Math.ceil(occluded)+"px");
+}
+updateVisibleBottom();
+window.addEventListener("resize",updateVisibleBottom);
+window.visualViewport?.addEventListener("resize",updateVisibleBottom);
+window.visualViewport?.addEventListener("scroll",updateVisibleBottom);
 const musicSlider=$("music-volume"),musicReadout=$("music-volume-value");
 let scenes=[],ready=false,frameReady=false,chapter=0,beat=-1,elapsed=0;
 let paused=false,finished=false,failed=false,started=false,last=performance.now(),flashTimer=0;
