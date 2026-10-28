@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.github.ohioascension.client",
+      "sha256_cert_fingerprints": [
+        "62:C9:97:B4:3B:16:BB:0F:EF:E0:6F:56:11:F8:5B:35:4E:E1:0C:E9:5C:18:E0:94:B1:20:68:93:E2:44:7B:B5"
+      ]
+    }
+  }
+]
