@@ -7,8 +7,23 @@ for(const [a,b] of [["americas","europe"],["europe","africa"],["europe","asia"],
 g.world.forEach(r=>{let [x,y]=positions[r.id],ratio=(r.delivered_power/r.power+r.delivered_water/r.water)/2;let ring=document.createElementNS(ns,"circle");for(let [k,v] of Object.entries({cx:x,cy:y,r:30,fill:r.connected?"#176849":"#24352e",stroke:ratio===1?"#70e4a7":"#5da98a","stroke-width":4}))ring.setAttribute(k,v);diagram.append(ring);let name=document.createElementNS(ns,"text");for(let [k,v] of Object.entries({x,y:y+52,fill:"#d4fbe6","font-size":16,"text-anchor":"middle"}))name.setAttribute(k,v);name.textContent=r.name;diagram.append(name);let pct=document.createElementNS(ns,"text");for(let [k,v] of Object.entries({x,y:y+5,fill:"#ffffff","font-size":15,"font-weight":"bold","text-anchor":"middle"}))pct.setAttribute(k,v);pct.textContent=Math.round(ratio*100)+"%";diagram.append(pct)});world.append(diagram);
 let worldGrid=node("div","grid");
 g.world.forEach(r=>{let c=card(r.name,"Electricidad "+r.delivered_power+"/"+r.power+" · Agua "+r.delivered_water+"/"+r.water,"Tendido inicial: "+r.cost+" créditos, "+(r.power*2)+" mineral");
-if(!r.connected)c.append(btn("Conectar región",()=>act("world_connect",r.id),!!g.pending));
-else c.append(btn("Extender 100 de electricidad",()=>act("world_supply",r.id+":power"),r.delivered_power>=r.power||!!g.pending),btn("Potabilizar 100 de agua",()=>act("world_supply",r.id+":water"),r.delivered_water>=r.water||!!g.pending));worldGrid.append(c)});
+if(!r.connected){
+ const issues=[g.pending?"Resolvé primero el acontecimiento pendiente.":"",
+ g.stats.credits<r.cost?"Te faltan "+(r.cost-g.stats.credits)+" créditos.":"",
+ g.stats.ore<r.power*2?"Te faltan "+(r.power*2-g.stats.ore)+" mineral.":""].filter(Boolean);
+ c.append(btn("Conectar región · "+r.cost.toLocaleString("es-AR")+" créditos · "+(r.power*2)+" mineral",()=>act("world_connect",r.id),issues.length>0,issues.join(" ")));
+}
+else{
+ c.append(btn("Extender 100 de electricidad",()=>act("world_supply",r.id+":power"),r.delivered_power>=r.power||!!g.pending,
+ r.delivered_power>=r.power?"Cobertura eléctrica completa.":"Resolvé el acontecimiento pendiente."));
+ const waterWhy=[r.delivered_water>=r.water?"Cobertura de agua completa.":"",
+ g.stats.credits<120000?"Faltan "+(120000-g.stats.credits)+" créditos.":"",
+ g.stats.wood<100?"Faltan "+(100-g.stats.wood)+" madera.":"",
+ g.stats.ore<100?"Faltan "+(100-g.stats.ore)+" mineral.":"",
+ g.pending?"Resolvé el acontecimiento pendiente.":""].filter(Boolean);
+ c.append(btn("Potabilizar 100 de agua · 120.000 créditos · 100 madera · 100 mineral",
+ ()=>act("world_supply",r.id+":water"),waterWhy.length>0,waterWhy.join(" ")));
+}worldGrid.append(c)});
 world.append(worldGrid);
 
 }

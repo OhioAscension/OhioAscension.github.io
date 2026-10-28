@@ -93,3 +93,25 @@
 @media(prefers-reduced-motion:reduce){
  #game .view:not([hidden]){animation:none!important}
 }
+
+/* Desktop parity: settings are accessed through an explicit sidebar tab. */
+@media(min-width:701px){
+ .ohio-desktop-sidebar-switcher{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:10px 0}
+ .ohio-desktop-sidebar-switcher button{
+  min-width:0;padding:11px 6px;border-radius:10px;border:1px solid #3b6d51;
+  background:#132e22;color:#afdbc0;font-weight:700;font-size:12px
+ }
+ .ohio-desktop-sidebar-switcher button[aria-pressed="true"]{
+  background:#235c3e;border-color:#87d6a2;color:#e5ffef
+ }
+ #mobile-drawer[data-desktop-panel="colony"] #ohio-settings{display:none!important}
+ #mobile-drawer[data-desktop-panel="settings"] #ohio-colony-controls{display:none!important}
+ #mobile-drawer[data-desktop-panel="settings"] #ohio-settings{display:block!important}
+ #ohio-settings{padding:4px 0 14px}
+ #ohio-settings h3{margin:22px 0 9px}
+ #ohio-settings #logout:not([hidden]){
+  display:block;width:100%;margin-top:20px;min-height:44px
+ }
+ #ohio-settings #mobile-logout{display:none!important}
+ #ohio-security-slot button{max-width:100%;white-space:normal}
+}

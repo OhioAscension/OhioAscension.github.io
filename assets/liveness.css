@@ -64,3 +64,62 @@
    credential's github.io RP ID. Offer a clear route, never silent failure. */
 .ohio-public-login-hint{padding:13px 15px;margin:12px 0;border:1px solid #428c62;border-radius:11px;background:#133d2b;color:#c4e7d0;font-size:12px;line-height:1.65}
 .ohio-public-login-hint a{display:inline-block;margin-top:4px;font-weight:800;color:#a6facc;text-underline-offset:4px}
+
+
+/* Ohio's industrial window: naturalistic in-game dawn/dusk lighting.
+ * Warm sunlight passes across the window and nearby hero surface,
+ * without overlaying controls or text. The clock, not OS wall time,
+ * controls the color and intensity.
+ */
+:root{--ohio-sunlight:0}
+#live-console .industrial-sky::after{
+ content:"";position:absolute;inset:0;z-index:3;pointer-events:none;
+ background:
+  linear-gradient(112deg,transparent 19%,rgba(255,204,126,.28) 63%,transparent 94%),
+  radial-gradient(ellipse at 80% 34%,rgba(255,178,80,.63),transparent 54%);
+ mix-blend-mode:screen;opacity:var(--ohio-sunlight);
+ transition:opacity 2.2s ease;
+}
+.hero::before{
+ content:"";position:absolute;pointer-events:none;z-index:0;
+ right:-12px;top:-12px;width:min(72%,760px);height:min(96%,420px);
+ background:
+  radial-gradient(ellipse at 82% 18%,rgba(255,152,63,.15),transparent 66%),
+  linear-gradient(118deg,transparent 20%,rgba(255,173,83,.07) 73%,transparent 100%);
+ opacity:var(--ohio-sunlight);
+ transition:opacity 2.4s ease;
+}
+.hero>*{position:relative;z-index:1}
+:root[data-phase="dusk"] #live-console{
+ box-shadow:0 12px 42px rgba(120,63,29,.20),0 12px 36px #0005;
+ border-color:#916d49;
+}
+:root[data-phase="dusk"] #live-console .industrial-sky{
+ background:linear-gradient(180deg,#303852 0%,#a76a55 47%,#e3a76d 78%,#514d3d 100%);
+}
+:root[data-phase="dusk"] #live-console .sun{
+ top:39%;right:13%;width:45px;height:45px;
+ background:#ffe9b3;
+ box-shadow:0 0 25px 9px #ffd39277,0 0 95px 36px #f4a4614d;
+}
+:root[data-phase="dawn"] #live-console .sun{
+ top:34%;right:16%;
+ box-shadow:0 0 65px 27px #f8bc7e5c;
+}
+:root[data-phase="night"] #live-console .industrial-sky{
+ background:linear-gradient(180deg,#071128,#112d46 72%,#1d343d);
+}
+:root[data-phase="night"] #live-console .moon{
+ box-shadow:0 0 35px 10px #b6ceef55;
+}
+:root[data-phase="night"] .hero::before{opacity:0}
+:root[data-severity="critical"] #live-console .industrial-sky::after,
+:root[data-severity="critical"] .hero::before{opacity:0}
+@media(max-width:700px){
+ .hero::before{right:0;top:0;width:90%;height:210px}
+ #live-console .industrial-sky::after{background:
+  radial-gradient(ellipse at 80% 28%,rgba(255,180,101,.5),transparent 65%)}
+}
+@media(prefers-reduced-motion:reduce){
+ #live-console .industrial-sky::after,.hero::before{transition:none}
+}

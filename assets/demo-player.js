@@ -58,7 +58,7 @@ function cameraTo(target){
 function animateResourceChanges(previous,current){
  if(!previous?.stats||!current?.stats)return;
  document.querySelectorAll("#stats .stat").forEach(cell=>{
-  const key=cell.querySelector("span")?.textContent?.toLowerCase();
+  const key=cell.dataset.statKey; // Stable engine ID; labels may be translated.
   const element=cell.querySelector("strong");
   if(!key||!element)return;
   const before=Number(previous.stats[key]),after=Number(current.stats[key]);
@@ -68,7 +68,7 @@ function animateResourceChanges(previous,current){
   function frame(now){
    if(window.currentGame!==current)return;
    const p=Math.min(1,(now-start)/duration);
-   element.textContent=Math.round(before+(after-before)*(1-Math.pow(1-p,3))).toLocaleString("es-AR");
+   element.textContent=Math.round(before+(after-before)*(1-Math.pow(1-p,3))).toLocaleString(window.OhioI18n?.effective()==="en"?"en-US":"es-AR");
    if(p<1)requestAnimationFrame(frame);
    else element.classList.remove("demo-stat-changed");
   }
@@ -104,6 +104,11 @@ function showDemoScene(g,tab,beat=0,focus=tab,cue="reveal"){
 }
 window.addEventListener("message",event=>{
  if(event.origin!==location.origin||event.data?.type!=="OHIO_DEMO_SCENE")return;
+ // The trailer carries its language choice with every frame. Do not save
+ // changes to the player's account from a read-only demonstration.
+ if(["default","es","en"].includes(event.data.lang)){
+  window.OhioI18n?.setProfile(event.data.lang,{remember:false});
+ }
  showDemoScene(event.data.state,event.data.tab,event.data.beat||0,
                event.data.focus,event.data.cue);
 });
@@ -112,4 +117,4 @@ el("sidebar").hidden=false;
 el("auth").hidden=true;
 window.OhioMobile?.authenticated(true);
 
-/* Ohio locale bundle: effb10d2e08f */
+/* Ohio locale bundle: 235c5f4a5032 */

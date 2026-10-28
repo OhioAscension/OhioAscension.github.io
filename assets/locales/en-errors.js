@@ -1,7 +1,7 @@
 "use strict";
 window.OhioLocaleEnglish=(window.OhioLocaleEnglish||[]).concat([
 ["La partida tiene un formato inválido.","The save has an invalid format."],
-["Partida incompatible: Ohio v6 requiere una campaña nueva.","Incompatible save: Ohio v6 requires a new campaign."],
+["Partida incompatible: el formato de guardado es demasiado antiguo para esta versión de Ohio.","Incompatible save: this save format is too old for this version of Ohio."],
 ["MODO AUSENCIA · Se simularon 60 días de Ohio (24 horas reales); el exceso quedó pausado.","OFFLINE MODE · 60 Ohio days (24 real hours) were simulated; additional time remained paused."],
 ["Necesitás descansar antes de continuar.","You need to rest before continuing."],
 ["El tiempo avanza automáticamente. Ya no se puede adelantar el día.","Time advances automatically. You can no longer skip a day."],

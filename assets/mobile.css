@@ -180,3 +180,19 @@
 @media(max-width:700px){
  body.mobile-logged-in #auth{display:none!important}
 }
+
+/* Keep gameplay and account configuration isolated in the phone drawer. */
+@media(max-width:700px){
+ #mobile-drawer[data-mobile-panel="colony"] #ohio-settings{display:none!important}
+ #mobile-drawer[data-mobile-panel="account"] #ohio-colony-controls{display:none!important}
+ #mobile-drawer[data-mobile-panel="account"] #ohio-settings{display:block!important}
+ #mobile-drawer[data-mobile-panel="sections"] #sidebar{display:none!important}
+ #mobile-drawer[data-mobile-panel="colony"] #sidebar{display:flex!important}
+ #mobile-drawer[data-mobile-panel="account"] #sidebar{display:flex!important}
+ #mobile-drawer[data-mobile-panel="account"] #sidebar>section#ohio-settings{display:block!important}
+ #mobile-drawer[data-mobile-panel="colony"] #sidebar>section#ohio-settings{display:none!important}
+ #mobile-drawer #ohio-colony-controls,#mobile-drawer #ohio-settings{width:100%;min-width:0}
+ #mobile-drawer #ohio-settings #ohio-security-slot section{display:block;max-width:100%}
+ #mobile-drawer #ohio-settings #mobile-logout{display:block!important;width:100%}
+ #mobile-drawer .ohio-desktop-sidebar-switcher{display:none!important}
+}

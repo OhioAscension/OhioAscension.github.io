@@ -13,7 +13,7 @@ const OhioMobile=(()=>{
  const panels=[
   ["sections","Secciones"],
   ["colony","Colonia"],
-  ["account","Cuenta"]
+  ["account","Configuración"]
  ];
 
  // Phone-only controls are inserted alongside the existing desktop sidebar.

@@ -61,7 +61,7 @@
  const accountName=$("username");
  accountName?.insertAdjacentElement("afterend",login.box);
  if(!accountName)auth.append(login.box);
- sidebar.insertBefore(profile.box,sidebar.firstChild);
+ (document.getElementById("ohio-language-slot")||sidebar).append(profile.box);
  // Unauthenticated users can try the UI in their own language. Once logged
  // in, the preference from the signed JSON save overrides this selection.
  login.select.addEventListener("change",()=>i18n.setProfile(login.select.value));

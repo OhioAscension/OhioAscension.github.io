@@ -140,3 +140,21 @@ button:active:not(:disabled){transform:scale(.97)}
 .ohio-workforce-feedback{margin:0;font-size:.9rem;color:#ffc98e}
 .ohio-workforce-feedback:empty{display:none}
 @media(max-width:430px){.ohio-workforce-actions{grid-template-columns:1fr}}
+
+/* Disabled-looking buttons are still keyboard/touch accessible for an exact
+   explanation. The click never calls a blocked game action. */
+.ohio-blocked-action[aria-disabled="true"]{
+ opacity:.53;cursor:help;filter:saturate(.75);
+ border-style:dashed;
+}
+.ohio-blocked-action[aria-disabled="true"]:focus-visible{
+ opacity:1;outline:2px solid #ffd88c;outline-offset:3px;
+}
+#night-sleep{margin-top:8px}
+
+/* Actionable incident remediation belongs alongside the alert. */
+.ohio-incident-requirements{
+ margin:10px 0 7px!important;padding:10px 12px;border-left:3px solid #e7bd74;
+ border-radius:6px;background:rgba(111,75,34,.22);
+ color:#f6dfba;line-height:1.5;font-size:13px;
+}

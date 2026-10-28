@@ -91,7 +91,7 @@ window.OhioLocaleEnglish = (window.OhioLocaleEnglish || []).concat([
 ["Red mundial","Global network"],
 ["Espacio","Space"],
 ["Empresa y Justicia","Business & Legal"],
-["Energía v6","Energy v6"],
+["Energía","Energy"],
 ["Registro","Log"],
 ["Más secciones","More sections"],
 ["Operar","Operate"],

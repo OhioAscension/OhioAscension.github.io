@@ -86,8 +86,13 @@ function showBeat(index,chapterStart=false){
  trailer.dataset.mood=scene.moods?.[part]||"normal";
  if(sound)audio?.cue(cue);
  if(started&&part>0)window.OhioCinematics?.play(cue);
+ // Carry the signed-profile preference into the isolated gameplay iframe.
+ // A viewer can also open the film directly; "default" follows OS locale.
+ let locale=window.OhioI18n?.preference?.();
+ if(!locale){try{locale=localStorage.getItem("ohio-language-choice")}catch(_){}}
+ if(!["default","es","en"].includes(locale))locale="default";
  frame.contentWindow?.postMessage({
-  type:"OHIO_DEMO_SCENE",
+  type:"OHIO_DEMO_SCENE",lang:locale,
   state:scene.frames[part],tab:scene.tabs[part],beat:part,
   focus:scene.focus?.[part]||scene.tabs[part],cue
  },location.origin);
@@ -218,4 +223,4 @@ document.addEventListener("visibilitychange",()=>{
 window.addEventListener("pagehide",()=>{audio?.stop();sound=false;setStatus()});
 requestAnimationFrame(tick);
 
-/* Ohio locale bundle: effb10d2e08f */
+/* Ohio locale bundle: 235c5f4a5032 */

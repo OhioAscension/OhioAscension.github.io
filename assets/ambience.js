@@ -16,6 +16,11 @@ const OhioAmbience=(()=>{
   if(!scene)return;
   const hour=g.clock.hour;
   root.dataset.phase=hour<6||hour>=20?"night":hour<8?"dawn":hour>=17?"dusk":"day";
+  // The genuine Ohio clock drives the window glow, not the computer clock.
+  // Keep it cosmetic and continuous within each dawn/dusk band.
+  const glow=hour>=17&&hour<20?(hour===18?1:hour===17?.65:.38):
+             hour>=6&&hour<8?(hour===7?.58:.35):0;
+  root.style.setProperty("--ohio-sunlight",glow.toFixed(2));
   const grid=g.energy_worlds.find(w=>w.id==="earth").grid;
   const deficit=grid.last.unserved, outage=deficit>0;
   root.classList.toggle("grid-alert",outage);

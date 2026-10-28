@@ -51,3 +51,8 @@ html,body,.shell,.shell>aside,.shell>main{margin-right:0;max-width:100%;}
    The film already narrates those engine events and its own lower-left
    caption must stay clear. Hide these ONLY in this iframe stylesheet. */
 .ohio-toast,#message{display:none!important}
+
+/* Keep the cinematic camera focused on gameplay. The iframe now shares
+   the current live shell markup, but settings/sign-out are intentionally
+   not interactive or shown inside a read-only film. */
+#ohio-settings,#logout,#mobile-logout{display:none!important}

@@ -77,6 +77,23 @@ async function act(kind,target,count){
 }
 document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".view").forEach(v=>v.hidden=v.id!==b.dataset.tab)});
 document.querySelectorAll("[data-action]").forEach(b=>{if(b.dataset.action==="advance"){b.hidden=true;b.disabled=true}else b.onclick=()=>act(b.dataset.action)});
+const restButton=document.querySelector('[data-action="rest"]');
+if(restButton){
+ const sleep=document.createElement("button");
+ sleep.type="button";sleep.id="night-sleep";sleep.className="full";
+ sleep.textContent="Dormir hasta las 08:00 · 250 créditos · energía 10";
+ sleep.addEventListener("click",()=>{
+  const g=window.currentGame,h=g?.clock?.hour;
+  const reasons=[];
+  if(!g){msg("La partida todavía no está cargada.");return}
+  if(h>=8&&h<20)reasons.push("Solo podés dormir entre las 20:00 y las 08:00.");
+  if(g.stats.credits<250)reasons.push("Necesitás 250 créditos para dormir; te faltan "+(250-g.stats.credits)+".");
+  if(g.pending)reasons.push("Primero resolvé el acontecimiento pendiente.");
+  if(reasons.length){msg(reasons.join(" "));return}
+  act("sleep");
+ });
+ restButton.insertAdjacentElement("afterend",sleep);
+}
 // Keyboard controls: Tab / Shift+Tab remain native and accessible.
 document.addEventListener("keydown",e=>{
  const t=e.target;
@@ -166,7 +183,7 @@ document.getElementById("ohio-totp-confirm").onclick=()=>safe(async()=>{
 });
 const securityPanel=document.createElement("section");
 securityPanel.innerHTML='<h3>SEGURIDAD DE CUENTA</h3><p id="ohio-security-status"></p><button type="button" id="ohio-add-totp">Activar Authenticator</button> <button type="button" id="ohio-add-passkey">Agregar passkey</button><div id="ohio-enroll-panel" hidden><p>En Google Authenticator, agregá una clave basada en tiempo:</p><div id="ohio-enroll-qr"></div><p id="ohio-enroll-secret" style="overflow-wrap:anywhere;user-select:all"></p><label>Código de seis dígitos <input id="ohio-enroll-code" inputmode="numeric" maxlength="6"></label><button type="button" id="ohio-confirm-enroll">Activar</button></div>';
-el("sidebar").appendChild(securityPanel);
+(el("ohio-security-slot")||el("sidebar")).appendChild(securityPanel);
 async function updateSecurity(){
  if(el("sidebar").hidden)return;
  const st=await api("auth/security/status");
