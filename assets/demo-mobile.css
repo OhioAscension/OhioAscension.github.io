@@ -12,3 +12,18 @@
  #game .view:not([hidden]){min-height:48vh}
  .demo-focus{scroll-margin-top:105px}
 }
+
+/* Film camera: keep highlighted mobile cards inside the safe viewport.
+   The old positive outline offset let the focused card's border be clipped
+   against the Android screen edge on narrow layouts. */
+@media(max-width:700px){
+ .shell>main{
+  width:100%!important;max-width:100%!important;min-width:0!important;
+  padding:12px max(17px,env(safe-area-inset-right))
+          calc(90px + env(safe-area-inset-bottom))
+          max(17px,env(safe-area-inset-left))!important;
+ }
+ #game,#game .view,#game .grid{min-width:0;max-width:100%}
+ #game .view .card{min-width:0;max-width:100%}
+ #game .demo-focus{outline-offset:-3px!important}
+}

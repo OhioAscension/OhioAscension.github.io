@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#06140f">
 <title>OHIO: ASCENSION · Tráiler oficial</title>
 <link rel="icon" href="/assets/favicon.svg?v=36151721e9ef" type="image/svg+xml">
-<link rel="stylesheet" href="/assets/demo.css?v=efa8ec4b612b"><link rel="stylesheet" href="/assets/cinematics.css?v=554cb8bcc47b">
+<link rel="stylesheet" href="/assets/demo.css?v=5ca040137ce0"><link rel="stylesheet" href="/assets/cinematics.css?v=554cb8bcc47b">
 </head>
 <body>
 <main class="trailer" id="trailer">
@@ -17,36 +17,18 @@
   <div class="trailer-cut" id="trailer-cut" aria-hidden="true"></div>
   <header class="trailer-header">
     <a href="/" class="trailer-logo" aria-label="Volver a Ohio">◈ <span>OHIO</span><small>ASCENSION</small></a>
-    <span class="trailer-label">GAMEPLAY REAL · 5 ACTOS · 75 SEGUNDOS</span>
     <a class="trailer-exit" href="/">Salir <span aria-hidden="true">×</span></a>
   </header>
-  <div class="trailer-action" id="trailer-action" aria-hidden="true">
-    <span id="action-icon">◆</span><span id="action-label">OPERACIÓN INICIADA</span>
+  <!-- A small contextual caption; the game footage remains the hero. -->
+  <section class="trailer-copy" aria-label="Acto actual del tráiler">
+    <p class="trailer-kicker" id="act-number">ACTO 01 / 05</p>
+    <h1 id="scene-title">Todo empieza acá</h1>
+    <p id="scene-description" aria-live="off">Una colonia por construir.</p>
+  </section>
+  <!-- The film can be paused by touching its surface; no player toolbar. -->
+  <div id="trailer-paused" class="trailer-paused" role="status" hidden>
+    PAUSADO <span>· Tocá o hacé clic para continuar</span>
   </div>
-  <section class="trailer-copy" aria-label="Narración del tráiler">
-    <p class="trailer-kicker"><span id="act-number">ACTO 01 / 05</span> <span class="kicker-rule"></span> <span id="act-subtitle">Tu historia comienza</span></p>
-    <h1 id="scene-title">La revolución empieza en Ohio.</h1>
-    <p id="scene-description" aria-live="polite">Cinco decisiones. Una colonia. Un futuro por construir.</p>
-    <span id="scene-tagline" class="trailer-tagline">EL DESTINO DE OHIO ESTÁ EN TUS MANOS</span>
-  </section>
-  <section class="trailer-hud" aria-label="Controles del tráiler">
-    <div class="trailer-chapters" id="chapter-list" role="group" aria-label="Saltar a un acto"></div>
-    <div class="trailer-toolbar">
-      <div class="trailer-transport">
-        <button id="previous" type="button" aria-label="Acto anterior" title="Acto anterior (←)">‹</button>
-        <button id="pause-button" type="button" aria-label="Pausar" title="Pausar o reproducir (Espacio)">Ⅱ</button>
-        <button id="next" type="button" aria-label="Acto siguiente" title="Acto siguiente (→)">›</button>
-      </div>
-      <div class="trailer-audio-controls">
-        <button id="sound-button" type="button" aria-pressed="false">♫ Activar música</button>
-        <label for="music-volume" class="demo-volume-label">Volumen <output id="music-volume-value">55%</output></label>
-        <input id="music-volume" type="range" min="0" max="100" value="55" step="1" aria-label="Volumen de la banda sonora">
-      </div>
-      <span id="live-status" class="trailer-live" role="status">CARGANDO</span>
-      <span id="trailer-clock" class="trailer-clock" aria-label="Tiempo transcurrido">00:00 / 01:15</span>
-    </div>
-    <div class="trailer-timeline" aria-label="Progreso del tráiler"><div id="bar-progress"></div></div>
-  </section>
   <section id="trailer-end" class="trailer-end" hidden aria-label="Fin del tráiler">
     <p class="trailer-end-kicker">EXPLOTACIONES MINERAS DE OHIO</p>
     <h2>LA HISTORIA<br><em>LA ESCRIBÍS VOS.</em></h2>
@@ -62,6 +44,11 @@
     <p class="trailer-gate-eyebrow">OHIO: ASCENSION · EXPERIENCIA CINEMATOGRÁFICA</p>
     <h2>DE UNA ALDEA.<br><em>AL UNIVERSO.</em></h2>
     <p class="trailer-gate-description">75 segundos. Cinco actos. Gameplay real calculado por el motor del juego. Una banda sonora original que reacciona a cada decisión.</p>
+    <div class="trailer-gate-volume">
+      <label for="music-volume">VOLUMEN DE LA BANDA SONORA <output id="music-volume-value" for="music-volume">55%</output></label>
+      <input id="music-volume" type="range" min="0" max="100" value="55" step="1"
+             aria-label="Volumen de la música del tráiler">
+    </div>
     <div class="trailer-gate-actions">
       <button type="button" id="trailer-start-audio" disabled>♫ Iniciar con música</button>
       <button type="button" id="trailer-start-muted" disabled>▶ Ver sin sonido</button>
@@ -73,6 +60,6 @@
   <div id="trailer-error" class="trailer-error" role="alert" hidden></div>
 </main>
 <script src="/assets/cinematics.js?v=2233dbeda361" defer></script><script src="/assets/trailer-audio.js?v=00e386ec44a7" defer></script>
-<script src="/assets/ohio-config.js?v=617921070a1f" defer></script><script src="/assets/demo.js?v=3015d96d6a2e" defer></script>
+<script src="/assets/ohio-config.js?v=e2ca3ceec9f8" defer></script><script src="/assets/demo.js?v=1260886350bc" defer></script>
 </body>
 </html>
