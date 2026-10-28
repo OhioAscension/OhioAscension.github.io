@@ -26,11 +26,19 @@ const OhioMobile=(()=>{
    document.querySelectorAll(".tabs [data-tab]").forEach(button=>{
     const b=document.createElement("button");b.type="button";b.className="full";
     b.textContent=button.textContent;b.dataset.targetTab=button.dataset.tab;
+    // The drawer is built lazily: inherit the progression state already
+    // applied to the canonical tab before adding this new button.
+    b.classList.toggle("ohio-discovery-hidden",button.classList.contains("ohio-discovery-hidden"));
     b.addEventListener("click",()=>{button.click();drawer(false)});
     section.append(b);
    });
    $("mobile-drawer").append(section);
   }
+  // Refresh every time: stages can change while the drawer is closed.
+  document.querySelectorAll("#mobile-tab-list [data-target-tab]").forEach(b=>{
+   const source=document.querySelector('.tabs [data-tab="'+b.dataset.targetTab+'"]');
+   b.classList.toggle("ohio-discovery-hidden",!source||source.classList.contains("ohio-discovery-hidden"));
+  });
  });
  function update(game){
   if(!game)return;
