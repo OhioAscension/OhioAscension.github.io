@@ -1,5 +1,5 @@
 /* OHIO: ASCENSION · five-act film. Gameplay occupies the whole viewport.
- * Only the small act caption, brand and exit persist during playback.
+ * Only a small narrative caption persists over gameplay; desktop retains Salir.
  * All media-player UI was intentionally removed for desktop and phone.
  */
 :root{
@@ -70,10 +70,6 @@ button:focus-visible,a:focus-visible,input:focus-visible{
  width:min(420px,calc(100% - 40px - env(safe-area-inset-left) - env(safe-area-inset-right)));
  padding:0;pointer-events:none;
  text-shadow:0 2px 10px #02130eea,0 1px 3px #001c10d4
-}
-.trailer-kicker{
- margin:0 0 5px;color:#89d8a8;
- font-size:10px;letter-spacing:.14em;font-weight:800
 }
 .trailer-copy h1{
  margin:0 0 5px;font-size:clamp(22px,2.65vw,33px);font-weight:870;
@@ -237,10 +233,10 @@ body.ohio-trailer-playback .ohio-cinematic-canvas{opacity:.65}
  background:#5a3024;color:#ffe2ce;font-size:12px;font-weight:750
 }
 @media(max-width:700px){
- .trailer-header{padding-top:12px;padding-left:15px;padding-right:15px}
- .trailer-logo{font-size:15px;gap:5px}
- .trailer-logo small{font-size:8px;letter-spacing:.06em}
- .trailer-exit{font-size:11px;padding:7px 10px}
+ /* Android/TWA has its native Back gesture. Hide the entire
+    overlay header rather than covering the game's menu button.
+    Desktop keeps its ordinary logo and Salir link. */
+ .trailer-header{display:none}
  .trailer-vignette{
   background:
    linear-gradient(to top,rgba(2,16,10,.68),rgba(2,16,10,.25) 14%,transparent 31%),
@@ -255,7 +251,6 @@ body.ohio-trailer-playback .ohio-cinematic-canvas{opacity:.65}
                    calc(24px + var(--ohio-vv-bottom,0px)));
   max-height:35dvh;overflow:hidden;
  }
- .trailer-kicker{font-size:9px;margin-bottom:4px}
  .trailer-copy h1{
   font-size:clamp(20px,5.4vw,26px);line-height:1.14;
   margin-bottom:5px;overflow-wrap:anywhere
@@ -265,10 +260,6 @@ body.ohio-trailer-playback .ohio-cinematic-canvas{opacity:.65}
   max-width:100%;display:-webkit-box;-webkit-box-orient:vertical;
   -webkit-line-clamp:2;overflow:hidden
  }
- /* The film's only top-level control is Salir. The underlying game
-    already displays its brand, so another mobile logo just overlaps it. */
- .trailer-logo{display:none}
- .trailer-header{justify-content:flex-end}
  body.ohio-trailer-playback .ohio-cinematic-canvas{opacity:.38}
  .trailer-end{padding:23px 15px}
  .trailer-end h2{font-size:clamp(34px,9.8vw,53px)}

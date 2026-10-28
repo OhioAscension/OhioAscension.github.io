@@ -1,7 +1,7 @@
 "use strict";
 /* OHIO: ASCENSION — an uninterrupted five-act film, not a media player.
  * All gameplay frames originate in game/demo.py; no user saves are modified.
- * One tap/click pauses or resumes; the always-available Salir link returns home.
+ * One tap/click pauses or resumes; Salir stays on desktop; Android uses Back.
  */
 const $=id=>document.getElementById(id);
 const ACT_MS=15000,BEAT_COUNT=5;
@@ -63,7 +63,6 @@ function showBeat(index,chapterStart=false){
  const scene=scenes[chapter],part=Math.min(BEAT_COUNT-1,Math.max(0,index));
  beat=part;
  if(chapterStart){
-  $("act-number").textContent="ACTO "+String(chapter+1).padStart(2,"0")+" / 05";
   $("scene-title").textContent=scene.title;
   trailer.dataset.chapter=String(chapter+1);
   cut();
