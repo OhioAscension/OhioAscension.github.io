@@ -213,3 +213,37 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #a6ff
  }
 }
 @media(prefers-reduced-motion:reduce){.trailer[data-chapter] #game-frame{animation:none!important;transform:none!important}}
+
+/* Film framing correction: the full sidebar must remain visible.
+   The previous 6% zoom cropped both iframe edges while the horizontal
+   vignette buried the entire left-hand menu in dark shadow. */
+@media(min-width:701px){
+ .trailer-vignette{background:
+  linear-gradient(0deg,#04110dec 0%,#04110d99 18%,transparent 41%),
+  linear-gradient(180deg,#04130dc2,transparent 21%)}
+ .trailer[data-chapter] #game-frame{
+  animation:none!important;transform:none!important;filter:saturate(1.08) brightness(.91)
+ }
+ .trailer[data-chapter="3"] .trailer-vignette{background:
+  linear-gradient(0deg,#0b0c0ce8,transparent 60%),
+  linear-gradient(180deg,#0b0c0c8a,transparent 21%)}
+ .trailer[data-chapter="4"] .trailer-vignette{background:
+  linear-gradient(0deg,#090c12e8,transparent 60%),
+  linear-gradient(180deg,#090c128a,transparent 21%)}
+ .trailer[data-chapter="5"] .trailer-vignette{background:
+  linear-gradient(0deg,#061321eb,transparent 60%),
+  linear-gradient(180deg,#0613218a,transparent 21%)}
+}
+
+/* The narration must NEVER sit on top of the left navigation during
+   desktop playback. Reserve the sidebar's 235–294px footprint. */
+@media(min-width:801px){
+ .trailer-copy{
+  left:calc(clamp(235px,22vw,294px) + 23px);
+  width:min(660px,calc(100vw - clamp(235px,22vw,294px) - 68px));
+ }
+}
+@media(min-width:701px) and (max-width:800px){
+ .trailer-copy{left:218px;width:calc(100vw - 235px)}
+ .trailer-copy h1{font-size:clamp(24px,4.3vw,35px)}
+}

@@ -32,3 +32,16 @@ html,body,.shell,.shell>aside,.shell>main{margin-right:0;max-width:100%;}
 :root.demo-crisis .ohio-next-stage{border-color:#bd6b48}
 :root.demo-victory .hero h1 em{filter:drop-shadow(0 0 9px #73f1a466)}
 @media(prefers-reduced-motion:reduce){#game .demo-focus,.demo-pointer-ring{animation:none!important}#demo-pointer{transition:none!important}}
+
+/* Exact trailer framing: keep the full sidebar column on screen and scroll
+   its own content instead of clipping it behind main or the outer vignette. */
+@media(min-width:801px){
+ .shell{display:grid!important;grid-template-columns:clamp(235px,22vw,294px) minmax(0,1fr)!important;width:100%!important;overflow:hidden}
+ .shell>aside{position:relative!important;top:auto!important;width:100%!important;min-width:0!important;max-width:none!important;height:100dvh!important;overflow-x:hidden!important;overflow-y:auto!important;scrollbar-width:thin!important}
+ .shell>main{height:100dvh!important;overflow-x:hidden!important;overflow-y:auto!important;min-width:0!important;max-width:none!important;margin:0!important}
+}
+@media(min-width:701px) and (max-width:800px){
+ .shell{display:grid!important;grid-template-columns:205px minmax(0,1fr)!important;width:100%!important}
+ .shell>aside{position:relative!important;top:auto!important;width:205px!important;min-width:0!important;height:100dvh!important;overflow-y:auto!important;overflow-x:hidden!important}
+ .shell>main{min-width:0!important;margin:0!important;max-width:none!important}
+}
