@@ -25,8 +25,11 @@ async function safe(f){
   }
  }
 }
+let sessionRevision=0;
 async function refresh(){
+ const revision=sessionRevision;
  let a=await api("auth/status");
+ if(revision!==sessionRevision)return;
  if(a.authenticated&&a.lang&&window.OhioI18n)window.OhioI18n.setProfile(a.lang);
  el("authInfo").textContent=a.initialized?"Elegí tu cuenta o registrá un usuario nuevo.":"Registro del primer agente";
  // A credential registered on github.io cannot sign for the localhost RP ID.
@@ -55,11 +58,23 @@ async function refresh(){
  el("game").hidden=!a.authenticated;
  el("sidebar").hidden=!a.authenticated;
  window.OhioMobile?.authenticated(a.authenticated);
- if(a.authenticated){const g=await api("game");render(g);pollSignature=signature(g);await updateSecurity();}
+ if(a.authenticated){
+  const g=await api("game");
+  if(revision!==sessionRevision||el("game").hidden)return;
+  render(g);pollSignature=signature(g);
+  await updateSecurity();
+ }else{
+  pollSignature=null;
+  window.currentGame=null;
+ }
 }
 el("register").onclick=()=>safe(async()=>{let o=decode(await api("auth/register/options",{username:el("username").value,lang:el("login-language")?.value||"default"}));let c=await navigator.credentials.create({publicKey:o});await api("auth/register/verify",serial(c));await refresh()});
 el("login").onclick=()=>safe(async()=>{let o=decode(await api("auth/login/options",{username:el("username").value.trim()}));let c=await navigator.credentials.get({publicKey:o});await api("auth/login/verify",serial(c));await refresh()});
-el("logout").onclick=()=>safe(async()=>{await api("auth/logout",{});await refresh()});
+el("logout").onclick=()=>safe(async()=>{
+ ++sessionRevision; // Invalidate in-flight game and session requests immediately.
+ await api("auth/logout",{});
+ await refresh();
+});
 let busy=false;
 async function act(kind,target,count){
  if(busy)return;
@@ -224,11 +239,19 @@ function paintClock(g){
   summary.textContent=summary.textContent.replace(/(Día \d+ · )\d{2}:\d{2}/,"$1"+time);
  }
 }
-setInterval(()=>{if(!busy&&!el("game").hidden&&document.visibilityState==="visible")safe(async()=>{
- const g=await api("game"),next=signature(g);
- if(next!==pollSignature){render(g);pollSignature=next}
- else paintClock(g);
-})},10000);
+let polling=false;
+setInterval(()=>{
+ if(polling||busy||el("game").hidden||document.visibilityState!=="visible")return;
+ polling=true;
+ const revision=sessionRevision;
+ safe(async()=>{
+  const g=await api("game");
+  if(revision!==sessionRevision||el("game").hidden)return;
+  const next=signature(g);
+  if(next!==pollSignature){render(g);pollSignature=next}
+  else paintClock(g);
+ }).finally(()=>{polling=false});
+},10000);
 
 
 // Restore sessions and the menu after a network interruption, even if the
