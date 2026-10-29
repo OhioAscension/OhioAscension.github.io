@@ -196,3 +196,13 @@
  #mobile-drawer #ohio-settings #mobile-logout{display:block!important;width:100%}
  #mobile-drawer .ohio-desktop-sidebar-switcher{display:none!important}
 }
+
+/* Signed-out mobile screens must never expose the dynamically built drawer UI. */
+@media(max-width:700px){
+ body:not(.mobile-logged-in) #mobile-drawer .mobile-drawer-heading,
+ body:not(.mobile-logged-in) #mobile-drawer .mobile-drawer-switcher,
+ body:not(.mobile-logged-in) #mobile-tab-list,
+ body:not(.mobile-logged-in) #mobile-drawer #sidebar,
+ body:not(.mobile-logged-in) #mobile-drawer-backdrop,
+ body:not(.mobile-logged-in) #mobile-bottom-nav{display:none!important}
+}

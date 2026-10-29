@@ -60,15 +60,6 @@ const OhioMobile=(()=>{
   b.addEventListener("click",()=>navigate(source.dataset.tab));
   links.append(b);
  });
- // Reuse the already rewritten, environment-correct trailer URL.
- const trailer=document.querySelector(".trailer-link");
- if(trailer){
-  const a=document.createElement("a");
-  a.href=trailer.href;
-  a.className="mobile-showcase-link";
-  a.textContent="▶ Ver tráiler";
-  links.append(a);
- }
  aside.append(sections);
 
  function setPanel(panel){
@@ -208,7 +199,12 @@ const OhioMobile=(()=>{
  function authenticated(yes){
   document.body.classList.toggle("mobile-logged-in",yes);
   nav.hidden=!yes;
-  if(!yes)drawer(false);
+  if(!yes){
+   drawer(false);
+   context.textContent="";
+   player.textContent="OHIO / COLONIA";
+   setPanel("sections");
+  }
  }
  // The desktop status line stays persistent. On phones, show a visible
  // temporary message above the bottom bar instead of burying errors below
