@@ -5,7 +5,7 @@ const OhioAmbience=(()=>{
  const $=id=>document.getElementById(id);
  const root=document.documentElement;
  const scene=$("live-console");
- if(scene)scene.innerHTML='<div class="live-heading"><span class="signal"></span><b id="live-condition">CENTRO DE CONTROL</b><span id="live-clock">08:00</span></div><div class="industrial-sky" aria-hidden="true"><div class="sun"></div><div class="moon"></div><div class="factory-stars"></div><div class="industrial-haze"></div><div class="cloud cloud-a"></div><div class="cloud cloud-b"></div><div class="plant p1"><i></i><i></i></div><div class="plant p2"><i></i><i></i></div><div class="plant p3"><i></i><i></i></div><div class="stack"></div><div class="smoke"></div><div class="crane"><i></i></div><div class="terrain"></div></div><div class="live-readouts"><span id="live-machines">0 instalaciones</span><span id="live-grid">RED ESTABLE</span><span id="live-shift">JORNADA</span></div><div class="ohio-signal-feed" aria-live="off"><span class="ohio-signal-id">◈ OHIO NETWORK</span><strong id="live-radio">SEÑAL INDUSTRIAL ESTABLECIDA</strong><span class="ohio-radio-led" aria-hidden="true"></span></div>';
+ if(scene)scene.innerHTML='<div class="live-heading"><span class="signal"></span><b id="live-condition">CENTRO DE CONTROL</b><span id="live-clock">08:00</span></div><div class="industrial-sky" aria-hidden="true"><div class="sun"></div><div class="moon"></div><div class="factory-stars"></div><div class="industrial-haze"></div><div class="cloud cloud-a"></div><div class="cloud cloud-b"></div><div class="plant p1"><i></i><i></i></div><div class="plant p2"><i></i><i></i></div><div class="plant p3"><i></i><i></i></div><div class="stack"></div><div class="smoke"></div><div class="crane"><i></i></div><div class="ohio-tram" aria-hidden="true"><span></span><span></span></div><div class="ohio-energy-lines" aria-hidden="true"></div><div class="terrain"></div></div><div class="live-readouts"><span id="live-machines">0 instalaciones</span><span id="live-grid">RED ESTABLE</span><span id="live-shift">JORNADA</span></div><div class="ohio-signal-feed" aria-live="off"><span class="ohio-signal-id">◈ OHIO NETWORK</span><strong id="live-radio">SEÑAL INDUSTRIAL ESTABLECIDA</strong><span class="ohio-radio-led" aria-hidden="true"></span></div>';
  const toast=document.createElement("div");toast.className="ohio-toast";toast.setAttribute("role","status");toast.setAttribute("aria-live","polite");document.body.append(toast);
  function notify(message,emergency=false){
   if(!message)return;
@@ -28,12 +28,19 @@ const OhioAmbience=(()=>{
   root.dataset.severity=severity;
   window.OhioAudio?.setMode?.(severity);
   window.OhioAudio?.setEra?.(window.OhioProgression?.state?.(g)?.stage||0);
+  const dossier=g.director||{};
+  window.OhioAudio?.setNarrative?.(g.decisions?.effects?.lazarus_outcome||dossier.b12||"dormant");
+  scene.classList.toggle("b12-active",["investigating","revealed","private"].includes(dossier.b12));
   const count=Object.values(g.projects).reduce((sum,p)=>sum+p.owned,0);
   const stage=window.OhioProgression?.state?.(g)?.stage||0;
   const signal=outage
    ?"PRIORIDAD ROJA · MANTENIMIENTO DE LA RED"
    :g.decision_event||g.pending
     ?"CONSEJO DE ADMINISTRACIÓN · DECISIÓN PENDIENTE"
+    :dossier.b12==="investigating"
+     ?"B-12 · SEÑAL SUBTERRÁNEA EN INVESTIGACIÓN"
+    :dossier.grounded_days>0
+     ?"CONTROL DE MISIÓN · LANZAMIENTOS SUSPENDIDOS"
     :stage>=5
      ?"RED ORBITAL · LA COLONIA MIRA HACIA LAS ESTRELLAS"
      :stage>=4
@@ -55,7 +62,13 @@ const OhioAmbience=(()=>{
   scene.classList.toggle("industrial-active",g.clock.daylight&&count>0);
   scene.classList.toggle("has-outage",outage);
   if(previous&&!initial){
-   if(outage&&!previous.outage){
+   if(dossier.casualties>previous.casualties){
+    notify("TRAGEDIA ESPACIAL · La colonia exige una investigación",true);
+    window.OhioCinematics?.play("failure");
+   }else if(dossier.b12!==previous.b12&&dossier.b12==="revealed"){
+    notify("B-12 · SEÑAL RECIBIDA · El consejo debe decidir");
+    window.OhioCinematics?.play("warning");
+   }else if(outage&&!previous.outage){
     notify("ALERTA ELÉCTRICA · Déficit de "+deficit+" unidades",true);
     window.OhioCinematics?.play("blackout");
     if(Date.now()-lastAlarm>30000){window.OhioAudio?.alarm?.();lastAlarm=Date.now()}
@@ -67,7 +80,7 @@ const OhioAmbience=(()=>{
     notify(g.clock.daylight?"COMIENZA LA JORNADA INDUSTRIAL":"FIN DEL TURNO · La industria descansa");
    }
   }
-  previous={outage,day:g.stats.day,daylight:g.clock.daylight};
+  previous={outage,day:g.stats.day,daylight:g.clock.daylight,casualties:dossier.casualties||0,b12:dossier.b12};
  }
  function action(kind){
   if(kind==="build"||kind==="build_batch")notify("INSTALACIÓN COMPLETADA · Producción ampliada");

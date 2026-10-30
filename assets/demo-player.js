@@ -29,7 +29,7 @@ function focusCard(tab,focus,beat){
   return cards[0]||null;
  }
  if(tab==="enterprise"&&focus==="legal")return [...page.querySelectorAll(".card")].at(-1)||null;
- if(tab==="operations")return page.querySelector(".card");
+ if(tab==="operations")return focus==="b12"?page.querySelector('[data-director-focus="b12"]'):page.querySelector(".ohio-director .card")||page.querySelector(".card");
  const cards=[...page.querySelectorAll(".card")];
  return cards[Math.min(beat,cards.length-1)]||page.querySelector("h2");
 }
@@ -117,4 +117,4 @@ el("sidebar").hidden=false;
 el("auth").hidden=true;
 window.OhioMobile?.authenticated(true);
 
-/* Ohio locale bundle: 235c5f4a5032 */
+/* Ohio locale bundle: a993f660f4fa */

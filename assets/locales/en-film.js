@@ -27,4 +27,6 @@ window.OhioLocaleEnglish=(window.OhioLocaleEnglish||[]).concat([
 ["Entrar a Ohio","Enter Ohio"],
 ["Volver a ver","Watch again"],
 ["Partidas de demostración aisladas. Tus datos permanecen intactos.","Isolated demo saves. Your data stays untouched."]
+["Las decisiones se sienten. Una civilización por construir.","Decisions have consequences. A civilization to build."],
+["75 segundos de gameplay real calculado por el motor del juego. Una banda sonora original que acompaña cada cambio de rumbo.","75 seconds of real engine-driven gameplay. An original score that accompanies every change of course."],
 ]);

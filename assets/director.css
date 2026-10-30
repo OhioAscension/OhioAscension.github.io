@@ -1,0 +1,92 @@
+/* OHIO — live command room. State-driven, low-cost visual motion. */
+.ohio-director{margin:14px 0 28px;padding:clamp(16px,2.5vw,28px);border:1px solid #477b66;border-radius:18px;
+ background:radial-gradient(ellipse at 88% 0%,#27553b6b,transparent 50%),linear-gradient(155deg,#102a22,#071b17);
+ box-shadow:0 20px 55px #0005;position:relative;overflow:hidden}
+.ohio-director::before{content:"";position:absolute;inset:0 0 auto;height:2px;opacity:.78;
+ background:linear-gradient(90deg,transparent,#7df3b9,#bbdfff,transparent);background-size:220% 100%;
+ animation:ohioCircuit 8s linear infinite}
+@keyframes ohioCircuit{to{background-position:220% 0}}
+.ohio-director-top{display:flex;justify-content:space-between;gap:25px;align-items:center}
+.ohio-director-kicker{display:block;letter-spacing:.16em;color:#88dbaa;font-size:10px;font-weight:850}
+.ohio-director-top h2{margin:8px 0 5px;letter-spacing:-.03em;font-size:clamp(19px,2.8vw,29px)}
+.ohio-director-top p{max-width:720px;margin:0;color:#a1cbb4;font-size:13px}
+.ohio-morale{min-width:165px;max-width:240px;flex:1;display:grid;gap:7px;color:#9fcab0}
+.ohio-morale>span{font:800 10px/1.4 system-ui,sans-serif;letter-spacing:.09em}
+.ohio-morale strong{color:#e8ffef;font-size:27px;font-variant-numeric:tabular-nums}
+.ohio-morale-track{height:8px;background:#17372a;overflow:hidden;border-radius:99px}
+.ohio-morale-track span{display:block;height:100%;background:linear-gradient(90deg,#52c891,#c6fdb4);
+ border-radius:inherit;transition:width .8s}
+.ohio-director-stats{margin:20px 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.ohio-director-stat{background:#092019;border:1px solid #2d6049;border-radius:10px;padding:12px 13px;min-width:0}
+.ohio-director-stat small{display:block;color:#7eae95;font-size:10px;font-weight:800;letter-spacing:.08em;margin-bottom:8px}
+.ohio-director-stat strong{display:block;color:#d6ffe5;font-size:clamp(14px,1.6vw,20px);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.ohio-director-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.ohio-director .card{min-width:0;background:#0d281f;border-color:#345e49}
+.ohio-director .card h2{letter-spacing:.06em;font-size:14px}
+.ohio-director .card>p{margin:7px 0 14px}
+.ohio-director-option{border-top:1px solid #305744;padding:11px 0;display:grid;gap:4px}
+.ohio-director-option strong{color:#d4ffdf;font-size:13px}
+.ohio-director-option p{font-size:12px;line-height:1.5;color:#a0c7b1;margin:0}
+.ohio-director-option button{margin:7px 0 0;min-height:38px;background:#1a4b35;transition:border-color .2s,background .2s,transform .2s}
+.ohio-director-option button:hover{background:#286d4b;transform:translateY(-1px)}
+.ohio-director-priority{border-top:1px solid #315a45;padding-top:14px;display:grid;gap:8px}
+.ohio-director-priority strong{font-size:12px;color:#b4eccc}
+.ohio-director-priority select{width:100%;min-width:0;padding:12px;border:1px solid #41815d;border-radius:8px;background:#09251a;color:#eafff0}
+.ohio-director-alert{background:linear-gradient(90deg,#46231c,#291d1a);border:1px solid #ac755c;
+ border-radius:12px;margin:14px 0;padding:13px 16px;color:#ffcfb3}
+.ohio-director-alert strong{font-size:14px}
+.ohio-director-alert p{font-size:12px;color:#f9ceb1}
+.ohio-director-signal{padding:10px 12px;border-left:3px solid #8af4bc;background:#153b2b;
+ color:#d1ffe5!important;font-size:12px;animation:ohioSignal 3s ease-in-out infinite}
+@keyframes ohioSignal{50%{border-left-color:#cceab0;background:#174735}}
+/* The city window evolves with actual operating conditions. */
+#live-console .industrial-sky{isolation:isolate}
+#live-console .industrial-sky::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+ background:repeating-linear-gradient(105deg,transparent 0 35px,#bdf8da08 36px 37px,transparent 39px 92px);
+ opacity:.4;animation:ohioLightTravel 25s linear infinite}
+@keyframes ohioLightTravel{to{background-position:600px 0}}
+#live-console.industrial-active .crane{animation:ohioCraneShift 11s ease-in-out infinite alternate}
+@keyframes ohioCraneShift{to{transform:translateX(12px)}}
+#live-console.industrial-active .smoke{animation-duration:5s}
+#live-console.has-outage .industrial-sky{filter:saturate(.75)}
+#live-console.orbital-ready .industrial-sky{box-shadow:inset 0 0 40px #70baec24}
+:root[data-severity="critical"] .ohio-director{border-color:#b15e53}
+:root[data-severity="critical"] .ohio-director::before{background:linear-gradient(90deg,#a7433c,#ffb67c,#a7433c)}
+@media(max-width:870px){.ohio-director-layout{grid-template-columns:1fr}.ohio-director-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.ohio-director-top{display:grid;gap:14px}.ohio-morale{max-width:none}.ohio-director-stats{margin:16px 0}}
+@media(prefers-reduced-motion:reduce){
+ .ohio-director::before,.ohio-director-signal,#live-console .industrial-sky::before,
+ #live-console.industrial-active .crane{animation:none!important}
+ .ohio-director-option button,.ohio-morale-track span{transition:none}
+}
+
+/* Animated industrial logistics: running only while production is active. */
+#live-console .ohio-tram{position:absolute;bottom:14px;left:-50px;z-index:2;
+ width:62px;height:15px;border-radius:4px 9px 2px 2px;background:#1b4d42;
+ border-top:2px solid #a4e8b5;box-shadow:0 0 6px #7affb549;opacity:0}
+#live-console .ohio-tram::before,#live-console .ohio-tram::after{
+ content:"";position:absolute;bottom:-5px;width:9px;height:9px;border-radius:50%;
+ background:#081810;border:2px solid #78d69d}
+#live-console .ohio-tram::before{left:9px}
+#live-console .ohio-tram::after{right:9px}
+#live-console .ohio-tram span{position:absolute;top:3px;width:11px;height:5px;background:#c5eabb88}
+#live-console .ohio-tram span:first-child{left:8px}
+#live-console .ohio-tram span:last-child{right:8px}
+#live-console.industrial-active .ohio-tram{opacity:.85;animation:ohioFreight 14s linear infinite}
+@keyframes ohioFreight{0%{transform:translateX(0)}100%{transform:translateX(calc(100vw + 100px))}}
+#live-console .ohio-energy-lines{position:absolute;inset:auto 0 0;height:3px;z-index:3;
+ background:linear-gradient(90deg,transparent,#93ffd5aa 45%,transparent 70%);
+ background-size:170% 100%;opacity:0}
+#live-console.industrial-active .ohio-energy-lines{opacity:.65;animation:ohioEnergyFlow 5s linear infinite}
+@keyframes ohioEnergyFlow{to{background-position:170% 0}}
+#live-console.has-outage .ohio-tram,#live-console.has-outage .ohio-energy-lines{animation-play-state:paused;opacity:.15}
+#live-console.b12-active .ohio-signal-feed{border-top-color:#8f75c2;background:linear-gradient(90deg,#251d3a,#0c2222)}
+#live-console.b12-active .ohio-radio-led{background:#bda7fc;box-shadow:0 0 10px #bda7fc}
+.ohio-network-link{stroke-dasharray:8 7;animation:ohioNetworkPulse 4s linear infinite}
+.ohio-network-link.is-connected{stroke:#74dda4;stroke-width:3;filter:drop-shadow(0 0 4px #68eeae70)}
+.ohio-network-node.is-connected{filter:drop-shadow(0 0 7px #67eeab80)}
+@keyframes ohioNetworkPulse{to{stroke-dashoffset:-60}}
+@media(prefers-reduced-motion:reduce){
+ #live-console.industrial-active .ohio-tram,#live-console.industrial-active .ohio-energy-lines,
+ .ohio-network-link{animation:none!important}
+}

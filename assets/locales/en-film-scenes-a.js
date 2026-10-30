@@ -19,4 +19,9 @@ window.OhioLocaleEnglish=(window.OhioLocaleEnglish||[]).concat([
 ["Una jornada de saneamiento reduce la contaminación.","A cleanup shift reduces pollution."],
 ["Reparaciones completadas: vuelve la electricidad.","Repairs complete: electricity returns."],
 ["Crisis resuelta. Quedan decisiones para el futuro.","Crisis resolved. More decisions lie ahead."]
+["El consejo elige bienestar: cae la producción, mejora la confianza.","The board chooses welfare: output drops, public trust improves."],
+["La política exige cambios reales, no solo pagar multas.","Policy demands real change, not merely paying fines."],
+["La red vuelve. La política elegida seguirá afectando cada jornada.","The grid returns. The chosen policy will continue shaping every day."],
+["Una crisis. Una decisión. Consecuencias duraderas.","One crisis. One decision. Lasting consequences."],
+["La red vuelve. En el subsuelo B-12 comienza una expedición de seis jornadas.","The grid returns. A six-day expedition begins underground in B-12."],
 ]);

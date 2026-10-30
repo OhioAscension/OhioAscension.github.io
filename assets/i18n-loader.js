@@ -8,7 +8,7 @@ if(!window.__ohioLocalizationLoading){
  const files=[
   "locales/en-core.js","locales/en-game.js","locales/en-catalog.js",
   "locales/en-systems.js","locales/en-fragments.js","locales/en-film.js",
-  "locales/en-decisions.js","locales/en-engine-story.js",
+  "locales/en-decisions.js","locales/en-director.js","locales/en-engine-story.js",
   "locales/en-errors.js","locales/en-errors-more.js","locales/en-engine-tail.js",
   "locales/en-settings.js","locales/en-auth-errors.js",
   "locales/en-cinematics.js","locales/en-diagnostics.js",

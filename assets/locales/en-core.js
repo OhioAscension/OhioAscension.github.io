@@ -127,4 +127,8 @@ window.OhioLocaleEnglish = (window.OhioLocaleEnglish || []).concat([
 ["Etapa ","Stage "],
 ["DÍA ","DAY "],
 ["Día ","Day "]
+["B-12 · SEÑAL SUBTERRÁNEA EN INVESTIGACIÓN","B-12 · UNDERGROUND SIGNAL UNDER INVESTIGATION"],
+["CONTROL DE MISIÓN · LANZAMIENTOS SUSPENDIDOS","MISSION CONTROL · LAUNCHES GROUNDED"],
+["TRAGEDIA ESPACIAL · La colonia exige una investigación","SPACE TRAGEDY · The colony demands an investigation"],
+["B-12 · SEÑAL RECIBIDA · El consejo debe decidir","B-12 · SIGNAL RECEIVED · The board must decide"],
 ]);

@@ -17,10 +17,11 @@ else{
  c.append(node("p","","Generación/h: "+x.last.generated+" · Demanda/h: "+x.last.demand+" · Déficit/h: "+x.last.unserved));
  const fmt=n=>n.toLocaleString("es-AR");
  const localSolar=Math.max(3,x.batteries)*3*w.solar;
- const solarNow=w.id==="earth"?"depende de los campos solares de la Tierra":w.kind==="orbital"
-  ?"Producción solar teórica constante: "+Math.floor(localSolar)+" unidades/h."
-  :"Producción solar teórica durante el día local: "+Math.floor(localSolar)+" unidades/h (de noche, cero).";
- c.append(node("p","meta","RED LOCAL · "+solarNow+" En las estaciones fuera de la Tierra, cada batería también aumenta el generador solar asociado. Las baterías almacenan energía; mejorar cables aumenta el límite de transporte (100 unidades/h por cable, menos averías). La tecnología de batería amplía el almacenamiento, no la generación. La red terrestre no se exporta sin Helios."));
+ const summary=w.id==="earth"?"Campos solares terrestres":("Solar local: "+Math.floor(localSolar)+" unidades/h"+(w.kind==="orbital"?" constantes":" durante el día"));
+ const details=document.createElement("details");
+ details.append(node("summary","",summary));
+ details.append(node("p","meta","Fuera de la Tierra, cada batería también aumenta la generación solar. Los cables limitan el transporte; la tecnología de batería aumenta el almacenamiento. La red terrestre no se exporta sin Helios."));
+ c.append(details);
  const form=document.createElement("form");
  form.className="ohio-workforce-form ohio-battery-batch-form";
  const batchLabel=node("label","ohio-workforce-label","Baterías por lote (1 a 1000) · 15.000 créditos cada una");
@@ -67,7 +68,22 @@ else{
    [!x.damaged?"No hay averías pendientes.":"",g.stats.credits<50000*x.damaged?"Faltan "+(50000*x.damaged-g.stats.credits)+" créditos.":"",g.pending?"Primero resolvé el acontecimiento pendiente.":""].filter(Boolean).join(" ")));
 }
 gridCards.append(c)});energy.append(gridCards);
-let hc=card("PROYECTO HELIOS","Colectores: "+g.helios.collectors+" · Repetidores: "+g.helios.relay,"Energía solar orbital con costes de retransmisión por hora");
-hc.append(btn("Desplegar colector · 20.000.000 créditos + 1.000 chips",()=>act("helios_build"),!!g.pending),btn("Construir repetidor · 5.000.000 créditos",()=>act("helios_route"),!g.helios.active||!!g.pending));energy.append(hc);
+const budgets=card("BATERÍAS POR PLANETA","Objetivos para cubrir la demanda de día y de noche, sin Helios.","Los importes descuentan baterías y cables ya instalados. No incluyen reparaciones.");
+const fmtGoal=n=>n.toLocaleString("es-AR");
+for(const w of g.energy_worlds.filter(w=>w.id!=="earth")){
+ const daylight=w.kind==="orbital"?24:w.id==="mercury"?16:12;
+ const required=w.demand*24;
+ let target=2;
+ const generation=n=>Math.floor(Math.max(3,n)*3*w.solar);
+ while(target<100000&&(generation(target)*daylight<required||target*100*w.grid.battery_level<w.demand*(24-daylight)))target++;
+ const missing=Math.max(0,target-w.grid.batteries);
+ const minimumTransport=Math.ceil(required/daylight);
+ const cables=Math.max(0,Math.ceil((minimumTransport+w.grid.damaged*50)/100)-w.grid.lines);
+ const cost=missing*15000+cables*25000;
+ budgets.append(node("p","",w.name+": "+fmtGoal(target)+" baterías en total · Faltan "+fmtGoal(missing)+" · Costo: "+fmtGoal(cost)+" créditos"+(cables?" (incluye "+cables+" cable/s)":"")+"."));
+}
+energy.append(budgets);
+let hc=card("PROYECTO HELIOS","Colectores: "+g.helios.collectors+" · Repetidores: "+g.helios.relay,"Cada pareja aporta 1.000 unidades/h, asignadas solo cuando hace falta. Retransmisión: 3 créditos por unidad utilizada.");
+hc.append(btn("Desplegar colector · 5.000.000 créditos + 250 chips",()=>act("helios_build"),!!g.pending),btn("Construir repetidor · 2.000.000 créditos",()=>act("helios_route"),!g.helios.active||!!g.pending));energy.append(hc);
 
 }
