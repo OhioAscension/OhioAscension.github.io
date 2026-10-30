@@ -15,6 +15,44 @@ if(!w.established){
 }
 else{
  c.append(node("p","","Generación/h: "+x.last.generated+" · Demanda/h: "+x.last.demand+" · Déficit/h: "+x.last.unserved));
+ const fmt=n=>n.toLocaleString("es-AR");
+ const localSolar=Math.max(3,x.batteries)*3*w.solar;
+ const solarNow=w.id==="earth"?"depende de los campos solares de la Tierra":w.kind==="orbital"
+  ?"Producción solar teórica constante: "+Math.floor(localSolar)+" unidades/h."
+  :"Producción solar teórica durante el día local: "+Math.floor(localSolar)+" unidades/h (de noche, cero).";
+ c.append(node("p","meta","RED LOCAL · "+solarNow+" En las estaciones fuera de la Tierra, cada batería también aumenta el generador solar asociado. Las baterías almacenan energía; mejorar cables aumenta el límite de transporte (100 unidades/h por cable, menos averías). La tecnología de batería amplía el almacenamiento, no la generación. La red terrestre no se exporta sin Helios."));
+ const form=document.createElement("form");
+ form.className="ohio-workforce-form ohio-battery-batch-form";
+ const batchLabel=node("label","ohio-workforce-label","Baterías por lote (1 a 1000) · 15.000 créditos cada una");
+ const batch=document.createElement("input");
+ batch.type="number";batch.min="1";batch.max="1000";batch.step="1";batch.required=true;
+ batch.inputMode="numeric";batch.value="100";batch.className="ohio-workforce-quantity";
+ batch.id="battery-batch-"+w.id;batchLabel.htmlFor=batch.id;
+ const estimate=node("p","meta","");
+ const feedback=node("p","ohio-workforce-feedback","");
+ feedback.setAttribute("role","status");
+ const batchButton=btn("Instalar lote de baterías",()=>{},!!g.pending);
+ const refresh=()=>{
+  const raw=batch.value.trim(),n=Number(raw);
+  const valid=/^[0-9]+$/.test(raw)&&Number.isSafeInteger(n)&&n>=1&&n<=1000;
+  const total=valid?n*15000:0;
+  estimate.textContent=valid
+   ?"Costo total: "+fmt(total)+" créditos · Saldo posterior: "+fmt(g.stats.credits-total)+" créditos · Baterías: "+fmt(x.batteries)+" → "+fmt(x.batteries+n)+"."
+   :"Elegí una cantidad entera de 1 a 1000.";
+  feedback.textContent=valid&&total>g.stats.credits?"Créditos insuficientes para este lote.":"";
+  return valid&&total<=g.stats.credits;
+ };
+ batchButton.onclick=()=>{
+  if(g.pending){msg("Primero resolvé el acontecimiento pendiente.");return;}
+  if(!refresh()){batch.setCustomValidity("Revisá la cantidad y los créditos disponibles.");batch.reportValidity();return;}
+  batch.setCustomValidity("");
+  act("grid_upgrade_batch",w.id+":batteries:"+batch.value.trim());
+ };
+ batch.addEventListener("input",()=>{batch.setCustomValidity("");refresh();});
+ form.addEventListener("submit",event=>{event.preventDefault();batchButton.click();});
+ form.append(batchLabel,batch,estimate,batchButton,feedback);
+ refresh();
+ c.append(form);
  const upgrade=(label,kind,cost,extra="")=>{
   const blocked=!!g.pending||g.stats.credits<cost||!!extra;
   const reason=[g.pending?"Primero resolvé el acontecimiento pendiente.":"",

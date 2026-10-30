@@ -26,6 +26,31 @@ if(ohioNet){
   ohioNet.completed||!ohioNet.affordable||!!g.pending,needs.join(" ")));
  space.append(node("h2","","INFRAESTRUCTURA PREVIA AL LANZAMIENTO"),netCard);
 }
+// Helios is part of the aerospace roadmap, not a secret control at the end of Energy.
+const outposts=g.energy_worlds.filter(world=>world.id!=="earth");
+const missingOutposts=outposts.filter(world=>!world.established);
+const heliosReady=missingOutposts.length===0;
+const heliosRequirements=[
+ !heliosReady?"Puestos pendientes: "+missingOutposts.map(world=>world.name).join(", ")+". Abrí Energía para establecerlos.":"",
+ g.stats.credits<20000000?"Faltan "+(20000000-g.stats.credits).toLocaleString("es-AR")+" créditos para un colector.":"",
+ g.stats.chips<1000?"Faltan "+(1000-g.stats.chips).toLocaleString("es-AR")+" chips.":"",
+ g.pending?"Resolvé el acontecimiento pendiente.":""
+].filter(Boolean);
+const heliosCard=card("PROYECTO HELIOS · RED SOLAR DEL SISTEMA",
+ "Colectores: "+g.helios.collectors+" · Repetidores: "+g.helios.relay+
+ " · Puestos establecidos: "+(outposts.length-missingOutposts.length)+"/"+outposts.length,
+ "Para el primer colector se requiere presencia en todos los mundos del sistema solar; cada colector cuesta 20.000.000 créditos y 1.000 chips.");
+if(heliosRequirements.length)heliosCard.append(node("p","meta",heliosRequirements.join(" ")));
+heliosCard.append(btn("Desplegar colector · 20.000.000 créditos + 1.000 chips",
+ ()=>act("helios_build"),heliosRequirements.length>0,heliosRequirements.join(" ")));
+const relayRequirements=[
+ !g.helios.active?"Primero desplegá al menos un colector.":"",
+ g.stats.credits<5000000?"Faltan "+(5000000-g.stats.credits).toLocaleString("es-AR")+" créditos.":"",
+ g.pending?"Resolvé el acontecimiento pendiente.":""
+].filter(Boolean);
+heliosCard.append(btn("Construir repetidor · 5.000.000 créditos",
+ ()=>act("helios_route"),relayRequirements.length>0,relayRequirements.join(" ")));
+space.append(node("h2","","PROYECTO HELIOS · SIGUIENTE ETAPA"),heliosCard);
 space.append(node("h2","","COLONIAS EXTRATERRESTRES · LUNA Y MARTE"));
 let spaceGrid=node("div","grid");g.space.forEach(p=>{let buildings=p.structures;let c=card(p.name,"Base: "+(p.active?"fundada":"sin fundar")+" · Autosuficiencia: "+(p.self_sufficient?"LOGRADA":"pendiente"),p.active?"Hábitats "+buildings.habitat+"/"+p.required.habitat+" · Solares "+buildings.solar+"/"+p.required.solar+" · Extractores "+buildings.extractor+"/"+p.required.extractor+" · Mineral local "+buildings.ore:"Lanzamiento "+p.launch+" créditos · "+p.ore+" mineral · "+p.chips+" chips · "+p.compute+" cómputo");
 if(!p.active){

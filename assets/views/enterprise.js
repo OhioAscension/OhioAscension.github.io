@@ -47,7 +47,31 @@ person.roles.forEach(r=>{
  c.append(form);employees.append(c);
 });
 enterprise.append(employees,node("h2","","RELACIONES CON INVERSORES"));
-let investors=node("div","grid");person.offers.forEach(i=>{let c=card(i.name,"Financiación: "+i.income+" créditos por jornada","Reputación mínima: "+i.required);c.append(btn(i.signed?"Fondo activo":"Solicitar inversión",()=>act("investor",String(i.id)),i.signed||!!g.pending));investors.append(c)});enterprise.append(investors,node("h2","","AUTORIZACIONES Y LITIGIOS"));
+let investors=node("div","grid");person.offers.forEach(i=>{
+ const details="Reputación requerida: "+i.required+" · Actual: "+g.aerospace.reputation+
+  (i.id===3?" · Nivel orbital "+(i.funding_level+1)+"/5":"");
+ const c=card(i.name,"Financiación: "+i.income.toLocaleString("es-AR")+" créditos por jornada",details);
+ if(!i.eligible&&!i.signed)c.append(node("p","meta","Todavía no cumplís los requisitos. Los logros espaciales existentes cuentan retroactivamente."));
+ c.append(btn(i.signed?"Fondo activo":"Solicitar inversión",()=>act("investor",String(i.id)),i.signed||!i.eligible||!!g.pending));
+ investors.append(c);
+});
+enterprise.append(investors);
+const a=g.aerospace;
+const certification=card("HOMOLOGACIÓN AEROESPACIAL",
+ "Reputación: "+a.reputation+" (lanzamientos: "+a.launch_reputation+" · infraestructura: +"+a.experience_bonus+")",
+ "Después de las ocho etapas podés auditar tus operaciones para recuperar +8 reputación. Costo: 2.000.000 créditos, 150 chips y 150 cómputo. Renovación cada 24 horas de Ohio.");
+const missing=[
+ a.stage<a.completed?"Completá primero las ocho etapas aeroespaciales.":"",
+ a.certification_remaining_hours>0?"Disponible dentro de "+a.certification_remaining_hours+" horas de Ohio.":"",
+ a.reputation>=80?"Ya alcanzaste la reputación máxima necesaria.":"",
+ g.stats.credits<2000000?"Necesitás 2.000.000 créditos.":"",
+ g.stats.chips<150?"Necesitás 150 chips.":"",
+ g.stats.compute<150?"Necesitás 150 cómputo.":"",
+ g.pending?"Resolvé el acontecimiento pendiente.":""
+].filter(Boolean);
+if(missing.length)certification.append(node("p","meta",missing.join(" ")));
+certification.append(btn("Homologar operaciones · +8 reputación",()=>act("aero_certify"),missing.length>0,missing.join(" ")));
+enterprise.append(node("h2","","REPUTACIÓN Y EXPERIENCIA ESPACIAL"),certification,node("h2","","AUTORIZACIONES Y LITIGIOS"));
 let legal=card("Autoridad Aeroespacial","Autorizaciones vigentes: "+(person.licences.join(", ")||"ninguna")+" · Causas pendientes: "+person.lawsuits,"Tasas de homologación: 150.000 créditos por autorización");
 for(const [id,name] of [["launch","Lanzamiento"],["crew","Vuelo tripulado"],["station","Estación orbital"],["lunar","Misión lunar"]])legal.append(btn(person.licences.includes(id)?name+" autorizado":"Homologar "+name,()=>act("licence",id),person.licences.includes(id)||!!g.pending));
 legal.append(btn("Acuerdo extrajudicial (750.000)",()=>act("settle_lawsuit"),person.lawsuits===0||!!g.pending));enterprise.append(legal);

@@ -115,3 +115,19 @@
  #ohio-settings #mobile-logout{display:none!important}
  #ohio-security-slot button{max-width:100%;white-space:normal}
 }
+
+/* Desktop/Electron: hide the OS scrollbar chrome, retain mouse-wheel,
+   touchpad, keyboard, and programmatic scrolling everywhere. */
+@media(min-width:701px){
+ html,body,.shell>aside,main,.view,#desktop-command-results{
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+ }
+ html::-webkit-scrollbar,body::-webkit-scrollbar,
+ .shell>aside::-webkit-scrollbar,main::-webkit-scrollbar,
+ .view::-webkit-scrollbar,#desktop-command-results::-webkit-scrollbar{
+  display:none;
+  width:0;
+  height:0;
+ }
+}
