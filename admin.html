@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ohio · Administración</title><link rel="icon" href="/assets/favicon.svg?v=36151721e9ef">
+<link rel="stylesheet" href="/assets/admin.css?v=d849f212671f"></head>
+<body>
+<header><div><small>OHIO SYSTEMS · CENTRO DE CONTROL</small><h1>Diagnóstico administrativo</h1><p>Solo lectura · datos privados del servidor</p></div><button type="button" id="logout">Cerrar sesión</button></header>
+<main>
+<section id="auth-warning" role="alert" hidden>Iniciá sesión con la cuenta administrativa habilitada desde la PC del servidor. <a href="/">Volver al inicio</a></section>
+<section id="status" role="status" aria-live="polite">Comprobando sesión…</section>
+<section id="dashboard" hidden>
+<div class="toolbar"><span id="updated"></span><button type="button" id="refresh">Actualizar</button><button type="button" id="export">Exportar JSON</button></div>
+<div id="totals" class="totals" aria-label="Indicadores globales"></div>
+<h2>Usuarios y partidas</h2>
+<p>Los tiempos registrados son estimaciones de actividad desde que se habilitó el seguimiento, no horas históricas de todas las colonias. Las partidas de jugadores no se modifican.</p>
+<div class="table-scroll"><table><thead><tr><th>Usuario</th><th>Acceso</th><th>Partida</th><th>Día / Créditos</th><th>Instalaciones / Espacio</th><th>Actividad</th><th>Última conexión</th></tr></thead><tbody id="users"></tbody></table></div>
+<h2>Información de seguimiento</h2><ul id="notes"></ul>
+</section>
+</main>
+<script src="/assets/ohio-config.js?v=c2e40ea190fc" defer></script>
+<script src="/assets/admin.js?v=c6b22720a97f" defer></script>
+</body></html>
