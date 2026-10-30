@@ -30,6 +30,7 @@ async function refresh(){
  const revision=sessionRevision;
  let a=await api("auth/status");
  if(revision!==sessionRevision)return;
+ if(a.admin){window.location.assign(new URL("admin.html",location.href).href);return;}
  if(a.authenticated&&a.lang&&window.OhioI18n)window.OhioI18n.setProfile(a.lang);
  el("authInfo").textContent=a.initialized?"Elegí tu cuenta o registrá un usuario nuevo.":"Registro del primer agente";
  // A credential registered on github.io cannot sign for the localhost RP ID.
