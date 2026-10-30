@@ -16,7 +16,7 @@
 .ohio-morale-track{height:8px;background:#17372a;overflow:hidden;border-radius:99px}
 .ohio-morale-track span{display:block;height:100%;background:linear-gradient(90deg,#52c891,#c6fdb4);
  border-radius:inherit;transition:width .8s}
-.ohio-director-stats{margin:20px 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.ohio-director-stats{margin:20px 0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
 .ohio-director-stat{background:#092019;border:1px solid #2d6049;border-radius:10px;padding:12px 13px;min-width:0}
 .ohio-director-stat small{display:block;color:#7eae95;font-size:10px;font-weight:800;letter-spacing:.08em;margin-bottom:8px}
 .ohio-director-stat strong{display:block;color:#d6ffe5;font-size:clamp(14px,1.6vw,20px);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}

@@ -223,4 +223,4 @@ document.addEventListener("visibilitychange",()=>{
 window.addEventListener("pagehide",()=>{audio?.stop();sound=false;setStatus()});
 requestAnimationFrame(tick);
 
-/* Ohio locale bundle: a993f660f4fa */
+/* Ohio locale bundle: ea2cdb3f60e5 */

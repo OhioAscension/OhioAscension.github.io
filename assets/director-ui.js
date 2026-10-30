@@ -23,6 +23,7 @@ window.OhioDirectorUI=(()=>{
   const data=node("div","ohio-director-stats");
   for(const [title,value] of [
    ["PRODUCCIÓN",fmt(d.production_percent)+"%"],
+   ["JORNADA EFECTIVA",fmt(d.last_day_efficiency??100)+"%"],
    ["DEMANDA ELÉCTRICA",fmt(d.power_percent)+"%"],
    ["VÍCTIMAS ESPACIALES",fmt(d.casualties)],
    ["EXPEDICIÓN B-12",d.b12==="investigating"?fmt(d.expedition_days)+"/6":statuses[d.b12]||d.b12]

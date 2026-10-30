@@ -498,6 +498,7 @@ window.OhioLocaleEnglish=(window.OhioLocaleEnglish||[]).concat([
  ["Pacto laboral","Labor compact"],
  ["Extracción intensiva","Intensive extraction"],
  ["MANDATO EN VIGOR · ","ACTIVE MANDATE · "],
+ ["JORNADA EFECTIVA","EFFECTIVE SHIFT"],
  ["jornadas restantes.","days remaining."],
  ["contratos activada","contracts enabled"],["contratos desactivada","contracts disabled"],
  ["reparaciones activada","repairs enabled"],["reparaciones desactivada","repairs disabled"],
