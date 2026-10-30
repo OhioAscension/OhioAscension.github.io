@@ -57,7 +57,7 @@ const OhioProgression=(()=>{
     const label=h.textContent||"";
     let show=true;
     if(label.includes("REVOLUCIÓN TECNOLÓGICA"))show=s.advanced;
-    if(label.includes("MEGAPROYECTOS"))show=s.interplanetary||g.megaprojects?.some(m=>m.completed);
+    if(label.includes("MEGAPROYECTOS"))show=s.hasTech("cloud")||s.aerospace||s.interplanetary||g.megaprojects?.some(m=>m.completed);
     hidden(h,!show);
     if(h.nextElementSibling?.classList.contains("grid"))hidden(h.nextElementSibling,!show);
    });
